@@ -28,16 +28,17 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NineFragment extends  androidx.fragment.app.Fragment {
+public class NonVegMainCourseFragment extends  androidx.fragment.app.Fragment {
 
-
-    String URL = "https://api.myjson.com/bins/16wh73";
+    String URL = "https://api.myjson.com/bins/u5sun";
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
+
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    public NineFragment() {
+
+    public NonVegMainCourseFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +47,8 @@ public class NineFragment extends  androidx.fragment.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_nine, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler9);
+        View view = inflater.inflate(R.layout.fragment_nonvegmaincourse, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler4);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
@@ -76,7 +77,8 @@ public class NineFragment extends  androidx.fragment.app.Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("beverages");
+
+                    JSONArray array = json.getJSONArray("nonvegmaincourse");
 
                     JSONObject jObject=null;
 
@@ -116,5 +118,4 @@ public class NineFragment extends  androidx.fragment.app.Fragment {
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }
-
 }

@@ -1,5 +1,6 @@
 package com.example.food__delivery.MenuActivity;
 
+
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -23,31 +24,35 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TwoFragment extends androidx.fragment.app.Fragment {
+public class RollsFragment extends androidx.fragment.app.Fragment {
 
-    String URL = "https://api.myjson.com/bins/1egokv";
+    String URL = "https://api.myjson.com/bins/10nfcf";
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    public TwoFragment() {
-
+    public RollsFragment() {
+        // Required empty public constructor
     }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_two, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler2);
+        View view = inflater.inflate(R.layout.fragment_rolls, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler6);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
+
     }
     private class GetElements extends AsyncTask<String, String, List<FoodElements>> {
 
@@ -71,7 +76,7 @@ public class TwoFragment extends androidx.fragment.app.Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("nonvegstarter");
+                    JSONArray array = json.getJSONArray("rolls");
 
                     JSONObject jObject=null;
 
@@ -86,8 +91,10 @@ public class TwoFragment extends androidx.fragment.app.Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                         foodElements1.add(foodElements);
                     }
+
                 } catch (JSONException e) {
 
                 }
@@ -100,9 +107,8 @@ public class TwoFragment extends androidx.fragment.app.Fragment {
         protected void onPostExecute(List<FoodElements> result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            if ((loading != null) && loading.isShowing()) {
+            if (loading.isShowing())
                 loading.dismiss();
-            }
             /**
              * Updating parsed JSON data into ListView
              * */
@@ -110,4 +116,5 @@ public class TwoFragment extends androidx.fragment.app.Fragment {
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }
+
 }

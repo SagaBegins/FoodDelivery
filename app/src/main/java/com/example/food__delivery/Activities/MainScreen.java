@@ -141,7 +141,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
             });
         }else{
             navigationView.inflateMenu(R.menu.activity_main_screen_drawer);
-            sign.setText("com.example.fooddelivery.Signup or com.example.fooddelivery.Login");
+            //sign.setText("com.example.fooddelivery.Signup or com.example.fooddelivery.Login");
             nametext.setText("Guest User");
             photo.setImageResource(R.drawable.male3);
             sign.setOnClickListener(new View.OnClickListener() {
@@ -195,77 +195,90 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            fragment = new HomeFragment();
-            setTitle("Home");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        } else if (id == R.id.nav_dine) {
-            fragment = new HomeFragment();
-            setTitle("A La Carte");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        } else if (id == R.id.nav_about) {
-            fragment = new AboutFragment();
-            setTitle("About Us");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        } else if (id == R.id.nav_call) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-            alertDialogBuilder.setMessage("Do you want to call Food Delivery's helpline?");
-                    alertDialogBuilder.setPositiveButton("CALL",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                    String tel = "8859691423";
-                                    callIntent.setData(Uri.parse("tel:"+tel));
-                                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    if (ContextCompat.checkSelfPermission(MainScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                                        ActivityCompat.requestPermissions(MainScreen.this, new String[]{Manifest.permission.CALL_PHONE},1);
-                                    }else{
-                                        startActivity(callIntent);
-                                    }
+        switch (id) {
+            case R.id.nav_home: {
+                fragment = new HomeFragment();
+                setTitle("Home");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.nav_dine: {
+                fragment = new HomeFragment();
+                setTitle("A La Carte");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.nav_about: {
+                fragment = new AboutFragment();
+                setTitle("About Us");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.nav_call:
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                alertDialogBuilder.setMessage("Do you want to call Food Delivery's helpline?");
+                alertDialogBuilder.setPositiveButton("CALL",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                                String tel = "370666666666";
+                                callIntent.setData(Uri.parse("tel:" + tel));
+                                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                if (ContextCompat.checkSelfPermission(MainScreen.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(MainScreen.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+                                } else {
+                                    startActivity(callIntent);
                                 }
-                            });
+                            }
+                        });
 
-            alertDialogBuilder.setNegativeButton("CANCEL",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                }
-            });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
-        } else if (id == R.id.nav_rate) {
-            fragment = new RateFragment();
-            setTitle("Rate Us");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        }
-        else if(id == R.id.order){
-            fragment = new AllOrders();
-            setTitle("Order");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        }
-        else if(id == R.id.cartnav){
-            fragment = new CartFragment();
-            setTitle("Your Cart");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        }
-        else if(id == R.id.favourite){
-            fragment = new FavouriteFragment();
-            setTitle("Favourite");
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                alertDialogBuilder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+                break;
+            case R.id.nav_rate: {
+                fragment = new RateFragment();
+                setTitle("Rate Us");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.order: {
+                fragment = new AllOrders();
+                setTitle("Order");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.cartnav: {
+                fragment = new CartFragment();
+                setTitle("Your Cart");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
+            case R.id.favourite: {
+                fragment = new FavouriteFragment();
+                setTitle("Favourite");
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                break;
+            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -1,6 +1,5 @@
 package com.example.food__delivery.MenuActivity;
 
-
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -24,38 +23,32 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Threefragment extends  androidx.fragment.app.Fragment {
+public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
 
-
-    String URL = "https://api.myjson.com/bins/ybu33";
+    String URL = "https://api.myjson.com/bins/1egokv";
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
+    public NonVegStartersFragment() {
 
-    public Threefragment() {
-        // Required empty public constructor
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_threefragment, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler3);
+        View view = inflater.inflate(R.layout.fragment_nonvegstarters, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler2);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
     }
-
     private class GetElements extends AsyncTask<String, String, List<FoodElements>> {
 
         @Override
@@ -78,7 +71,7 @@ public class Threefragment extends  androidx.fragment.app.Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("vegmaincourse");
+                    JSONArray array = json.getJSONArray("nonvegstarter");
 
                     JSONObject jObject=null;
 
@@ -93,10 +86,8 @@ public class Threefragment extends  androidx.fragment.app.Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                         foodElements1.add(foodElements);
                     }
-
                 } catch (JSONException e) {
 
                 }
@@ -109,8 +100,9 @@ public class Threefragment extends  androidx.fragment.app.Fragment {
         protected void onPostExecute(List<FoodElements> result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
-            if (loading.isShowing())
+            if ((loading != null) && loading.isShowing()) {
                 loading.dismiss();
+            }
             /**
              * Updating parsed JSON data into ListView
              * */

@@ -28,15 +28,16 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SixFragment extends androidx.fragment.app.Fragment {
+public class BeveragesFragment extends  androidx.fragment.app.Fragment {
 
-    String URL = "https://api.myjson.com/bins/10nfcf";
+
+    String URL = "https://api.myjson.com/bins/16wh73";
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    public SixFragment() {
+    public BeveragesFragment() {
         // Required empty public constructor
     }
 
@@ -45,14 +46,13 @@ public class SixFragment extends androidx.fragment.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_six, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler6);
+        View view = inflater.inflate(R.layout.fragment_beverages, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler9);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
-
     }
     private class GetElements extends AsyncTask<String, String, List<FoodElements>> {
 
@@ -76,7 +76,7 @@ public class SixFragment extends androidx.fragment.app.Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("rolls");
+                    JSONArray array = json.getJSONArray("beverages");
 
                     JSONObject jObject=null;
 

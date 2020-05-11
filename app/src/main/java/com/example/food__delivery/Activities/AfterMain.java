@@ -20,15 +20,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.example.food__delivery.MenuActivity.EightFragment;
-import com.example.food__delivery.MenuActivity.FiveFragment;
-import com.example.food__delivery.MenuActivity.FourFragment;
-import com.example.food__delivery.MenuActivity.NineFragment;
-import com.example.food__delivery.MenuActivity.OneFragment;
-import com.example.food__delivery.MenuActivity.SevenFragment;
-import com.example.food__delivery.MenuActivity.SixFragment;
-import com.example.food__delivery.MenuActivity.Threefragment;
-import com.example.food__delivery.MenuActivity.TwoFragment;
+import com.example.food__delivery.MenuActivity.BreadsFragment;
+import com.example.food__delivery.MenuActivity.PlattersFragment;
+import com.example.food__delivery.MenuActivity.NonVegMainCourseFragment;
+import com.example.food__delivery.MenuActivity.BeveragesFragment;
+import com.example.food__delivery.MenuActivity.VegStartersFragment;
+import com.example.food__delivery.MenuActivity.RiceFragment;
+import com.example.food__delivery.MenuActivity.RollsFragment;
+import com.example.food__delivery.MenuActivity.VegMainCoursefragment;
+import com.example.food__delivery.MenuActivity.NonVegStartersFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
@@ -98,33 +98,37 @@ public class AfterMain extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            finish();
-        }
-        if(id == R.id.action_cart){
-            Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
-            intent.putExtra("ViewPager", 0);
-            startActivity(intent);
-        }
-        if(id == R.id.favorite){
-            Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
-            intent.putExtra("ViewPager", 1);
-            startActivity(intent);
+        switch (id) {
+            case R.id.action_settings:
+                finish();
+                break;
+            case R.id.action_cart: {
+                Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
+                intent.putExtra("ViewPager", 0);
+                startActivity(intent);
+                break;
+            }
+            case R.id.favorite: {
+                Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
+                intent.putExtra("ViewPager", 1);
+                startActivity(intent);
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new OneFragment(), "Veg Starters");
-        adapter.addFrag(new TwoFragment(), "Non-Veg Starters");
-        adapter.addFrag(new Threefragment(), "Veg Main Course");
-        adapter.addFrag(new FourFragment(), "Non-Veg Main Course");
-        adapter.addFrag(new FiveFragment(), "Platters");
-        adapter.addFrag(new SixFragment(), "Rolls");
-        adapter.addFrag(new SevenFragment(), "Rice");
-        adapter.addFrag(new EightFragment(), "Breads");
-        adapter.addFrag(new NineFragment(), "Beverages");
+        adapter.addFrag(new VegStartersFragment(), "Veg Starters");
+        adapter.addFrag(new NonVegStartersFragment(), "Non-Veg Starters");
+        adapter.addFrag(new VegMainCoursefragment(), "Veg Main Course");
+        adapter.addFrag(new NonVegMainCourseFragment(), "Non-Veg Main Course");
+        adapter.addFrag(new PlattersFragment(), "Platters");
+        adapter.addFrag(new RollsFragment(), "Rolls");
+        adapter.addFrag(new RiceFragment(), "Rice");
+        adapter.addFrag(new BreadsFragment(), "Breads");
+        adapter.addFrag(new BeveragesFragment(), "Beverages");
         viewPager.setAdapter(adapter);
     }
 

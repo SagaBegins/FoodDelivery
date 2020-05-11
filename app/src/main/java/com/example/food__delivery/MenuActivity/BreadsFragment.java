@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EightFragment extends androidx.fragment.app.Fragment {
+public class BreadsFragment extends androidx.fragment.app.Fragment {
 
     String URL = "https://api.myjson.com/bins/tbslr";
     ProgressDialog loading;
@@ -34,14 +34,14 @@ public class EightFragment extends androidx.fragment.app.Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    public EightFragment() {
+    public BreadsFragment() {
         // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_eight, container, false);
+        View view = inflater.inflate(R.layout.fragment_breads, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler8);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();

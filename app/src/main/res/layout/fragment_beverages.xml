@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.food__delivery.MenuActivity.EightFragment">
+    tools:context="com.example.food__delivery.MenuActivity.BeveragesFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/recycler8"
+            android:id="@+id/recycler9"
             android:layout_alignParentLeft="true" />
     </RelativeLayout>
 </FrameLayout>

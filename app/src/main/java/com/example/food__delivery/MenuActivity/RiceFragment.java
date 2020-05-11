@@ -27,16 +27,15 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FiveFragment extends androidx.fragment.app.Fragment {
+public class RiceFragment extends  androidx.fragment.app.Fragment{
 
+    String URL = "https://api.myjson.com/bins/10la6n";
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    String URL = "https://api.myjson.com/bins/boxnz";
-
-    public FiveFragment() {
+    public RiceFragment() {
         // Required empty public constructor
     }
 
@@ -45,8 +44,8 @@ public class FiveFragment extends androidx.fragment.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_five, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler5);
+        View view = inflater.inflate(R.layout.fragment_rice, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler7);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
@@ -75,7 +74,7 @@ public class FiveFragment extends androidx.fragment.app.Fragment {
             if (jsonStr != null) {
                 try {
                     JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("platters");
+                    JSONArray array = json.getJSONArray("rice");
 
                     JSONObject jObject=null;
 
@@ -115,4 +114,5 @@ public class FiveFragment extends androidx.fragment.app.Fragment {
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }
+
 }

@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OneFragment extends androidx.fragment.app.Fragment {
+public class VegStartersFragment extends androidx.fragment.app.Fragment {
     ProgressDialog loading;
     List<FoodElements> foodElements1;
     RecyclerView recyclerView;
@@ -35,14 +35,14 @@ public class OneFragment extends androidx.fragment.app.Fragment {
     Adapter_Menu_Items recyclerViewadapter;
     String URL = "https://api.myjson.com/bins/137l8v";
 
-    public OneFragment() {
+    public VegStartersFragment() {
         // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_one, container, false);
+        View view = inflater.inflate(R.layout.fragment_vegstarters, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler1);
         recyclerView.setHasFixedSize(true);
         new GetElements().execute();
