@@ -24,7 +24,7 @@ public class OpenScreen extends AppCompatActivity implements View.OnClickListene
         login = (Button)findViewById(R.id.button3);
         signup= (Button)findViewById(R.id.button2);
         skip = (Button)findViewById(R.id.button);
-        sqLiteDatabase=openOrCreateDatabase("Tadqa", MODE_PRIVATE, null);
+        sqLiteDatabase=openOrCreateDatabase("Hunger Hunt", MODE_PRIVATE, null);
         sqLiteDatabase.execSQL("create table if not exists credentials(email text primary key, name text not null, password text not null);");
         login.setOnClickListener(this);
         signup.setOnClickListener(this);

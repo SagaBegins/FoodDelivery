@@ -6,20 +6,26 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.example.food__delivery.Adapter.Adapter_Menu;
 import com.example.food__delivery.Helper.FoodElements;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.HttpHandler;
 import com.example.food__delivery.Testing.SlidingImage_Adapter;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import org.json.JSONArray;
@@ -144,36 +150,37 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
         @Override
         protected List<FoodElements> doInBackground(String... arg0) {
-            HttpHandler sh = new HttpHandler();
-            String jsonStr = sh.makeServiceCall(URL);
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference();
             foodElements1 = new ArrayList<>();
-            if (jsonStr != null) {
-                try {
-                    JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("menu");
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject jObject= array.getJSONObject(i);
-                        FoodElements foodElements = new FoodElements();
-                        try {
-                            foodElements.setPhoto(jObject.getString("Imagepath"));
-                            foodElements.setFoodType(jObject.getString("Category"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        foodElements1.add(foodElements);
+            DatabaseReference menuRef = myRef.child("menu");
+            Log.d("Adding Ref",menuRef.toString());
+            menuRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot child:dataSnapshot.getChildren()) {
+                        FoodElements foodElement = new FoodElements();
+                        foodElement.setPhoto(child.child("Imagepath").getValue(String.class));
+                        foodElement.setFoodType(child.child("Category").getValue(String.class));
+                        Log.d("checking", child.toString());
+                        foodElements1.add(foodElement);
                     }
 
-                } catch (JSONException e) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }
-
+            });
             return foodElements1;
         }
 
         @Override
         protected void onPostExecute(List<FoodElements> result) {
             super.onPostExecute(result);
+            Log.d("Executed", "Hmm wonder why this runs");
+            Log.d("Executed", foodElements1.size()+" No of items");
             // Dismiss the progress dialog
             if (loading.isShowing())
                 loading.dismiss();

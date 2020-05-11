@@ -60,7 +60,7 @@ public class SevenFragment extends  androidx.fragment.app.Fragment{
             // Showing progress dialog
             loading = new ProgressDialog(getActivity());
             loading.setMessage("Please wait...");
-            loading.setCancelable(false);
+            loading.setCancelable(true);
             loading.show();
 
         }

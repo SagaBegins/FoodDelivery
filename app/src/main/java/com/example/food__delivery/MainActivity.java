@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
                                 Intent callIntent = new Intent(Intent.ACTION_CALL);
-                                String tel = "8859691423";
+                                String tel = "3706666666";
                                 callIntent.setData(Uri.parse("tel:"+tel));
                                 callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {

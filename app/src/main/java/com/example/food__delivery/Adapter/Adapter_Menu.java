@@ -40,7 +40,7 @@ public class Adapter_Menu extends RecyclerView.Adapter<Adapter_Menu.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.food_name.setText(foodElements.get(position).getFoodType());
         Glide.with(context.getApplicationContext())
-                .load(foodElements.get(position).getPhoto()).transform(new RoundedCornersTransformation(context.getApplicationContext(), 5, 0)).into(holder.image);
+                .load(foodElements.get(position).getPhoto()).into(holder.image);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
