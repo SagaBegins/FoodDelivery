@@ -50,6 +50,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
             holder.price.setText(foodElements.get(position).getPrice());
             if(databaseEntry.totalQty()<40) {
                 holder.add.setEnabled(true);
+                databaseEntry.close();
                 holder.add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -57,10 +58,12 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                         rate = foodElements.get(position).getRate();
                         databaseEntry.insertIntoCart(foodElements.get(position).getFoodType(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
                         Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT);
+                        databaseEntry.close();
                         AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
                     }
                 });
             }else{
+                databaseEntry.close();
                 holder.add.setEnabled(false);
 
             }
@@ -72,10 +75,12 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                         holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         databaseEntry = new DatabaseEntry(context);
                         databaseEntry.insertIntoFav(foodElements.get(position).getFoodType(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        databaseEntry.close();
                         Toast.makeText(context, "Food Added to Favourites.", Toast.LENGTH_SHORT);
                     }else if(isPressed){
                         databaseEntry = new DatabaseEntry(context);
                         databaseEntry.deleteARow(foodElements.get(position).getPhoto(), "favour_table");
+                        databaseEntry.close();
                         holder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                     }
                     isPressed = !isPressed;

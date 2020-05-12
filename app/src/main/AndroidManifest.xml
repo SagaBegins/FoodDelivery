@@ -13,7 +13,9 @@
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="false"
-        android:icon="@drawable/logo1"
+        android:logo="@drawable/logo1"
+        android:icon="@color/colorPrimaryDark"
+        android:roundIcon="@drawable/logo1"
         android:label="Food Delivery"
         android:largeHeap="true"
         android:supportsRtl="true"

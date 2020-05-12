@@ -38,7 +38,7 @@ import java.util.List;
  */
 public class VegStartersFragment extends androidx.fragment.app.Fragment {
     ProgressDialog loading;
-    List<FoodElement> foodElements = new ArrayList<>();
+    private static List<FoodElement> foodElements = new ArrayList<>();
     RecyclerView recyclerView;
     GetElements getElements = new GetElements();
     RecyclerView.LayoutManager reLayoutManager;
@@ -56,7 +56,11 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_vegstarters, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler1);
         recyclerView.setHasFixedSize(true);
-        if(foodElements.size() == 0){
+        Log.d("Size", foodElements.size()+"");
+        if(foodElements.size() == 0) {
+            AsyncTask.Status temp = getElements.getStatus();
+            getElements.cancel(temp == AsyncTask.Status.RUNNING);
+            getElements = new GetElements();
             getElements.execute();
         }
         else{
@@ -83,17 +87,18 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
         @Override
         protected List<FoodElement> doInBackground(String... arg0) {
             done = false;
-            DatabaseReference menuRef = mDatabase.child("restaurants").child("0").child("menu").child("vegstarters");
+            DatabaseReference menuRef = mDatabase.child("restaurants").child("0").child("menu");
             menuRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot child:dataSnapshot.getChildren()) {
                         FoodElement foodElement = new FoodElement();
-                        foodElement.setPhoto(child.child("ImagePath").getValue(String.class));
+                        foodElement.setPhoto(child.child("Imagepath").getValue(String.class));
                         foodElement.setName(child.child("Name").getValue(String.class));
                         foodElement.setFoodType(child.child("Category").getValue(String.class));
-                        foodElement.setPrice(child.child("Price").getValue(String.class));
+                        foodElement.setPrice(child.child("Price").getValue(Integer.class).toString());
                         foodElement.setRate(child.child("Rate").getValue(Integer.class));
+                        foodElements.add(foodElement);
                     }
                     done = true;
                 }
@@ -105,9 +110,7 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
                 }
             });
 
-            while(!done){
-                Log.d("loop","waiting for done");
-            };
+            while(!done);
             return foodElements;
         }
 

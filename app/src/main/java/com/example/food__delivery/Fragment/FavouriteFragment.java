@@ -44,6 +44,7 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
         databaseEntry = new DatabaseEntry(getActivity());
         foodElementsList  = new ArrayList<>();
         foodElementsList = databaseEntry.getDataFromDB("favour_table");
+        databaseEntry.close();
         quote = (TextView)view.findViewById(R.id.textView16);
         quote.setVisibility(View.GONE);
         recyclerViewAdapter = new Adapter_Fav(foodElementsList, getActivity().getApplicationContext());

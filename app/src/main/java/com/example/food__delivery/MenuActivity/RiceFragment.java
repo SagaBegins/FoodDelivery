@@ -56,8 +56,12 @@ public class RiceFragment extends  androidx.fragment.app.Fragment{
         View view = inflater.inflate(R.layout.fragment_rice, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler7);
         recyclerView.setHasFixedSize(true);
-                if(foodElements.size() == 0)
+        if(foodElements.size() == 0) {
+            AsyncTask.Status temp = getElements.getStatus();
+            getElements.cancel(temp == AsyncTask.Status.RUNNING);
+            getElements = new GetElements();
             getElements.execute();
+        }
         else{
             recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
@@ -92,8 +96,9 @@ public class RiceFragment extends  androidx.fragment.app.Fragment{
                         foodElement.setPhoto(child.child("ImagePath").getValue(String.class));
                         foodElement.setName(child.child("Name").getValue(String.class));
                         foodElement.setFoodType(child.child("Category").getValue(String.class));
-                        foodElement.setPrice(child.child("Price").getValue(String.class));
+                        foodElement.setPrice(child.child("Price").getValue(Integer.class).toString());
                         foodElement.setRate(child.child("Rate").getValue(Integer.class));
+                        foodElements.add(foodElement);
                     }
                     done = true;
                 }

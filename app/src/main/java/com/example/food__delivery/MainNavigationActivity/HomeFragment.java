@@ -45,7 +45,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     Adapter_Menu recyclerViewadapter;
     boolean done;
     private static ViewPager mPager;
-    private final GetElements getElements = new GetElements();
+    private GetElements getElements = new GetElements();
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private static final Integer[] IMAGES = {R.drawable.paneer, R.drawable.parantha_1, R.drawable.kathiroll, R.drawable.rice, R.drawable.nonveg};
@@ -64,8 +64,12 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         init(view);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
-        if(restaurantList.size() == 0)
+        if(restaurantList.size() == 0) {
+            AsyncTask.Status temp = getElements.getStatus();
+            getElements.cancel(temp == AsyncTask.Status.RUNNING);
+            getElements = new GetElements();
             getElements.execute();
+        }
         else{
             recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
             recyclerView.setAdapter(recyclerViewadapter);

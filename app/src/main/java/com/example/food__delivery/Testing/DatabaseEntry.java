@@ -62,18 +62,19 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         values.put("price", price);
         values.put("rate", rate);
         values.put("qty", qty);
+        Log.d("URL", url);
         try {
             if(totalQty()<40) {
-                db.insert(CART_TABLE, null, values);
+                db.insertOrThrow(CART_TABLE, null, values);
                 Toast.makeText(context, "Item added in Cart.", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(context, "Cart is full! Can't order more than 40 items at a time.", Toast.LENGTH_SHORT).show();
             }
-        }catch (SQLiteConstraintException e){
+        }catch (SQLiteException e){
             Toast.makeText(context, "Item already exists in Cart.", Toast.LENGTH_SHORT).show();
         }
 
-        db.close();
+        
     }
     public void insertIntoFav(String foodname,String url,String price,int rate, int qty){
 
@@ -91,7 +92,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             Toast.makeText(context, "Item added in Favourites.", Toast.LENGTH_SHORT).show();
         }catch (SQLiteConstraintException e){
         }
-        db.close();
+        
     }
 
 
@@ -103,6 +104,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         if(i.moveToFirst()){
             total = i.getInt(0);
         }
+        
         return total;
     }
 
@@ -123,6 +125,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
                 modelList.add(food);
             }while (cursor.moveToNext());
         }
+        
         return modelList;
     }
     public void deleteARow(String url, String TABLE){
@@ -130,7 +133,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
         db.delete(TABLE, "url" + " = ?", new String[] { url });
-        db.close();
+        
     }
     public void updateInRow(String url, String table, int qty){
         SQLiteDatabase db= this.getWritableDatabase();
@@ -138,6 +141,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         cv.put("qty", qty);
         db.update(table, cv, "url="+"'"+url.toString().trim()+"'",null);
+        
     }
     public  void addToOrderTable(String name, String add , String tranxid ){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -162,6 +166,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
                 }
             }while (cursor.moveToNext());
         }
+        
     }
 
         public void deleteAll() {
@@ -169,11 +174,11 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             try {
                 db.execSQL("DROP TABLE " + CART_TABLE);
                 db.execSQL(CREATE_CART);
-                db.close();
             }catch (Exception e){
                 e.printStackTrace();
                 Log.e("","In delete");
             }
+            
         }
         public  void createTable(){
             SQLiteDatabase db = this.getWritableDatabase();
@@ -182,6 +187,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             }catch (SQLiteException exe){
                 exe.printStackTrace();
             }
+            
         }
 
         public  List<OrderElements> getDataFromOrder(){
@@ -227,6 +233,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             }catch (SQLiteException e){
                 e.printStackTrace();
             }
+            
             return previousDatas;
         }
         public void addToPreviousOrder(){
@@ -247,6 +254,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
                     }
                 }while (cursor.moveToNext());
             }
+            
         }
         public   ArrayList<PreviousData> getDataForList(){
             SQLiteDatabase db = this.getWritableDatabase();
@@ -266,6 +274,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             }catch (SQLiteException exe){
                 exe.printStackTrace();
             }
+            
             return orderElements;
         }
         public void deleteTable(){
@@ -273,11 +282,12 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             try {
                 db.execSQL("DROP TABLE " + ORDER_TABLE);
                 db.execSQL(CREATE_ORDER);
-                db.close();
+                
             }catch (Exception e){
                 e.printStackTrace();
                 Log.e("","In delete");
             }
+            
         }
         public int total(){
             SQLiteDatabase db = this.getWritableDatabase();
@@ -287,6 +297,8 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             if(i.moveToFirst()){
                 total = i.getInt(0);
             }
+            
             return total;
         }
+
 }

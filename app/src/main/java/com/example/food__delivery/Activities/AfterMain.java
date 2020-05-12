@@ -87,6 +87,7 @@ public class AfterMain extends AppCompatActivity {
         tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
         imageView = (ImageView)notifCount.findViewById(R.id.imagenotif);
         tv.setText(String.valueOf(databaseEntry.totalQty()));
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +96,8 @@ public class AfterMain extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        databaseEntry.close();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -162,4 +165,17 @@ public class AfterMain extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        databaseEntry.close();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        databaseEntry.close();
+    }
+
 }

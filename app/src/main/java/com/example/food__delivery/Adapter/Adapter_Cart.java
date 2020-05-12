@@ -47,6 +47,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
         holder.price.setText(foodElements.get(position).getPrice());
         if(databaseEntry.totalQty()<40){
             holder.add.setEnabled(true);
+            databaseEntry.close();
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,13 +57,14 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 databaseEntry.updateInRow(foodElements.get(position).getPhoto(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
                 AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
-
+                databaseEntry.close();
                 notifyDataSetChanged();
                 CartFragment.calculateGrandTotal();
             }
         });
         }else{
             holder.add.setEnabled(false);
+            databaseEntry.close();
         }
         holder.sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +77,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
                     CartFragment.calculateGrandTotal();
+                    databaseEntry.close();
                     AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
                 }
             }
@@ -85,6 +88,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 databaseEntry = new DatabaseEntry(context);
                 databaseEntry.deleteARow(foodElements.get(position).getPhoto(),"cart_table");
                 foodElements.remove(position);
+                databaseEntry.close();
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
                 CartFragment.calculateGrandTotal();
