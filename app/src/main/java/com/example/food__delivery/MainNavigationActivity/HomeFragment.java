@@ -20,17 +20,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.example.food__delivery.Adapter.Adapter_Menu;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.Restaurant;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.HttpHandler;
 import com.example.food__delivery.Testing.SlidingImage_Adapter;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.viewpagerindicator.CirclePageIndicator;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,17 +39,18 @@ import java.util.TimerTask;
 public class HomeFragment extends androidx.fragment.app.Fragment {
 
     ProgressDialog loading;
-    List<FoodElements> foodElements1;
+    public static List<Restaurant> restaurantList  = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu recyclerViewadapter;
+    boolean done;
     private static ViewPager mPager;
+    private final GetElements getElements = new GetElements();
     private static int currentPage = 0;
-    String URL = "https://api.myjson.com/bins/yg4en";
     private static int NUM_PAGES = 0;
     private static final Integer[] IMAGES = {R.drawable.paneer, R.drawable.parantha_1, R.drawable.kathiroll, R.drawable.rice, R.drawable.nonveg};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-    private DatabaseReference mDatabase;
+    public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -68,7 +64,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         init(view);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
-        new GetElements().execute();
+        if(restaurantList.size() == 0)
+            getElements.execute();
+        else{
+            recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
+            recyclerView.setAdapter(recyclerViewadapter);
+        }
+
         reLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext()){
             @Override
             public boolean canScrollVertically() {
@@ -135,7 +137,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
     }
 
-    private class GetElements extends AsyncTask<String, String, List<FoodElements>> {
+    private class GetElements extends AsyncTask<String, String, List<Restaurant>> {
 
         @Override
         protected void onPreExecute() {
@@ -143,29 +145,26 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             // Showing progress dialog
             loading = new ProgressDialog(getActivity());
             loading.setMessage("One cannot think well, love well, sleep well, if one has not dined well!");
-            loading.setCancelable(false);
+            loading.setCancelable(true);
             loading.show();
 
         }
 
         @Override
-        protected List<FoodElements> doInBackground(String... arg0) {
-            final FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference();
-            foodElements1 = new ArrayList<>();
-            DatabaseReference menuRef = myRef.child("menu");
+        protected List<Restaurant> doInBackground(String... arg0) {
+            done = false;
+            DatabaseReference menuRef = mDatabase.child("restaurants");
             Log.d("Adding Ref",menuRef.toString());
             menuRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot child:dataSnapshot.getChildren()) {
-                        FoodElements foodElement = new FoodElements();
-                        foodElement.setPhoto(child.child("Imagepath").getValue(String.class));
-                        foodElement.setFoodType(child.child("Category").getValue(String.class));
-                        Log.d("checking", child.toString());
-                        foodElements1.add(foodElement);
+                        Restaurant Restaurant = new Restaurant();
+                        Restaurant.photo = (child.child("Imagepath").getValue(String.class));
+                        Restaurant.restaurantName = (child.child("Category").getValue(String.class));
+                        restaurantList.add(Restaurant);
                     }
-
+                    done = true;
                 }
 
                 @Override
@@ -173,21 +172,21 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
                 }
             });
-            return foodElements1;
+
+            while(!done);
+            return restaurantList;
         }
 
         @Override
-        protected void onPostExecute(List<FoodElements> result) {
+        protected void onPostExecute(List<Restaurant> result) {
             super.onPostExecute(result);
-            Log.d("Executed", "Hmm wonder why this runs");
-            Log.d("Executed", foodElements1.size()+" No of items");
             // Dismiss the progress dialog
             if (loading.isShowing())
                 loading.dismiss();
             /**
              * Updating parsed JSON data into ListView
              * */
-            recyclerViewadapter = new Adapter_Menu(getActivity(), foodElements1);
+            recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }

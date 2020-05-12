@@ -1,6 +1,6 @@
 package com.example.food__delivery.Helper;
 
-public class FoodElements {
+public class FoodElement {
 
     private String price;
     private String name;
@@ -41,7 +41,7 @@ public class FoodElements {
     public void setRate(int rate) {
         this.rate = rate;
     }
-    public FoodElements(String price, String photo, String foodType) {
+    public FoodElement(String price, String photo, String foodType) {
         this.price = price;
         this.photo = photo;
         this.foodType = foodType;
@@ -52,11 +52,11 @@ public class FoodElements {
     public void setPrice(String price) {
         this.price = price;
     }
-    public FoodElements(String photo, String foodType) {
+    public FoodElement(String photo, String foodType) {
         this.photo = photo;
         this.foodType = foodType;
     }
-    public FoodElements() {
+    public FoodElement() {
     }
     public void setFoodType(String foodType) {
         this.foodType = foodType;

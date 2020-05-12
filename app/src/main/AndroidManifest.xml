@@ -42,16 +42,12 @@
             android:label="Menu"
             android:parentActivityName="com.example.food__delivery.Activities.MainScreen"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.food__delivery.Activities.MainScreen" />
+
         </activity>
         <activity
             android:name="com.example.food__delivery.Activities.Cart_Favorite"
             android:parentActivityName="com.example.food__delivery.Activities.AfterMain">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.food__delivery.Activities.AfterMain" />
+
         </activity>
         <activity
             android:name="com.example.food__delivery.Activities.Checkout"
@@ -59,9 +55,7 @@
             android:parentActivityName="com.example.food__delivery.Activities.Cart_Favorite"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.food__delivery.Activities.Cart_Favorite" />
+
         </activity>
 
         <activity android:name="com.example.food__delivery.Activities.ThankYouPage">

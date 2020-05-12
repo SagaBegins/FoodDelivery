@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.OrderElements;
 import com.example.food__delivery.Helper.PreviousData;
 
@@ -106,15 +106,15 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         return total;
     }
 
-    public List<FoodElements> getDataFromDB(String cart_table){
-        List<FoodElements> modelList = new ArrayList<FoodElements>();
+    public List<FoodElement> getDataFromDB(String cart_table){
+        List<FoodElement> modelList = new ArrayList<FoodElement>();
         String query = "select * from "+ cart_table;
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
         Cursor cursor = db.rawQuery(query,null);
         if (cursor.moveToFirst()){
             do {
-                FoodElements food = new FoodElements();
+                FoodElement food = new FoodElement();
                 food.setPhoto(cursor.getString(1));
                 food.setFoodType(cursor.getString(0));
                 food.setPrice(cursor.getString(2));

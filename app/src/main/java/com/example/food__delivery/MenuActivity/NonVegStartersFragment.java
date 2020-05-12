@@ -4,17 +4,24 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.HttpHandler;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +35,15 @@ import java.util.List;
  */
 public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
 
-    String URL = "https://api.myjson.com/bins/1egokv";
     ProgressDialog loading;
-    List<FoodElements> foodElements1;
+    List<FoodElement> foodElements = new ArrayList<>();
     RecyclerView recyclerView;
+    GetElements getElements = new GetElements();
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
+    boolean done;
+    public final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
     public NonVegStartersFragment() {
 
     }
@@ -44,12 +54,17 @@ public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_nonvegstarters, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler2);
         recyclerView.setHasFixedSize(true);
-        new GetElements().execute();
+                if(foodElements.size() == 0)
+            getElements.execute();
+        else{
+            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
+            recyclerView.setAdapter(recyclerViewadapter);
+        }
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
     }
-    private class GetElements extends AsyncTask<String, String, List<FoodElements>> {
+    private class GetElements extends AsyncTask<String, String, List<FoodElement>> {
 
         @Override
         protected void onPreExecute() {
@@ -63,41 +78,36 @@ public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
         }
 
         @Override
-        protected List<FoodElements> doInBackground(String... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            String jsonStr = sh.makeServiceCall(URL);
-            foodElements1 = new ArrayList<>();
-            if (jsonStr != null) {
-                try {
-                    JSONObject json = new JSONObject(jsonStr);
-                    JSONArray array = json.getJSONArray("nonvegstarter");
-
-                    JSONObject jObject=null;
-
-                    for (int i = 0; i < array.length(); i++) {
-                        FoodElements foodElements = new FoodElements();
-                        try {
-                            jObject = array.getJSONObject(i);
-                            foodElements.setPhoto(jObject.getString("ImagePath"));
-                            foodElements.setFoodType(jObject.getString("Name"));
-                            foodElements.setPrice(jObject.getString("Price"));
-                            foodElements.setRate(jObject.getInt("Rate"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        foodElements1.add(foodElements);
+        protected List<FoodElement> doInBackground(String... arg0) {
+            done = false;
+            DatabaseReference menuRef = mDatabase.child("restaurants").child("0").child("menu").child("vegstarters");
+            Log.d("Adding Ref",menuRef.toString());
+            menuRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot child:dataSnapshot.getChildren()) {
+                        FoodElement foodElement = new FoodElement();
+                        foodElement.setPhoto(child.child("ImagePath").getValue(String.class));
+                        foodElement.setName(child.child("Name").getValue(String.class));
+                        foodElement.setFoodType(child.child("Category").getValue(String.class));
+                        foodElement.setPrice(child.child("Price").getValue(String.class));
+                        foodElement.setRate(child.child("Rate").getValue(Integer.class));
                     }
-                } catch (JSONException e) {
+                    done = true;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                 }
-            }
+            });
 
-            return foodElements1;
+            while(!done);
+            return foodElements;
         }
 
         @Override
-        protected void onPostExecute(List<FoodElements> result) {
+        protected void onPostExecute(List<FoodElement> result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
             if ((loading != null) && loading.isShowing()) {
@@ -106,7 +116,7 @@ public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
             /**
              * Updating parsed JSON data into ListView
              * */
-            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements1);
+            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }

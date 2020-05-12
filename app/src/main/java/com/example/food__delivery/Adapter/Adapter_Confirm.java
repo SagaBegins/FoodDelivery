@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 
 import java.util.List;
@@ -18,10 +18,10 @@ import java.util.List;
 
 public class Adapter_Confirm extends RecyclerView.Adapter<Adapter_Confirm.ViewHolder> {
 
-    private List<FoodElements> foodElements;
+    private List<FoodElement> foodElements;
     Context context;
 
-    public Adapter_Confirm(List<FoodElements> foodElements, Context context) {
+    public Adapter_Confirm(List<FoodElement> foodElements, Context context) {
         this.foodElements = foodElements;
         this.context = context;
     }

@@ -15,18 +15,18 @@ import com.bumptech.glide.Glide;
 import com.example.food__delivery.Testing.DatabaseEntry;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 
 import java.util.List;
 
 public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder> {
 
-    private List<FoodElements> foodElements;
+    private List<FoodElement> foodElements;
     Context context;
     DatabaseEntry databaseEntry;
 
-    public Adapter_Cart(List<FoodElements> foodElements, Context context) {
+    public Adapter_Cart(List<FoodElement> foodElements, Context context) {
         this.foodElements = foodElements;
         this.context = context;
     }

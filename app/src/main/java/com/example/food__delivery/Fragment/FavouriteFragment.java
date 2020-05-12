@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Fav;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
@@ -27,7 +27,7 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
     RecyclerView recyclerView;
     DatabaseEntry databaseEntry;
     TextView quote;
-    List<FoodElements> foodElementsList;
+    List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Fav recyclerViewAdapter;
     int i=0;

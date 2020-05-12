@@ -3,10 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash"
     android:id="@+id/splash"
     tools:context="com.example.food__delivery.SplashActivity">
-
+    <ImageView
+        android:id="@+id/imgPlaylistItemBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:maxHeight="0dp"
+        android:scaleType="centerCrop"
+        android:gravity="center|bottom|clip_horizontal|clip_vertical"
+        android:src="@drawable/splash" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

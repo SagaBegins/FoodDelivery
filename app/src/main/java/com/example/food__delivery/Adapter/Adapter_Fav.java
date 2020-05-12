@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
@@ -22,11 +22,11 @@ import java.util.List;
 
 public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
 
-    private List<FoodElements> foodElements;
+    private List<FoodElement> foodElements;
     Context context;
     DatabaseEntry databaseEntry;
 
-    public Adapter_Fav(List<FoodElements> foodElementsList, Context context) {
+    public Adapter_Fav(List<FoodElement> foodElementsList, Context context) {
         this.context = context;
         this.foodElements = foodElementsList;
     }

@@ -31,9 +31,12 @@ import com.example.food__delivery.MenuActivity.VegMainCoursefragment;
 import com.example.food__delivery.MenuActivity.NonVegStartersFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AfterMain extends AppCompatActivity {
 
@@ -52,6 +55,7 @@ public class AfterMain extends AppCompatActivity {
     public static TextView tv;
     private ViewPager mViewPager;
     private DatabaseEntry databaseEntry;
+    public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +66,11 @@ public class AfterMain extends AppCompatActivity {
         toolbar.setTitleTextColor(0xFFFFFFFF);
         Intent intent = getIntent();
 
-        int position = intent.getIntExtra("viewPosition" ,0);
+        int restaurantId = intent.getIntExtra("restaurantId" ,0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
-        mViewPager.setOffscreenPageLimit(2);
-        mViewPager.setCurrentItem(position);
+        //mViewPager.setOffscreenPageLimit(2);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));

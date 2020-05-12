@@ -4,9 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@drawable/home_back"
     tools:context="com.example.food__delivery.Activities.AfterMain">
+
+    <ImageView
+        android:id="@+id/imgPlaylistItemBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:maxHeight="0dp"
+        android:scaleType="centerCrop"
+        android:gravity="center|bottom|clip_horizontal|clip_vertical"
+        android:src="@drawable/splash" />
+    <ImageView
+        android:id="@+id/imgPlaylistItemFg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:adjustViewBounds="true"
+        android:maxHeight="0dp"
+        android:scaleType="centerCrop"
+        android:gravity="center|bottom|clip_horizontal|clip_vertical"
+        android:src="@color/colorPrimaryDark" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

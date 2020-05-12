@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,7 +79,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     Adapter_Confirm reAdapterconfirm;
     DatabaseEntry databaseEntry;
     ViewPager viewPager;
-    List<FoodElements> foodElementsList;
+    List<FoodElement> foodElementsList;
     FirebaseAuth auth;
     FirebaseUser user;
     CallbackManager mCallbackManager;

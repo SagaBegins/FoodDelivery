@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.Activities.AfterMain;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 import com.example.food__delivery.Testing.RoundedCornersTransformation;
@@ -23,13 +23,13 @@ import java.util.List;
 
 public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.ViewHolder> {
 
-    private List<FoodElements> foodElements;
+    private List<FoodElement> foodElements;
     Context context;
     boolean isPressed = false;
     int rate = 0;
     DatabaseEntry databaseEntry;
 
-        public Adapter_Menu_Items(Context context, List<FoodElements> foodElements) {
+        public Adapter_Menu_Items(Context context, List<FoodElement> foodElements) {
         this.foodElements = foodElements;
         this.context = context;
         }
@@ -46,7 +46,6 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
             holder.food_name.setText(foodElements.get(position).getFoodType());
             Glide.with(context.getApplicationContext())
                     .load(foodElements.get(position).getPhoto())
-                    .transform(new RoundedCornersTransformation(context.getApplicationContext(), 15, 1))
                     .into(holder.image);
             holder.price.setText(foodElements.get(position).getPrice());
             if(databaseEntry.totalQty()<40) {

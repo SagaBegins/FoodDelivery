@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Activities.Checkout;
 import com.example.food__delivery.Adapter.Adapter_Cart;
-import com.example.food__delivery.Helper.FoodElements;
+import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
@@ -36,7 +36,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     RecyclerView recyclerView;
     Adapter_Cart reAdapterFav;
     DatabaseEntry databaseEntry;
-    List<FoodElements> foodElementsList;
+    List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager layoutManager;
     int price=0;
 

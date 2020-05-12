@@ -19,5 +19,6 @@
     <string name="emptycart"><b>Your Cart is empty.</b>\n Your Cart lives to serve. Give it purpose fill it with Food. \n\n Continue Ordering or visit your Favourite Section.</string>
     <string name="title_activity_checkout">Checkout</string>
     <string name="emptyfav">What\'s my favourite food? Once you order out..\n -ABIGAIL BRESLIN. </string>
+    <string name="sign_up">SIGN UP</string>
 
 </resources>
