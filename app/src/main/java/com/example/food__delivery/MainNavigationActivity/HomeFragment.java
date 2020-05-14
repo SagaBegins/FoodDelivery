@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.Helper.Menu;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,10 +42,12 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
     ProgressDialog loading;
     public static List<Restaurant> restaurantList  = new ArrayList<>();
+    public static List<Menu> menuList = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu recyclerViewadapter;
     boolean done;
+    boolean menuDone;
     private static ViewPager mPager;
     private GetElements getElements = new GetElements();
     private static int currentPage = 0;
@@ -65,9 +69,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
         if(restaurantList.size() == 0) {
-            AsyncTask.Status temp = getElements.getStatus();
-            getElements.cancel(temp == AsyncTask.Status.RUNNING);
-            getElements = new GetElements();
             getElements.execute();
         }
         else{
@@ -148,8 +149,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             super.onPreExecute();
             // Showing progress dialog
             loading = new ProgressDialog(getActivity());
-            loading.setMessage("One cannot think well, love well, sleep well, if one has not dined well!");
-            loading.setCancelable(true);
+            loading.setMessage("One cannot think well, love well, sleep well, if one has not dined well! :)");
+            loading.setCancelable(false);
             loading.show();
 
         }
@@ -157,9 +158,11 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         @Override
         protected List<Restaurant> doInBackground(String... arg0) {
             done = false;
-            DatabaseReference menuRef = mDatabase.child("restaurants");
+            menuDone = false;
+            DatabaseReference restaurantRef = mDatabase.child("restaurants");
+            DatabaseReference menuRef = mDatabase.child("menu");
             Log.d("Adding Ref",menuRef.toString());
-            menuRef.addValueEventListener(new ValueEventListener() {
+            restaurantRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for(DataSnapshot child:dataSnapshot.getChildren()) {
@@ -177,7 +180,41 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 }
             });
 
+            menuRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ArrayList<FoodElement> foodElements = new ArrayList<>();
+                    String nameOfKey;
+                    for(DataSnapshot child:dataSnapshot.getChildren()) {
+                        Menu menuItem = new Menu();
+                        for(DataSnapshot category: child.getChildren()) {
+                            nameOfKey = category.getKey();
+                            Log.d("category", "Line 195 Home Fragment,"+nameOfKey+" "+ category.getRef().toString());
+                            for(DataSnapshot childOfChild: category.getChildren()) {
+                                FoodElement foodElement = new FoodElement();
+                                foodElement.setPhoto(childOfChild.child("image").getValue(String.class));
+                                foodElement.setName(childOfChild.child("name").getValue(String.class));
+                                foodElement.setFoodType(childOfChild.child("category").getValue(String.class));
+                                foodElement.setPrice(childOfChild.child("price").getValue(String.class));
+                                foodElement.setRate(childOfChild.child("rate").getValue(Integer.class));
+                                foodElements.add(foodElement);
+                            }
+                            menuItem.setIndex(nameOfKey, foodElements);
+                            foodElements.clear();
+                        }
+                        menuList.add(menuItem);
+                    }
+                    menuDone = true;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
             while(!done);
+            while(!menuDone);
             return restaurantList;
         }
 

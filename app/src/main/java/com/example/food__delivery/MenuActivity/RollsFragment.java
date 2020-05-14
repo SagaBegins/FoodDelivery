@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
 import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +36,7 @@ public class RollsFragment extends androidx.fragment.app.Fragment {
     ProgressDialog loading;
     List<FoodElement> foodElements = new ArrayList<>();
     RecyclerView recyclerView;
-    GetElements getElements = new GetElements();
+
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
     boolean done;
@@ -54,13 +55,8 @@ public class RollsFragment extends androidx.fragment.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_rolls, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler6);
         recyclerView.setHasFixedSize(true);
+        foodElements = HomeFragment.menuList.get(restaurantId).rolls;
         if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
-            foodElements.clear();
-            AsyncTask.Status temp = getElements.getStatus();
-                        getElements.cancel(temp == AsyncTask.Status.RUNNING);
-            while(!getElements.isCancelled());
-            getElements = new GetElements();
-            getElements.execute();
         }
         else{
             recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
@@ -71,62 +67,4 @@ public class RollsFragment extends androidx.fragment.app.Fragment {
         return view;
 
     }
-    private class GetElements extends AsyncTask<String, String, List<FoodElement>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // Showing progress dialog
-            /*loading = new ProgressDialog(getActivity());
-                    loading.setMessage("Please wait...");
-                    loading.setCancelable(true);
-                    loading.show();*/
-
-        }
-
-        @Override
-        protected List<FoodElement> doInBackground(String... arg0) {
-            done = false;
-            DatabaseReference menuRef = mDatabase.child("menu").child(restaurantId+"").child("rolls");
-            Log.d("Adding Ref",menuRef.toString());
-            menuRef.addValueEventListener(valueChanger);
-            while(!done);
-            menuRef.removeEventListener(valueChanger);
-            return foodElements;
-        }
-
-        @Override
-        protected void onPostExecute(List<FoodElement> result) {
-            super.onPostExecute(result);
-            // Dismiss the progress dialog
-            /*if (loading.isShowing())
-                loading.dismiss();*/
-            /**
-             * Updating parsed JSON data into ListView
-             * */
-            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
-            recyclerView.setAdapter(recyclerViewadapter);
-        }
-    }
-    private ValueEventListener valueChanger = new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-            for(DataSnapshot child:dataSnapshot.getChildren()) {
-                FoodElement foodElement = new FoodElement();
-                foodElement.setPhoto(child.child("image").getValue(String.class));
-                foodElement.setName(child.child("name").getValue(String.class));
-                foodElement.setFoodType(child.child("category").getValue(String.class));
-                foodElement.setPrice(child.child("price").getValue(String.class));
-                foodElement.setRate(restaurantId);
-                foodElements.add(foodElement);
-            }
-            done = true;
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError databaseError) {
-            done = true;
-            Log.d("setting done","is done in database error");
-        }
-    };
 }

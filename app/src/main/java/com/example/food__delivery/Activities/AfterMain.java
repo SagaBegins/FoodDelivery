@@ -70,7 +70,6 @@ public class AfterMain extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         Intent intent = getIntent();
-
         restaurantId = intent.getIntExtra("restaurantId" ,0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewPager = (ViewPager) findViewById(R.id.container);
