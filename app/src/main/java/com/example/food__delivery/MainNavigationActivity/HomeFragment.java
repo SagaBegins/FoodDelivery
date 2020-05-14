@@ -7,9 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,19 +42,22 @@ import java.util.TimerTask;
  */
 public class HomeFragment extends androidx.fragment.app.Fragment {
 
-    ProgressDialog loading;
     public static List<Restaurant> restaurantList  = new ArrayList<>();
     public static List<Menu> menuList = new ArrayList<>();
+
+    ProgressDialog loading;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu recyclerViewadapter;
     boolean done;
     boolean menuDone;
     private static ViewPager mPager;
+    private static boolean[] filteredMenu = new boolean[5];
+    private static List<Restaurant> filteredRestaurant = new ArrayList<>();
     private GetElements getElements = new GetElements();
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES = {R.drawable.paneer, R.drawable.parantha_1, R.drawable.kathiroll, R.drawable.rice, R.drawable.nonveg};
+    private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount2, R.drawable.discount3, R.drawable.discount4};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     public HomeFragment() {
@@ -66,6 +71,124 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
+        EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
+
+        searchFilter.setOnKeyListener(new View.OnKeyListener() {
+                                          @Override
+                                          public boolean onKey(View v, int keyCode, KeyEvent event) {
+                                              EditText s = v.findViewById(R.id.editText_search);
+                                              String t = s.getText().toString();
+                                              for(int i=0;i<5;i++){
+                                                  filteredMenu[i] = false;
+                                              }
+                                              Log.d("Text", "Line 81 Home Fragement "+ t);
+                                              int iter = 0;
+                                              if(t.equals("") || t.equals(" ")){
+                                                  for(int i=0;i<5;i++){
+                                                      filteredMenu[i] = true;
+                                                  }
+                                              }
+                                              for(Menu m: menuList){
+                                                  for(FoodElement f: m.vegStarters){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                        filteredMenu[iter] = true;
+                                                        break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.nonVegStarters){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.nonVegMainCourse){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.vegMainCourse){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.rice){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.sweets){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter])
+                                                      continue;
+                                                  for(FoodElement f: m.beverages){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.rolls){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  if(filteredMenu[iter]){
+                                                      iter++;
+                                                      continue;
+                                                  }
+                                                  for(FoodElement f: m.breads){
+                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
+                                                          filteredMenu[iter] = true;
+                                                          break;
+                                                      }
+                                                  }
+                                                  iter++;
+                                              }
+
+                                              filteredRestaurant.clear();
+                                              for(int i=0;i<5;i++){
+                                                  if(filteredMenu[i]){
+                                                      filteredRestaurant.add(restaurantList.get(i));
+                                                  }
+                                              }
+
+                                              recyclerViewadapter = new Adapter_Menu(getActivity(), filteredRestaurant);
+                                              recyclerView.setAdapter(recyclerViewadapter);
+                                              return false;
+                                          }
+                                      }
+        );
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
         if(restaurantList.size() == 0) {
@@ -190,13 +313,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                         for(DataSnapshot category: child.getChildren()) {
                             nameOfKey = category.getKey();
                             Log.d("category", "Line 195 Home Fragment,"+nameOfKey+" "+ category.getRef().toString());
-                            for(DataSnapshot childOfChild: category.getChildren()) {
+                            for(DataSnapshot food: category.getChildren()) {
                                 FoodElement foodElement = new FoodElement();
-                                foodElement.setPhoto(childOfChild.child("image").getValue(String.class));
-                                foodElement.setName(childOfChild.child("name").getValue(String.class));
-                                foodElement.setFoodType(childOfChild.child("category").getValue(String.class));
-                                foodElement.setPrice(childOfChild.child("price").getValue(String.class));
-                                foodElement.setRate(childOfChild.child("rate").getValue(Integer.class));
+                                foodElement.setPhoto(food.child("image").getValue(String.class));
+                                foodElement.setName(food.child("name").getValue(String.class));
+                                foodElement.setFoodType(food.child("category").getValue(String.class));
+                                foodElement.setPrice(food.child("price").getValue(String.class));
+                                foodElement.setRate(food.child("rate").getValue(Integer.class));
                                 foodElements.add(foodElement);
                             }
                             menuItem.setIndex(nameOfKey, foodElements);

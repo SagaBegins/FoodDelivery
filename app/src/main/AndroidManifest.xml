@@ -13,9 +13,9 @@
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="false"
-        android:logo="@drawable/logo1"
+        android:logo="@drawable/logo"
         android:icon="@color/colorPrimaryDark"
-        android:roundIcon="@drawable/logo1"
+        android:roundIcon="@drawable/logo"
         android:label="Hunger Hunt"
         android:largeHeap="true"
         android:supportsRtl="true"
