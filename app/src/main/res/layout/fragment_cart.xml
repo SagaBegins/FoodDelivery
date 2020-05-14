@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="Place Order"
+                android:text="@string/string_placeOrder"
                 android:textAlignment="center"
                 android:textColor="@android:color/white"
                 android:layout_marginStart="96dp"
@@ -49,11 +49,17 @@
                 android:layout_alignParentLeft="true"
                 tools:ignore="RtlCompat" />
 
+            <Button
+                android:id="@+id/btn_placeOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/string_placeOrder" />
+
             <TextView
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="|"
+                android:text="@string/string_divder"
                 android:textSize="25sp"
                 android:textColor="@android:color/white"
                 android:gravity="center"
@@ -62,7 +68,7 @@
                 android:layout_toRightOf="@+id/textView28" />
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/textView_cartTotalPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -75,7 +81,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/textView_cartEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"

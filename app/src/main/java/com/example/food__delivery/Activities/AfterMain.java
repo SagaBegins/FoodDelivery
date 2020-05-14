@@ -3,6 +3,7 @@ package com.example.food__delivery.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +19,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.food__delivery.Helper.FoodElement;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.food__delivery.MenuActivity.BreadsFragment;
-import com.example.food__delivery.MenuActivity.PlattersFragment;
+import com.example.food__delivery.MenuActivity.SweetsFragment;
 import com.example.food__delivery.MenuActivity.NonVegMainCourseFragment;
 import com.example.food__delivery.MenuActivity.BeveragesFragment;
 import com.example.food__delivery.MenuActivity.VegStartersFragment;
 import com.example.food__delivery.MenuActivity.RiceFragment;
 import com.example.food__delivery.MenuActivity.RollsFragment;
-import com.example.food__delivery.MenuActivity.VegMainCoursefragment;
+import com.example.food__delivery.MenuActivity.VegMainCourseFragment;
 import com.example.food__delivery.MenuActivity.NonVegStartersFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
@@ -36,7 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AfterMain extends AppCompatActivity {
 
@@ -55,18 +56,22 @@ public class AfterMain extends AppCompatActivity {
     public static TextView tv;
     private ViewPager mViewPager;
     private DatabaseEntry databaseEntry;
+    private ArrayList<FoodElement> foodElements = new ArrayList<>();
     public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+    Bundle savedInstanceState;
     ImageView imageView;
+    public int restaurantId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_after_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         Intent intent = getIntent();
 
-        int restaurantId = intent.getIntExtra("restaurantId" ,0);
+        restaurantId = intent.getIntExtra("restaurantId" ,0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
@@ -126,15 +131,15 @@ public class AfterMain extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new VegStartersFragment(), "Veg Starters");
-        adapter.addFrag(new NonVegStartersFragment(), "Non-Veg Starters");
-        adapter.addFrag(new VegMainCoursefragment(), "Veg Main Course");
-        adapter.addFrag(new NonVegMainCourseFragment(), "Non-Veg Main Course");
-        adapter.addFrag(new PlattersFragment(), "Platters");
-        adapter.addFrag(new RollsFragment(), "Rolls");
-        adapter.addFrag(new RiceFragment(), "Rice");
-        adapter.addFrag(new BreadsFragment(), "Breads");
-        adapter.addFrag(new BeveragesFragment(), "Beverages");
+        adapter.addFrag(new VegStartersFragment(restaurantId), "Veg Starters");
+        adapter.addFrag(new NonVegStartersFragment(restaurantId), "Non-Veg Starters");
+        adapter.addFrag(new VegMainCourseFragment(restaurantId), "Veg Main Course");
+        adapter.addFrag(new NonVegMainCourseFragment(restaurantId), "Non-Veg Main Course");
+        adapter.addFrag(new SweetsFragment(restaurantId), "Sweets");
+        adapter.addFrag(new RollsFragment(restaurantId), "Rolls");
+        adapter.addFrag(new RiceFragment(restaurantId), "Rice");
+        adapter.addFrag(new BreadsFragment(restaurantId), "Breads");
+        adapter.addFrag(new BeveragesFragment(restaurantId), "Beverages");
         viewPager.setAdapter(adapter);
     }
 
@@ -164,6 +169,11 @@ public class AfterMain extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

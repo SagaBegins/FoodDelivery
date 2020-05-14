@@ -63,13 +63,13 @@ public class CartFragment extends androidx.fragment.app.Fragment {
 
         foodElementsList = databaseEntry.getDataFromDB("cart_table");
         databaseEntry.close();
-        textget = (TextView)view.findViewById(R.id.textView15);
+        textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
         proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
         reAdapterFav = new Adapter_Cart(foodElementsList,getActivity());
-        totalp=(TextView)view.findViewById(R.id.textView14);
+        totalp=(TextView)view.findViewById(R.id.textView_cartTotalPrice);
         recyclerView.setAdapter(reAdapterFav);
-        int tot = calculateGrandTotal();
-        String totalvalue = String.valueOf(tot);
+        double tot = calculateGrandTotal();
+        String totalvalue = String.format("%.2f",tot);
         textget.setVisibility(View.GONE);
         SharedPreferences totalPrice;
         totalPrice = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
@@ -120,15 +120,15 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         super.onResume();
         //databaseEntry = ();
     }
-    public static int calculateGrandTotal(){
-        int total;
+    public static double calculateGrandTotal(){
+        double total;
         Activity activity = (Activity)view.getContext();
 
         databaseEntrytotal = new DatabaseEntry(activity);
         total = databaseEntrytotal.total();
         databaseEntrytotal.close();
-
-        totalp.setText("\u20B9 "+total);
+        String tot = String.format("%.2f",total);
+        totalp.setText("\u20B9 "+tot);
         if(total == 0){
             textget.setVisibility(View.VISIBLE);
             proceed.setVisibility(View.GONE);

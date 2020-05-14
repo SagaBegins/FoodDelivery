@@ -16,7 +16,7 @@ import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
-import com.example.food__delivery.Testing.RoundedCornersTransformation;
+
 
 import java.util.List;
 
@@ -43,11 +43,11 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             databaseEntry = new DatabaseEntry(context);
-            holder.food_name.setText(foodElements.get(position).getFoodType());
+            holder.food_name.setText(foodElements.get(position).getName());
             Glide.with(context.getApplicationContext())
                     .load(foodElements.get(position).getPhoto())
                     .into(holder.image);
-            holder.price.setText(foodElements.get(position).getPrice());
+            holder.price.setText("₹"+foodElements.get(position).getPrice());
             if(databaseEntry.totalQty()<40) {
                 holder.add.setEnabled(true);
                 databaseEntry.close();
@@ -56,8 +56,8 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     public void onClick(View view) {
                         databaseEntry = new DatabaseEntry(context);
                         rate = foodElements.get(position).getRate();
-                        databaseEntry.insertIntoCart(foodElements.get(position).getFoodType(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
-                        Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT);
+                        databaseEntry.insertIntoCart(foodElements.get(position).getName(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        //Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT).show();
                         databaseEntry.close();
                         AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
                     }
@@ -74,7 +74,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     if(!isPressed) {
                         holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         databaseEntry = new DatabaseEntry(context);
-                        databaseEntry.insertIntoFav(foodElements.get(position).getFoodType(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        databaseEntry.insertIntoFav(foodElements.get(position).getName(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
                         databaseEntry.close();
                         Toast.makeText(context, "Food Added to Favourites.", Toast.LENGTH_SHORT);
                     }else if(isPressed){

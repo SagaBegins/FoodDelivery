@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.Helper.OnDataUpdateListener;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -48,7 +47,6 @@ import com.example.food__delivery.MainNavigationActivity.AboutFragment;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MainNavigationActivity.RateFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.CircleTransform;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
 public class MainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -85,6 +83,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
         setTitle("Home");
         databaseEntry = new DatabaseEntry(MainScreen.this);
         databaseEntry.createTable();
+        databaseEntry.close();
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
         navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
         nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textView2);
@@ -106,7 +105,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                         nametext.setText(namef);
                         if(!idf.equalsIgnoreCase("null")){
                             sign.setText("Log Out");
-                            Glide.with(MainScreen.this).load("http://graph.facebook.com/" + idf + "/picture?type=normal").transform(new CircleTransform()).into(photo);
+                            Glide.with(MainScreen.this).load("http://graph.facebook.com/" + idf + "/picture?type=normal").into(photo);
                             sign.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

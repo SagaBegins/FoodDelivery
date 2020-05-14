@@ -62,7 +62,6 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         values.put("price", price);
         values.put("rate", rate);
         values.put("qty", qty);
-        Log.d("URL", url);
         try {
             if(totalQty()<40) {
                 db.insertOrThrow(CART_TABLE, null, values);
@@ -118,7 +117,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             do {
                 FoodElement food = new FoodElement();
                 food.setPhoto(cursor.getString(1));
-                food.setFoodType(cursor.getString(0));
+                food.setName(cursor.getString(0));
                 food.setPrice(cursor.getString(2));
                 food.setRate(cursor.getInt(3));
                 food.setQty(cursor.getInt(4));
@@ -135,13 +134,12 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         db.delete(TABLE, "url" + " = ?", new String[] { url });
         
     }
-    public void updateInRow(String url, String table, int qty){
+    public void updateInRow(String name, String table, int qty){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
         ContentValues cv = new ContentValues();
         cv.put("qty", qty);
-        db.update(table, cv, "url="+"'"+url.toString().trim()+"'",null);
-        
+        db.update(table, cv, "foodname="+"'"+name.trim()+"'",null);
     }
     public  void addToOrderTable(String name, String add , String tranxid ){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -186,6 +184,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
                 db.execSQL(CREATE_PREORDER);
             }catch (SQLiteException exe){
                 exe.printStackTrace();
+                Log.d("Database Exception", "Error thrown on line 189 DatabaseEntry.java");
             }
             
         }
@@ -289,16 +288,20 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             }
             
         }
-        public int total(){
+        public double total(){
             SQLiteDatabase db = this.getWritableDatabase();
-            int total = 0;
-            String sqlQuery = "select sum(qty*rate) from "+CART_TABLE;
+            double total = 0;
+            String sqlQuery = "select sum(qty*CAST(price as float)) from "+CART_TABLE;
             Cursor i = db.rawQuery(sqlQuery, null);
             if(i.moveToFirst()){
-                total = i.getInt(0);
+                total = i.getDouble(0);
             }
             
             return total;
         }
 
+    @Override
+    public synchronized void close() {
+        super.close();
+    }
 }

@@ -48,7 +48,6 @@ import com.example.food__delivery.MainNavigationActivity.AboutFragment;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MainNavigationActivity.RateFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.CircleTransform;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
 public class MainActivity extends AppCompatActivity
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                         nametext.setText(namef);
                         if(!idf.equalsIgnoreCase("null")){
                             sign.setText("Log Out");
-                            Glide.with(MainActivity.this).load("http://graph.facebook.com/" + idf + "/picture?type=normal").transform(new CircleTransform()).into(photo);
+                            Glide.with(MainActivity.this).load("http://graph.facebook.com/" + idf + "/picture?type=normal").into(photo);
                             sign.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {

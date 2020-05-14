@@ -2,32 +2,28 @@ package com.example.food__delivery.MenuActivity;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 
 import androidx.annotation.NonNull;
-import androidx.core.util.TimeUtils;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
 import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.Helper.Restaurant;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.HttpHandler;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +41,10 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
     Adapter_Menu_Items recyclerViewadapter;
     boolean done;
     public final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private int restaurantId;
 
-    public VegStartersFragment() {
+    public VegStartersFragment(int restaurantId) {
+        this.restaurantId = restaurantId;
         // Required empty public constructor
     }
     @Override
@@ -57,9 +55,11 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler1);
         recyclerView.setHasFixedSize(true);
         Log.d("Size", foodElements.size()+"");
-        if(foodElements.size() == 0) {
+        if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
+            foodElements.clear();
             AsyncTask.Status temp = getElements.getStatus();
-            getElements.cancel(temp == AsyncTask.Status.RUNNING);
+                        getElements.cancel(temp == AsyncTask.Status.RUNNING);
+            while(!getElements.isCancelled());
             getElements = new GetElements();
             getElements.execute();
         }
@@ -67,7 +67,7 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
             recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
         }
-        reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 2);
+        reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 1);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
     }
@@ -87,30 +87,11 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
         @Override
         protected List<FoodElement> doInBackground(String... arg0) {
             done = false;
-            DatabaseReference menuRef = mDatabase.child("restaurants").child("0").child("menu");
-            menuRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot child:dataSnapshot.getChildren()) {
-                        FoodElement foodElement = new FoodElement();
-                        foodElement.setPhoto(child.child("Imagepath").getValue(String.class));
-                        foodElement.setName(child.child("Name").getValue(String.class));
-                        foodElement.setFoodType(child.child("Category").getValue(String.class));
-                        foodElement.setPrice(child.child("Price").getValue(Integer.class).toString());
-                        foodElement.setRate(child.child("Rate").getValue(Integer.class));
-                        foodElements.add(foodElement);
-                    }
-                    done = true;
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    done = true;
-                    Log.d("setting done","is done in database error");
-                }
-            });
-
+            DatabaseReference menuRef = mDatabase.child("menu").child(restaurantId+"").child("vegstarters");
+            Log.d("ondatachange", "Line 91, Yup is being called atleast");
+            menuRef.addValueEventListener(valueChanger);
             while(!done);
+            menuRef.removeEventListener(valueChanger);
             return foodElements;
         }
 
@@ -124,4 +105,26 @@ public class VegStartersFragment extends androidx.fragment.app.Fragment {
             recyclerView.setAdapter(recyclerViewadapter);
         }
     }
+    private ValueEventListener valueChanger = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            Log.d("ondatachange", "Line 110, Yup is being called atleast");
+            for(DataSnapshot child:dataSnapshot.getChildren()) {
+                FoodElement foodElement = new FoodElement();
+                foodElement.setPhoto(child.child("image").getValue(String.class));
+                foodElement.setName(child.child("name").getValue(String.class));
+                foodElement.setFoodType(child.child("category").getValue(String.class));
+                foodElement.setPrice(child.child("price").getValue(String.class));
+                foodElement.setRate(restaurantId);
+                foodElements.add(foodElement);
+            }
+            done = true;
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError databaseError) {
+            done = true;
+            Log.d("setting done","is done in database error");
+        }
+    };
 }

@@ -16,11 +16,11 @@
         android:logo="@drawable/logo1"
         android:icon="@color/colorPrimaryDark"
         android:roundIcon="@drawable/logo1"
-        android:label="Food Delivery"
+        android:label="Hunger Hunt"
         android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label,android:icon">
+        tools:replace="android:label,android:roundIcon">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="216477612202792" />

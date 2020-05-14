@@ -20,5 +20,7 @@
     <string name="title_activity_checkout">Checkout</string>
     <string name="emptyfav">What\'s my favourite food? Once you order out..\n -ABIGAIL BRESLIN. </string>
     <string name="sign_up">SIGN UP</string>
+    <string name="string_divder">|</string>
+    <string name="string_placeOrder">Place Order</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.food__delivery.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,8 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 int qty = foodElements.get(position).getQty()+1;
                 foodElements.get(position).setQty(qty);
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.updateInRow(foodElements.get(position).getPhoto(),"cart_table",qty);
+                Log.d("name",position+"");
+                databaseEntry.updateInRow(foodElements.get(position).getName(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
                 AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
                 databaseEntry.close();
@@ -73,7 +75,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 if(qty>0) {
                     foodElements.get(position).setQty(qty);
                     databaseEntry = new DatabaseEntry(context);
-                    databaseEntry.updateInRow(foodElements.get(position).getPhoto(), "cart_table", qty);
+                    databaseEntry.updateInRow(foodElements.get(position).getName(), "cart_table", qty);
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
                     CartFragment.calculateGrandTotal();
