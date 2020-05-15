@@ -3,15 +3,23 @@ package com.example.food__delivery.MainNavigationActivity;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
+import android.text.style.CharacterStyle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +28,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.Menu;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,124 +80,30 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
-        EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
+        TextInputEditText searchFilter = (TextInputEditText)  view.findViewById(R.id.editText_search);
+        //EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
+        searchFilter.setTextColor(Color.WHITE);
+        searchFilter.setHintTextColor(Color.WHITE);
+        searchFilter.setHint("Food Search");
+        searchFilter.setSingleLine();
+        searchFilter.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        searchFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        searchFilter.setOnKeyListener(new View.OnKeyListener() {
-                                          @Override
-                                          public boolean onKey(View v, int keyCode, KeyEvent event) {
-                                              EditText s = v.findViewById(R.id.editText_search);
-                                              String t = s.getText().toString();
-                                              for(int i=0;i<5;i++){
-                                                  filteredMenu[i] = false;
-                                              }
-                                              Log.d("Text", "Line 81 Home Fragement "+ t);
-                                              int iter = 0;
-                                              if(t.equals("") || t.equals(" ")){
-                                                  for(int i=0;i<5;i++){
-                                                      filteredMenu[i] = true;
-                                                  }
-                                              }
-                                              for(Menu m: menuList){
-                                                  for(FoodElement f: m.vegStarters){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                        filteredMenu[iter] = true;
-                                                        break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.nonVegStarters){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.nonVegMainCourse){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.vegMainCourse){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.rice){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.sweets){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter])
-                                                      continue;
-                                                  for(FoodElement f: m.beverages){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.rolls){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  if(filteredMenu[iter]){
-                                                      iter++;
-                                                      continue;
-                                                  }
-                                                  for(FoodElement f: m.breads){
-                                                      if(f.getName().toLowerCase().contains(t.toLowerCase())){
-                                                          filteredMenu[iter] = true;
-                                                          break;
-                                                      }
-                                                  }
-                                                  iter++;
-                                              }
+            }
 
-                                              filteredRestaurant.clear();
-                                              for(int i=0;i<5;i++){
-                                                  if(filteredMenu[i]){
-                                                      filteredRestaurant.add(restaurantList.get(i));
-                                                  }
-                                              }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                                              recyclerViewadapter = new Adapter_Menu(getActivity(), filteredRestaurant);
-                                              recyclerView.setAdapter(recyclerViewadapter);
-                                              return false;
-                                          }
-                                      }
-        );
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                onKeyFilter(s);
+            }
+        });
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
         if(restaurantList.size() == 0) {
@@ -249,7 +164,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             @Override
             public void onPageSelected(int position) {
                 currentPage = position;
-
             }
 
             @Override
@@ -353,5 +267,37 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
             recyclerView.setAdapter(recyclerViewadapter);
         }
+    }
+
+    private boolean[] setBoolArrayTo(boolean bool, int size){
+        boolean[] newBool = new boolean[size];
+        for(int i=0; i< size; i++){
+            newBool[i] = bool;
+        }
+        return newBool;
+    }
+
+    private void onKeyFilter(Editable v) {
+        String filterText = v.toString();
+        filteredMenu = setBoolArrayTo(false, filteredMenu.length);
+        Log.d("Text", "Line 81 Home Fragement "+ filterText);
+        int iter = 0;
+        if(filterText.equals("") || filterText.equals(" ")){
+            filteredMenu = setBoolArrayTo(true, filteredMenu.length);
+        }
+        for(Menu m: menuList){
+            filteredMenu[iter] = m.containsFood(filterText);
+            iter++;
+        }
+
+        filteredRestaurant.clear();
+        for(int i=0;i<5;i++){
+            if(filteredMenu[i]){
+                filteredRestaurant.add(restaurantList.get(i));
+            }
+        }
+
+        recyclerViewadapter = new Adapter_Menu(getActivity(), filteredRestaurant);
+        recyclerView.setAdapter(recyclerViewadapter);
     }
 }

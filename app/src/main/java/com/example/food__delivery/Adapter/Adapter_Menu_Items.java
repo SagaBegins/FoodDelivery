@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Visibility;
 
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.Activities.AfterMain;
@@ -27,6 +29,8 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
     Context context;
     boolean isPressed = false;
     int rate = 0;
+    RelativeLayout card;
+
     DatabaseEntry databaseEntry;
 
         public Adapter_Menu_Items(Context context, List<FoodElement> foodElements) {
@@ -43,6 +47,24 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             databaseEntry = new DatabaseEntry(context);
+            holder.image.setClickable(true);
+            holder.image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch(holder.description.getVisibility()){
+                        case View.GONE:
+                            holder.description.setVisibility(View.VISIBLE);
+                            holder.food_name.setVisibility(View.GONE);
+                            holder.bottom.setVisibility(View.GONE);
+                            break;
+                        case View.VISIBLE:
+                            holder.description.setVisibility(View.GONE);
+                            holder.food_name.setVisibility(View.VISIBLE);
+                            holder.bottom.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
             holder.food_name.setText(foodElements.get(position).getName());
             Glide.with(context.getApplicationContext())
                     .load(foodElements.get(position).getPhoto())
@@ -93,9 +115,10 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView food_name, price;
+            private TextView food_name, price, description;
             private ImageView image;
             private ImageButton add, fav;
+            private RelativeLayout bottom;
 
             public ViewHolder(View view) {
                 super(view);
@@ -104,6 +127,8 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                 price = (TextView)view.findViewById(R.id.priceofproduct);
                 add = (ImageButton)view.findViewById(R.id.imageButton3);
                 fav = (ImageButton)view.findViewById(R.id.imageButton4);
+                description = (TextView) view.findViewById(R.id.food_description);
+                bottom = (RelativeLayout) view.findViewById(R.id.bottom_section);
             }
         }
     }

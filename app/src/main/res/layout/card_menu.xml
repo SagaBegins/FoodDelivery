@@ -2,109 +2,125 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_food_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="2dp">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        card_view:cardCornerRadius="5dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:clickable="true"
         android:foreground="@android:color/transparent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true">
+        card_view:cardCornerRadius="5dp">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/dishimage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:alpha="0.9"
-        android:background="@drawable/image_corner"
-        android:scaleType="centerCrop" />
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#40000000">
+            <ImageView
+                android:id="@+id/dishimage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:alpha="0.9"
+                android:background="@drawable/image_corner"
+                android:scaleType="centerCrop" />
 
-    <TextView
-        android:id="@+id/menuItemName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="2dp"
-        android:layout_marginRight="5dp"
-        android:alpha="0.7"
-        android:background="@color/colorPrimaryDark"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center_horizontal"
-        android:padding="5dp"
-        android:shadowColor="@android:color/background_dark"
-        android:shadowRadius="2"
-        android:text="Text"
-        android:textAlignment="center"
-        android:textColor="@color/default_circle_indicator_fill_color"
-        android:textSize="25dp" />
-</RelativeLayout>
+            <TextView
+                android:id="@+id/food_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.8"
+                android:background="@color/colorPrimaryDark"
+                android:clickable="false"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Description temporarily unavailable"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#40000000">
+
+                <TextView
+                    android:id="@+id/menuItemName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginRight="5dp"
+                    android:alpha="0.7"
+                    android:background="@color/colorPrimaryDark"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center_horizontal"
+                    android:padding="5dp"
+                    android:shadowColor="@android:color/background_dark"
+                    android:shadowRadius="2"
+                    android:text="Text"
+                    android:textAlignment="center"
+                    android:textColor="@color/default_circle_indicator_fill_color"
+                    android:textSize="25dp" />
+            </RelativeLayout>
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.6"
-        android:background="@color/colorPrimaryDark">
+            <RelativeLayout
+                android:id="@+id/bottom_section"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:alpha="0.6"
+                android:background="@color/colorPrimaryDark">
 
-        <ImageButton
-            android:id="@+id/imageButton4"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            card_view:srcCompat="@drawable/ic_favorite_border_black_24dp"
-            tools:ignore="VectorDrawableCompat" />
+                <ImageButton
+                    android:id="@+id/imageButton4"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    card_view:srcCompat="@drawable/ic_favorite_border_black_24dp"
+                    tools:ignore="VectorDrawableCompat" />
 
-        <ImageButton
-            android:id="@+id/imageButton3"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignTop="@+id/imageButton4"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:background="@android:color/transparent"
-            android:scaleType="fitXY"
-            card_view:srcCompat="@drawable/ic_add_shopping_cart_black_24dp"
-            tools:ignore="VectorDrawableCompat" />
+                <ImageButton
+                    android:id="@+id/imageButton3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignTop="@+id/imageButton4"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    card_view:srcCompat="@drawable/ic_add_shopping_cart_black_24dp"
+                    tools:ignore="VectorDrawableCompat" />
 
-        <TextView
-            android:id="@+id/priceofproduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="bottom"
-            android:layout_marginRight="10dp"
-            android:shadowColor="@android:color/black"
-            android:shadowRadius="2"
-            android:text="Price"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="28sp"
-            tools:ignore="RtlCompat" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/priceofproduct"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:shadowColor="@android:color/black"
+                    android:shadowRadius="2"
+                    android:text="Price"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="28sp"
+                    tools:ignore="RtlCompat" />
+            </RelativeLayout>
 
-</RelativeLayout>
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 

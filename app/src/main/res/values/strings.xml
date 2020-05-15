@@ -23,5 +23,6 @@
     <string name="string_divder">|</string>
     <string name="string_placeOrder">Place Order</string>
     <string name="restaurants">Restaurants</string>
+    <string name="food_search">Food Search</string>
 
 </resources>
