@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.zxing.aztec.encoder.Encoder;
+import com.payu.custombrowser.PayUSurePayWebViewClient;
 import com.payu.india.Extras.PayUChecksum;
 import com.payu.india.Interfaces.OneClickPaymentListener;
 import com.payu.india.Model.PaymentParams;
@@ -34,16 +37,20 @@ import com.payu.india.Model.PayuHashes;
 import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
+import com.payumoney.core.PayUmoneySdkInitializer;
 import com.payumoney.sdkui.ui.activities.BaseActivity;
 import com.example.food__delivery.Adapter.Adapter_Confirm;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Signup;
 import com.example.food__delivery.Testing.DatabaseEntry;
+import com.payumoney.sdkui.ui.activities.PayUmoneyActivity;
+import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,18 +59,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Confirmation extends androidx.fragment.app.Fragment implements OneClickPaymentListener{
-
-    private String merchantKey="gtKFFx", userCredentials;
+    private String merchantId = "7076546";
+    private String merchantKey="I2lGq2jl", userCredentials;
+    private String salt = "clorzgwwte";
+    private final String txnid = System.currentTimeMillis() + "";//UUID.randomUUID().toString();
+    //private String authHeader = "Acf5JnJZSaHq5z5UfnrIvcybuasyk58qlXXGBQr6TI4=";
     private PayuConfig payuConfig;
     static TextView shipname;
     static TextView address;
@@ -128,7 +142,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         recyclerViewconfirm.setLayoutManager(layoutManager);
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
-
+        email = user.getEmail();
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,7 +152,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     FacebookSdk.setApplicationId("216477612202792");
                     FacebookSdk.sdkInitialize(getActivity());
                     dialog.setContentView(R.layout.dialog);
-                    dialog.setTitle("com.example.fooddelivery.Login OR Sign Up");
+                    dialog.setTitle("Login OR Sign Up");
                     dialog.show();
                     mCallbackManager = CallbackManager.Factory.create();
                     Button sign = (Button)dialog.findViewById(R.id.button7);
@@ -160,12 +174,60 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                         }
                     });
                 }else {
-                    navigateToBase();
+                    Log.d("Nav", "Line 165 its here");
+                    try {
+                        payuIntegration();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
         return view;
     }
+
+    public void payuIntegration() throws Exception {
+        //key|txnid|amount|productinfo|firstname|email|udf1||||||||||salt;
+        String hash = merchantKey+'|'+txnid+'|'+text.trim()+'|'+"Food"+'|'+fname+'|'+email+'|'+add.toUpperCase().trim()+"||||||||||"+salt;
+        hash = CalculateHash("SHA-512", hash);
+
+        PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();//.setIsDebug(true);
+        builder.setAmount(text.trim())
+                .setTxnId(txnid)
+                .setPhone(phno)
+                .setProductName("Food")
+                .setFirstName(fname)
+                .setEmail(email)
+                .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")
+                .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")
+                .setUdf1(add.toUpperCase().trim())
+                .setUdf2("").setUdf3("").setUdf4("").setUdf5("").setUdf6("").setUdf7("").setUdf8("").setUdf9("").setUdf10("")
+                .setIsDebug(true)
+                .setKey(merchantKey)
+                .setMerchantId(merchantId);
+        PayUmoneySdkInitializer.PaymentParam paymentParam = builder.build();
+        paymentParam.setMerchantHash(hash);
+        PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, false);
+    }
+
+
+    public static String CalculateHash(String type, String hashString) {
+        StringBuilder hash = new StringBuilder();
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance(type);
+            messageDigest.update(hashString.getBytes());
+            byte[] mdbytes = messageDigest.digest();
+            for (byte hashByte : mdbytes) {
+                hash.append(Integer.toString((hashByte & 0xff) + 0x100, 16).substring(1));
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return hash.toString();
+    }
+
+
     public static void textviews(String fname, String add, String city, String zip, String phno) {
         if (!fname.isEmpty() && !add.isEmpty() && !city.isEmpty() && !zip.isEmpty() && !phno.isEmpty()) {
             shipname.setText(fname.toUpperCase());
@@ -173,6 +235,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
             phone.setText(phno);
         }
     }
+
+
 
     public static void priceTextview(String price) {
         if (!price.isEmpty()) {
@@ -212,8 +276,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
          * Surl --> Success url is where the transaction response is posted by PayU on successful transaction
          * Furl --> Failre url is where the transaction response is posted by PayU on failed transaction
          */
-        mPaymentParams.setSurl("https://payu.herokuapp.com/success");
-        mPaymentParams.setFurl("https://payu.herokuapp.com/failure");
+        mPaymentParams.setSurl(PayuConstants.SURL);
+        mPaymentParams.setFurl(PayuConstants.FURL);
 
         /*
          * udf1 to udf5 are options params where you can pass additional information related to transaction.
@@ -242,7 +306,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         payuConfig.setEnvironment(environment);
 
         //TODO It is recommended to generate hash from server only. Keep your key and salt in server side hash generation code.
-        generateHashFromServer(mPaymentParams);
+        generateHashFromSDK(mPaymentParams, salt);
 
         /**
          * Below approach for generating hash is not recommended. However, this approach can be used to test in PRODUCTION_ENV
@@ -284,7 +348,10 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
 
         postData = checksum.getHash();
         if (postData.getCode() == PayuErrors.NO_ERROR) {
+            Log.d("Hash","Hash created");
             payuHashes.setPaymentHash(postData.getResult());
+        }else{
+            Log.d("Error","Line 291 some error with hash");
         }
 
         // checksum for payemnt related details
@@ -329,6 +396,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         }
 
         // we have generated all the hases now lest launch sdk's ui
+        Log.d("Launch","Line 337 About to launc");
         launchSdkUI(payuHashes);
     }
 
@@ -372,9 +440,11 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
 
         String postParams = postParamsBuffer.charAt(postParamsBuffer.length() - 1) == '&' ? postParamsBuffer.substring(0, postParamsBuffer.length() - 1).toString() : postParamsBuffer.toString();
 
+        generateHashFromSDK(mPaymentParams, salt);
+
         // lets make an api call
-        GetHashesFromServerTask getHashesFromServerTask = new GetHashesFromServerTask();
-        getHashesFromServerTask.execute(postParams);
+        //GetHashesFromServerTask getHashesFromServerTask = new GetHashesFromServerTask();
+        //getHashesFromServerTask.execute(postParams);
     }
 
 
@@ -561,13 +631,15 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
      */
     public void launchSdkUI(PayuHashes payuHashes) {
 
-        Intent intent = new Intent(getActivity(), BaseActivity.class);
+        Intent intent = new Intent(getActivity(), PayUmoneyActivity.class);
         intent.putExtra(PayuConstants.PAYU_CONFIG, payuConfig);
         intent.putExtra(PayuConstants.PAYMENT_PARAMS, mPaymentParams);
         intent.putExtra(PayuConstants.PAYU_HASHES, payuHashes);
+        intent.putExtra(PayuConstants.ONE_CLICK_CARD_TOKENS, "oneClickTokens");
 
+        startActivityForResult(intent, PayuConstants.PAYU_REQUEST_CODE);
         //Lets fetch all the one click card tokens first
-        fetchMerchantHashes(intent);
+        //fetchMerchantHashes(intent);
 
     }
 
@@ -828,7 +900,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         // GET params - merchant_key, user_credentials.
         // 2. In response we get a
         // this is a sample code for fetching one click hash from merchant server.
-        return getAllOneClickHashHelper(merchantKey, userCreds);
+       // return getAllOneClickHashHelper(merchantKey, userCreds);
+        return null;
     }
 
     //TODO This method is used only if integrating One Tap Payments
@@ -856,7 +929,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         // 2. In this POST method the oneclickhash is stored corresponding to card token in merchant server.
         // this is a sample code for storing one click hash on merchant server.
 
-        storeMerchantHash(cardToken, oneClickHash);
+        //storeMerchantHash(cardToken, oneClickHash);
 
     }
 
@@ -879,7 +952,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         // 2. In this POST method the oneclickhash is deleted in merchant server.
         // this is a sample code for deleting one click hash from merchant server.
 
-        deleteMerchantHash(cardToken);
+        //deleteMerchantHash(cardToken);
     }
 
     @Override

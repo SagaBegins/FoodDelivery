@@ -25,6 +25,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="216477612202792" />
 
+
         <activity android:name="com.example.food__delivery.Activities.OpenScreen"/>
 
         <activity android:name="com.example.food__delivery.Login" />
@@ -78,6 +79,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
     </application>
 </manifest>

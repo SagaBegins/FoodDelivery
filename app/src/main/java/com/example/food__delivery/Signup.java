@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
@@ -96,7 +98,7 @@ public class Signup extends AppCompatActivity {
                         //checking if success
                         if(task.isSuccessful()){
                             saveUserInformation();
-                            startActivity(new Intent(Signup.this, Login.class));
+                            //startActivity(new Intent(Signup.this, Login.class));
                         }else{
                             Toast.makeText(Signup.this, "Error in Registration!", Toast.LENGTH_SHORT).show();
                         }
@@ -109,7 +111,15 @@ public class Signup extends AppCompatActivity {
         String num = number.getText().toString().trim();
         UserInformation userInformation = new UserInformation(num,name1);
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        firebaseDatabase.child("users").child(user.getUid()).setValue(userInformation);
+        firebaseDatabase.child("users").child(user.getUid()).setValue(userInformation).addOnSuccessListener(
+                new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(Signup.this, Login.class));
+                    }
+                }
+        );
+        Log.d("Create", "Should have added user to database");
         }
 
         class MyTextWatcher implements android.text.TextWatcher {

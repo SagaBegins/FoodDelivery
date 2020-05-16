@@ -24,5 +24,10 @@
     <string name="string_placeOrder">Place Order</string>
     <string name="restaurants">Restaurants</string>
     <string name="food_search">Food Search</string>
+    <string name="name">NAME</string>
+    <string name="phone_number">PHONE NUMBER</string>
+    <string name="address">ADDRESS</string>
+    <string name="zip_code">ZIP CODE</string>
+    <string name="city">CITY</string>
 
 </resources>

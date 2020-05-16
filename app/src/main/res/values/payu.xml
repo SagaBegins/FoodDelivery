@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources> xmlns:tools="http://schemas.android.com/tools" tools:ignore="TypographyDashes"
+    <string name="payu_language">auto </string>
+    <string name="payu_payment_methods_fully_qualified_name">com.payu.android.front.sdk.demo.DemoMethodsActions</string>
+    <string name="payu_environment">sandbox</string>
+    <bool name="payu_save_and_use_card">false</bool>
+    <bool name="pay_add_card_option">true</bool>
+</resources>

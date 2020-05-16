@@ -47,6 +47,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
             databaseEntry = new DatabaseEntry(context);
+            holder.description.setText(foodElements.get(position).getDescription());
             holder.image.setClickable(true);
             holder.image.setOnClickListener(new View.OnClickListener() {
                 @Override

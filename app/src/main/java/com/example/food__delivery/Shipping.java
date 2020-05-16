@@ -49,6 +49,12 @@ public class Shipping extends androidx.fragment.app.Fragment {
         zip = (EditText)view.findViewById(R.id.zipedittext);
         city = (EditText)view.findViewById(R.id.cityedittext);
 
+        fname.setText("SS");
+        phno.setText("99999999999");
+        address.setText("sdnajskda");
+        zip.setText("123456");
+        city.setText("SSS");
+
         fnameLayout = (TextInputLayout)view.findViewById(R.id.firstnametext);
         addLayout = (TextInputLayout)view.findViewById(R.id.addresstext);
         phnoLayout = (TextInputLayout)view.findViewById(R.id.phonenumbertext);

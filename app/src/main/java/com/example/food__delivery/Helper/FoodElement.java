@@ -5,7 +5,7 @@ public class FoodElement {
     private String price;
     private String name;
     private String add;
-    private String trans;
+    private String description;
     private String photo;
     private String foodType;
     int rate;
@@ -23,11 +23,11 @@ public class FoodElement {
     public void setAdd(String add) {
         this.add = add;
     }
-    public String getTrans() {
-        return trans;
+    public String getDescription() {
+        return description;
     }
-    public void setTrans(String trans) {
-        this.trans = trans;
+    public void setDescription(String description) {
+        this.description = description;
     }
     public int getQty() {
         return qty;

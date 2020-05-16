@@ -233,6 +233,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                                 foodElement.setName(food.child("name").getValue(String.class));
                                 foodElement.setFoodType(food.child("category").getValue(String.class));
                                 foodElement.setPrice(food.child("price").getValue(String.class));
+                                foodElement.setDescription(food.child("description").getValue(String.class));
                                 foodElement.setRate(food.child("rate").getValue(Integer.class));
                                 foodElements.add(foodElement);
                             }
