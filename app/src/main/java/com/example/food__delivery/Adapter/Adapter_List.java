@@ -31,7 +31,7 @@ public class Adapter_List extends ArrayAdapter<PreviousData> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        PreviousData dataModel = getItem(position);
+        PreviousData dataModel = dataSet.get(position);
          LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.single_list_layout, parent, false);
             txtName = (TextView) convertView.findViewById(R.id.namelist);

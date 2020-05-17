@@ -22,7 +22,7 @@
             android:icon="@drawable/ic_favorite_border_black_menu_24dp"
             android:title="Favourite" />
         <item
-            android:title="Shopping Cart"
+            android:title="Shopping Carts"
             android:id="@+id/cartnav"
             android:icon="@drawable/ic_shopping_cart_black_menu_24dp"
             />

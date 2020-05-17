@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -264,7 +265,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.cartnav: {
-                fragment = new CartFragment();
+                fragment = new AllCartsFragment();
                 setTitle("Your Cart");
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -272,7 +273,8 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.favourite: {
-                fragment = new FavouriteFragment();
+                //fragment = new AllFavoriteFragemnt();
+                fragment = new FavouriteFragment(0);
                 setTitle("Favourite");
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();

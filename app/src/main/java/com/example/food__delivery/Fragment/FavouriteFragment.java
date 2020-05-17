@@ -31,7 +31,9 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Fav recyclerViewAdapter;
     int i=0;
-    public FavouriteFragment() {
+    private int restaurantId;
+    public FavouriteFragment(int rate) {
+        this.restaurantId = rate;
         // Required empty public constructor
     }
 
@@ -43,7 +45,7 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler10);
         databaseEntry = new DatabaseEntry(getActivity());
         foodElementsList  = new ArrayList<>();
-        foodElementsList = databaseEntry.getDataFromDB("favour_table");
+        foodElementsList = databaseEntry.getDataFromDB("favour_table", restaurantId);
         databaseEntry.close();
         quote = (TextView)view.findViewById(R.id.textView16);
         quote.setVisibility(View.GONE);

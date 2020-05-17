@@ -20,6 +20,8 @@ public class Cart_Favorite extends AppCompatActivity {
 
     Fragment fragment;
     Toolbar toolbar;
+    private int restaurantId;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -30,12 +32,12 @@ public class Cart_Favorite extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_favorite:
                     getSupportActionBar().setTitle("Favourite");
-                    fragment = new FavouriteFragment();
+                    fragment = new FavouriteFragment(restaurantId);
                     fragmentTransaction.replace(R.id.content, fragment).commit();
                     return true;
                 case R.id.navigation_cart:
                     getSupportActionBar().setTitle("Cart");
-                    fragment = new CartFragment();
+                    fragment = new CartFragment(restaurantId);
                     fragmentTransaction.replace(R.id.content, fragment).commit();
                     return true;
             }
@@ -46,6 +48,8 @@ public class Cart_Favorite extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        restaurantId = getIntent().getIntExtra("restaurantId",0);
         setContentView(R.layout.activity_cart__favorite);
         toolbar = (Toolbar) findViewById(R.id.toolbar8);
         setSupportActionBar(toolbar);

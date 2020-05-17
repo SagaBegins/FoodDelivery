@@ -257,14 +257,16 @@ public class MainActivity extends AppCompatActivity
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
             }
             else if(id == R.id.cartnav){
-                fragment = new CartFragment();
+                //need to change
+                fragment = new CartFragment(0);
                 setTitle("Your Cart");
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
             }
             else if(id == R.id.favourite){
-                fragment = new FavouriteFragment();
+                //need to change
+                fragment = new FavouriteFragment(0);
                 setTitle("Favourite");
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();

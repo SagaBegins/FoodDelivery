@@ -65,12 +65,12 @@ public class AfterMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
+        Intent intent = getIntent();
+        restaurantId = intent.getIntExtra("restaurantId" ,0);
         setContentView(R.layout.activity_after_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        Intent intent = getIntent();
-        restaurantId = intent.getIntExtra("restaurantId" ,0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
@@ -90,13 +90,14 @@ public class AfterMain extends AppCompatActivity {
         RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(item);
         tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
         imageView = (ImageView)notifCount.findViewById(R.id.imagenotif);
-        tv.setText(String.valueOf(databaseEntry.totalQty()));
+        tv.setText(String.valueOf(databaseEntry.totalQty(restaurantId)));
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
                 intent.putExtra("ViewPager", 0);
+                intent.putExtra("restaurantId", restaurantId);
                 startActivity(intent);
             }
         });
@@ -115,12 +116,14 @@ public class AfterMain extends AppCompatActivity {
             case R.id.action_cart: {
                 Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
                 intent.putExtra("ViewPager", 0);
+                intent.putExtra("restaurantId", restaurantId);
                 startActivity(intent);
                 break;
             }
             case R.id.favorite: {
                 Intent intent = new Intent(AfterMain.this, Cart_Favorite.class);
                 intent.putExtra("ViewPager", 1);
+                intent.putExtra("restaurantId", restaurantId);
                 startActivity(intent);
                 break;
             }

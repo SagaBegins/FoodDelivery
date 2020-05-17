@@ -71,7 +71,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     .load(foodElements.get(position).getPhoto())
                     .into(holder.image);
             holder.price.setText("₹"+foodElements.get(position).getPrice());
-            if(databaseEntry.totalQty()<40) {
+            if(databaseEntry.totalQty(foodElements.get(position).getRate())<40) {
                 holder.add.setEnabled(true);
                 databaseEntry.close();
                 holder.add.setOnClickListener(new View.OnClickListener() {
@@ -79,10 +79,10 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     public void onClick(View view) {
                         databaseEntry = new DatabaseEntry(context);
                         rate = foodElements.get(position).getRate();
-                        databaseEntry.insertIntoCart(foodElements.get(position).getName(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        databaseEntry.insertIntoCart(foodElements.get(position).getName()+"_"+rate, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
                         //Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT).show();
                         databaseEntry.close();
-                        AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
+                        AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(foodElements.get(position).getRate())));
                     }
                 });
             }else{
@@ -102,7 +102,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                         Toast.makeText(context, "Food Added to Favourites.", Toast.LENGTH_SHORT);
                     }else if(isPressed){
                         databaseEntry = new DatabaseEntry(context);
-                        databaseEntry.deleteARow(foodElements.get(position).getPhoto(), "favour_table");
+                        databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(), "favour_table");
                         databaseEntry.close();
                         holder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                     }

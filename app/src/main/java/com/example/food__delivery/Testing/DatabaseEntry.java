@@ -63,7 +63,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         values.put("rate", rate);
         values.put("qty", qty);
         try {
-            if(totalQty()<40) {
+            if(totalQty(rate)<40) {
                 db.insertOrThrow(CART_TABLE, null, values);
                 Toast.makeText(context, "Item added in Cart.", Toast.LENGTH_SHORT).show();
             }else{
@@ -95,16 +95,37 @@ public class DatabaseEntry extends SQLiteOpenHelper {
     }
 
 
-    public int totalQty(){
+    public int totalQty(int rate){
         SQLiteDatabase db = this.getWritableDatabase();
         int total = 0;
-        String sqlQuery = "select sum(qty) from "+CART_TABLE;
+        String sqlQuery = "select sum(qty) from "+CART_TABLE+ " where rate="+ rate;
         Cursor i = db.rawQuery(sqlQuery, null);
         if(i.moveToFirst()){
             total = i.getInt(0);
         }
         
         return total;
+    }
+
+    public List<FoodElement> getDataFromDB(String cart_table, int restaurantId){
+        List<FoodElement> modelList = new ArrayList<FoodElement>();
+        String query = "select * from "+ cart_table+ " where  rate=" + restaurantId;
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(CREATE_FAV);
+        Cursor cursor = db.rawQuery(query,null);
+        if (cursor.moveToFirst()){
+            do {
+                FoodElement food = new FoodElement();
+                food.setPhoto(cursor.getString(1));
+                food.setName(cursor.getString(0));
+                food.setPrice(cursor.getString(2));
+                food.setRate(cursor.getInt(3));
+                food.setQty(cursor.getInt(4));
+                modelList.add(food);
+            }while (cursor.moveToNext());
+        }
+
+        return modelList;
     }
 
     public List<FoodElement> getDataFromDB(String cart_table){
@@ -127,7 +148,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         
         return modelList;
     }
-    public void deleteARow(String url, String TABLE){
+    public void deleteARow(String url,int rate, String TABLE){
 
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
@@ -288,10 +309,10 @@ public class DatabaseEntry extends SQLiteOpenHelper {
             }
             
         }
-        public double total(){
+        public double total(int rate){
             SQLiteDatabase db = this.getWritableDatabase();
             double total = 0;
-            String sqlQuery = "select sum(qty*CAST(price as float)) from "+CART_TABLE;
+            String sqlQuery = "select sum(qty*CAST(price as float)) from "+CART_TABLE+" WHERE rate ="+ rate;
             Cursor i = db.rawQuery(sqlQuery, null);
             if(i.moveToFirst()){
                 total = i.getDouble(0);

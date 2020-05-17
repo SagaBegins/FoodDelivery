@@ -40,13 +40,13 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.food_name.setText(foodElements.get(position).getFoodType());
+        holder.food_name.setText(foodElements.get(position).getName().split("_")[0]);
         databaseEntry = new DatabaseEntry(context);
         Glide.with(context.getApplicationContext())
                 .load(foodElements.get(position).getPhoto())
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());
-        if(databaseEntry.totalQty()<40){
+        if(databaseEntry.totalQty(foodElements.get(position).getRate())<40){
             holder.add.setEnabled(true);
             databaseEntry.close();
         holder.add.setOnClickListener(new View.OnClickListener() {
@@ -56,12 +56,12 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 foodElements.get(position).setQty(qty);
                 databaseEntry = new DatabaseEntry(context);
                 Log.d("name",position+"");
-                databaseEntry.updateInRow(foodElements.get(position).getName(),"cart_table",qty);
+                databaseEntry.updateInRow(foodElements.get(position).getName()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
-                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
+                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(foodElements.get(position).getRate())));
                 databaseEntry.close();
                 notifyDataSetChanged();
-                CartFragment.calculateGrandTotal();
+                CartFragment.calculateGrandTotal(foodElements.get(position).getRate());
             }
         });
         }else{
@@ -75,12 +75,13 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 if(qty>0) {
                     foodElements.get(position).setQty(qty);
                     databaseEntry = new DatabaseEntry(context);
-                    databaseEntry.updateInRow(foodElements.get(position).getName(), "cart_table", qty);
+                    databaseEntry.updateInRow(foodElements.get(position).getName()+"_"+foodElements.get(position).getRate(), "cart_table", qty);
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
-                    CartFragment.calculateGrandTotal();
+                    int id = foodElements.get(position).getRate();
+                    CartFragment.calculateGrandTotal(id);
                     databaseEntry.close();
-                    AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
+                    AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
                 }
             }
         });
@@ -88,13 +89,14 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),"cart_table");
+                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"cart_table");
                 foodElements.remove(position);
                 databaseEntry.close();
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
-                CartFragment.calculateGrandTotal();
-                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
+                int id = foodElements.get(position).getRate();
+                CartFragment.calculateGrandTotal(id);
+                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
             }
         });
         holder.qty.setText(""+foodElements.get(position).getQty());

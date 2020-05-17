@@ -49,19 +49,20 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
                 databaseEntry.insertIntoCart(foodElements.get(position).getFoodType(),foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),"favour_table");
+                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"favour_table");
                 foodElements.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
-                CartFragment.calculateGrandTotal();
-                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty()));
+                int id = foodElements.get(position).getRate();
+                CartFragment.calculateGrandTotal(id);
+                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),"favour_table");
+                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"favour_table");
                 foodElements.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());

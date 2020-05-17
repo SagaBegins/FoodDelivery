@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Fragment.Confirmation;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Shipping;
 import com.example.food__delivery.Testing.CustomViewPager;
@@ -31,11 +33,12 @@ public class Checkout extends AppCompatActivity {
 
     private CustomViewPager mViewPager;
     private TabLayout tabLayout;
-
+    private int restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        restaurantId = getIntent().getIntExtra("restaurantId", 0);
         setContentView(R.layout.activity_checkout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,8 +63,8 @@ public class Checkout extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new Shipping(), "Shipping");
-        adapter.addFrag(new Confirmation(), "Confirmation");
+        adapter.addFrag(new Shipping(restaurantId), "Shipping");
+        adapter.addFrag(new Confirmation(restaurantId), "Confirmation");
         viewPager.setAdapter(adapter);
     }
 
@@ -105,8 +108,15 @@ public class Checkout extends AppCompatActivity {
 
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     //Success Transaction
+                    Toast.makeText(this.getApplicationContext(), "Transaction Success", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(this, MainScreen.class);
+                    HomeFragment.mDatabase.getRoot();
+                    startActivity(intent);
+                    Log.d("Succesful", "Line 109 Checkout");
                 } else {
                     //Failure Transaction
+                    Toast.makeText(this.getApplicationContext(), "Transaction Failed", Toast.LENGTH_LONG).show();
+                    Log.d("Failure", "Line 112 Checkout");
                 }
 
                 // Response from Payumoney

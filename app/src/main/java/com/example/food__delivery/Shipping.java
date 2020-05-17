@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.food__delivery.Activities.Checkout;
 import com.example.food__delivery.Fragment.Confirmation;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
@@ -31,18 +33,18 @@ public class Shipping extends androidx.fragment.app.Fragment {
     ViewPager viewPager;
     TabLayout tabLayout;
     TextInputLayout fnameLayout, phnoLayout, addLayout, zipLayout, cityLayout;
+    private int restaurantId;
 
-    public Shipping() {
+    public Shipping(int restaurantId) {
+        this.restaurantId = restaurantId;
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_shipping, container, false);
         tabLayout = (TabLayout)view.findViewById(R.id.tabs);
-
         fname = (EditText)view.findViewById(R.id.firstnameedittext);
         phno = (EditText)view.findViewById(R.id.phonenumberedittext);
         address = (EditText)view.findViewById(R.id.addressedittext);

@@ -97,8 +97,10 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     FirebaseAuth auth;
     FirebaseUser user;
     CallbackManager mCallbackManager;
+    int restaurantId;
 
-    public Confirmation() {
+    public Confirmation(int rate) {
+        this.restaurantId = rate;
         // Required empty public constructor
     }
 
@@ -119,6 +121,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         pricetotal = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
         text = pricetotal.getString("total", null);
         priceTextview(text);
+        restaurantId = getActivity().getIntent().getIntExtra("restaurantId", 0);
         shipdetails = getActivity().getSharedPreferences("SHIPPING_ADDRESS", Context.MODE_PRIVATE);
         fname = shipdetails.getString("firstname", "----");
         add = shipdetails.getString("address", "----");
@@ -136,7 +139,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         databaseEntry = new DatabaseEntry(getActivity());
         foodElementsList = new ArrayList<>();
-        foodElementsList = databaseEntry.getDataFromDB("cart_table");
+        foodElementsList = databaseEntry.getDataFromDB("cart_table", restaurantId);
         reAdapterconfirm = new Adapter_Confirm(foodElementsList, getActivity());
         recyclerViewconfirm.setAdapter(reAdapterconfirm);
         recyclerViewconfirm.setLayoutManager(layoutManager);
@@ -207,7 +210,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                 .setMerchantId(merchantId);
         PayUmoneySdkInitializer.PaymentParam paymentParam = builder.build();
         paymentParam.setMerchantHash(hash);
-        PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, false);
+        PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, true);
     }
 
 

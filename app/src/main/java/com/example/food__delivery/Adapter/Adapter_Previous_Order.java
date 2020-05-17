@@ -42,7 +42,7 @@ public class Adapter_Previous_Order extends RecyclerView.Adapter<Adapter_Previou
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(dataop.get(position).getUrl(),"order_previous");
+                databaseEntry.deleteARow(dataop.get(position).getUrl(), dataop.get(position).getRate(),"order_previous");
                 dataop.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,dataop.size());

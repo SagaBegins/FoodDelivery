@@ -3,6 +3,7 @@ package com.example.food__delivery.Helper;
 
 public class PreviousData {
     String name, price, url;
+    int rate;
 
     public String getName() {
         return name;
@@ -27,4 +28,8 @@ public class PreviousData {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public void setRate(int rate) {this.rate = rate;}
+
+    public int getRate() {return this.rate;}
 }

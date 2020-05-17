@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,8 +45,10 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     static TextView textget ;
 
     static RelativeLayout proceed;
+    private int restaurantId;
 
-    public CartFragment() {
+    public CartFragment(int rate) {
+        this.restaurantId = rate;
         // Required empty public constructor
     }
     @SuppressLint("StaticFieldLeak")
@@ -61,14 +64,14 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         foodElementsList = new ArrayList<>();
         recyclerView.hasFixedSize();
 
-        foodElementsList = databaseEntry.getDataFromDB("cart_table");
+        foodElementsList = databaseEntry.getDataFromDB("cart_table", restaurantId);
         databaseEntry.close();
         textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
         proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
         reAdapterFav = new Adapter_Cart(foodElementsList,getActivity());
         totalp=(TextView)view.findViewById(R.id.textView_cartTotalPrice);
         recyclerView.setAdapter(reAdapterFav);
-        double tot = calculateGrandTotal();
+        double tot = calculateGrandTotal(restaurantId);
         String totalvalue = String.format("%.2f",tot);
         textget.setVisibility(View.GONE);
         SharedPreferences totalPrice;
@@ -88,6 +91,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Checkout.class);
+                intent.putExtra("restaurantId", restaurantId);
                 startActivity(intent);
             }
         });
@@ -120,12 +124,12 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         super.onResume();
         //databaseEntry = ();
     }
-    public static double calculateGrandTotal(){
+    public static double calculateGrandTotal(int rate){
         double total;
         Activity activity = (Activity)view.getContext();
 
         databaseEntrytotal = new DatabaseEntry(activity);
-        total = databaseEntrytotal.total();
+        total = databaseEntrytotal.total(rate);
         databaseEntrytotal.close();
         String tot = String.format("%.2f",total);
         totalp.setText("\u20B9 "+tot);
