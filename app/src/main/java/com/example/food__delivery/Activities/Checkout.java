@@ -1,5 +1,6 @@
 package com.example.food__delivery.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,11 +19,17 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Fragment.Confirmation;
+import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Shipping;
 import com.example.food__delivery.Testing.CustomViewPager;
+import com.example.food__delivery.Testing.DatabaseEntry;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.payumoney.core.entity.TransactionResponse;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 
@@ -34,6 +41,7 @@ public class Checkout extends AppCompatActivity {
     private CustomViewPager mViewPager;
     private TabLayout tabLayout;
     private int restaurantId;
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,9 +117,33 @@ public class Checkout extends AppCompatActivity {
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     //Success Transaction
                     Toast.makeText(this.getApplicationContext(), "Transaction Success", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(this, MainScreen.class);
-                    HomeFragment.mDatabase.getRoot();
-                    startActivity(intent);
+                    intent = new Intent(this, MainScreen.class);
+                    DatabaseEntry successOperations = new DatabaseEntry(this);
+                    OrderList orderList = new OrderList();
+                    orderList.foodList = (ArrayList<FoodElement>) successOperations.getDataFromDB("cart_table", restaurantId);
+                    orderList.restaurantId = restaurantId;
+                    String txnId = getIntent().getStringExtra("txnId");
+                    orderList.txnTime = getIntent().getStringExtra("txnTime");
+                    orderList.amount = getIntent().getStringExtra("amount");
+                    orderList.status = "Will be delivered soon";
+                    successOperations.deleteCart(restaurantId, "cart_table");
+                    successOperations.close();
+
+                    final ProgressDialog waitingToWrite = new ProgressDialog(this);
+                    waitingToWrite.setMessage("Order Registering");
+                    waitingToWrite.setCancelable(false);
+                    waitingToWrite.show();
+
+                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    DatabaseReference currentOrder = HomeFragment.mDatabase.child("Orders").child(uid);
+                    currentOrder.child(txnId).setValue(orderList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            waitingToWrite.dismiss();
+                            startActivity(intent);
+                        }
+                    });
+
                     Log.d("Succesful", "Line 109 Checkout");
                 } else {
                     //Failure Transaction

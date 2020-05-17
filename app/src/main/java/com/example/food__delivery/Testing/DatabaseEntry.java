@@ -148,13 +148,21 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         
         return modelList;
     }
+
+    public void deleteCart(int rate, String TABLE){
+        SQLiteDatabase db= this.getWritableDatabase();
+        db.execSQL(CREATE_FAV);
+        db.delete(TABLE, "rate = ?", new String[] { rate+"" });
+    }
+
+
     public void deleteARow(String url,int rate, String TABLE){
 
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
-        db.delete(TABLE, "url" + " = ?", new String[] { url });
-        
+        db.delete(TABLE, "url" + " = ? and rate =" , new String[] { url, rate+"" });
     }
+
     public void updateInRow(String name, String table, int qty){
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
@@ -162,6 +170,8 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         cv.put("qty", qty);
         db.update(table, cv, "foodname="+"'"+name.trim()+"'",null);
     }
+
+
     public  void addToOrderTable(String name, String add , String tranxid ){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL(CREATE_ORDER);

@@ -7,8 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.icu.util.TimeZone;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +20,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.util.TimeUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.zxing.aztec.encoder.Encoder;
 import com.payu.custombrowser.PayUSurePayWebViewClient;
 import com.payu.india.Extras.PayUChecksum;
@@ -63,6 +68,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -76,7 +82,9 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     private String merchantId = "7076546";
     private String merchantKey="I2lGq2jl", userCredentials;
     private String salt = "clorzgwwte";
-    private final String txnid = System.currentTimeMillis() + "";//UUID.randomUUID().toString();
+    private String txntime;
+    private final String productName = "Food Delivery";
+    private final String txnid = UUID.randomUUID().toString();
     //private String authHeader = "Acf5JnJZSaHq5z5UfnrIvcybuasyk58qlXXGBQr6TI4=";
     private PayuConfig payuConfig;
     static TextView shipname;
@@ -190,26 +198,30 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     }
 
     public void payuIntegration() throws Exception {
-        //key|txnid|amount|productinfo|firstname|email|udf1||||||||||salt;
-        String hash = merchantKey+'|'+txnid+'|'+text.trim()+'|'+"Food"+'|'+fname+'|'+email+'|'+add.toUpperCase().trim()+"||||||||||"+salt;
+        //key|txnid|amount|productinfo|firstname|email|udf1|udf3|||||||||salt;
+        txntime = Calendar.getInstance().getTime() + "";
+        String hash = merchantKey+'|'+txnid+'|'+text.trim()+'|'+productName+'|'+fname+'|'+email+'|'+add.toUpperCase() + ", " + city.toUpperCase() + ", " + zip+"||||||||||"+salt; //"+txntime +"
         hash = CalculateHash("SHA-512", hash);
 
         PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();//.setIsDebug(true);
         builder.setAmount(text.trim())
                 .setTxnId(txnid)
                 .setPhone(phno)
-                .setProductName("Food")
+                .setProductName(productName)
                 .setFirstName(fname)
                 .setEmail(email)
                 .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")
                 .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")
-                .setUdf1(add.toUpperCase().trim())
+                .setUdf1(add.toUpperCase() + ", " + city.toUpperCase() + ", " + zip)
                 .setUdf2("").setUdf3("").setUdf4("").setUdf5("").setUdf6("").setUdf7("").setUdf8("").setUdf9("").setUdf10("")
                 .setIsDebug(true)
                 .setKey(merchantKey)
                 .setMerchantId(merchantId);
         PayUmoneySdkInitializer.PaymentParam paymentParam = builder.build();
         paymentParam.setMerchantHash(hash);
+        getActivity().getIntent().putExtra("txnId", txnid);
+        getActivity().getIntent().putExtra("txnTime", txntime);
+        getActivity().getIntent().putExtra("amount", text);
         PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, true);
     }
 
