@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#9C39CFA2"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        app:cardCornerRadius="@dimen/dimen_15dp"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="@dimen/dimen_2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgView_restaurant"
+                android:layout_width="80dp"
+                android:layout_height="@dimen/dimen_80dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:contentDescription="@string/image_of_restaurant"/>
+
+            <TextView
+                android:id="@+id/txtView_restaurantName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/payumoney_black"
+                android:layout_toEndOf="@+id/imgView_restaurant"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+
+                android:text="@string/restaurant_name"
+                android:textSize="@dimen/dimen_25dp" />
+
+            <TextView
+                android:id="@+id/priceoftransaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgView_restaurant"
+                android:layout_below="@id/txtView_restaurantName"
+                android:textColor="#145A01"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:text="@string/price"/>
+
+            <TextView
+                android:id="@+id/txtView_txnId"
+                android:layout_toEndOf="@id/imgView_restaurant"
+                android:layout_below="@id/priceoftransaction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:text="@string/transaction_id" />
+
+
+            <TextView
+                android:id="@+id/txtView_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dimen_10dp"
+                android:text="@string/view_details"
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="@dimen/dimen_15dp" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

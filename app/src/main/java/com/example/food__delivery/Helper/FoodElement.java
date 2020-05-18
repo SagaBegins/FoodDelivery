@@ -70,4 +70,5 @@ public class FoodElement {
     public String getPhoto() {
         return photo;
     }
+    public String getTotalPrice() {return String.format("%.2f",Float.parseFloat(price)*qty);}
 }

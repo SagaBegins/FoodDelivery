@@ -43,6 +43,29 @@ import com.example.food__delivery.Activities.MainScreen;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+
+
+/*LoginManager.getInstance().retrieveLoginStatus(this, new LoginStatusCallback() {
+@Override
+public void onCompleted(AccessToken accessToken) {
+        // User was previously logged in, can log them in directly here.
+        // If this callback is called, a popup notification appears that says
+        // "Logged in as <User Name>"
+        }
+@Override
+public void onFailure() {
+        // No access token could be retrieved for the user
+        }
+@Override
+public void onError(Exception exception) {
+        // An error occurred
+        }
+        });
+
+*/
+
+
 public class Login extends AppCompatActivity {
 
     TextInputEditText ed1, ed2;
@@ -68,7 +91,7 @@ public class Login extends AppCompatActivity {
             firebaseDatabase = database.getReference();
         }
         auth = FirebaseAuth.getInstance();
-        FacebookSdk.setApplicationId("216477612202792");
+        FacebookSdk.setApplicationId("581033482823166");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         mCallbackManager = CallbackManager.Factory.create();

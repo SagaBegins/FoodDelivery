@@ -160,7 +160,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                 if(user == null){
                     final Dialog dialog = new Dialog(getActivity());
                     auth = FirebaseAuth.getInstance();
-                    FacebookSdk.setApplicationId("216477612202792");
+                    FacebookSdk.setApplicationId("581033482823166");
                     FacebookSdk.sdkInitialize(getActivity());
                     dialog.setContentView(R.layout.dialog);
                     dialog.setTitle("Login OR Sign Up");

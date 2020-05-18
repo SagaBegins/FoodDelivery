@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         protected void onCreate(Bundle savedInstanceState) {
 
             super.onCreate(savedInstanceState);
-            FacebookSdk.setApplicationId("216477612202792");
+            FacebookSdk.setApplicationId("581033482823166");
             FacebookSdk.sdkInitialize(getApplicationContext());
             setContentView(R.layout.activity_main_screen);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

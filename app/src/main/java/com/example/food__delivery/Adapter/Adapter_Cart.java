@@ -26,10 +26,16 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
     private List<FoodElement> foodElements;
     Context context;
     DatabaseEntry databaseEntry;
-
+    private int id;
     public Adapter_Cart(List<FoodElement> foodElements, Context context) {
         this.foodElements = foodElements;
         this.context = context;
+        try {
+            this.id = foodElements.get(0).getRate();
+        }catch (Exception e){
+            e.printStackTrace();
+            this.id = 0;
+        }
     }
 
     @Override
@@ -45,7 +51,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
         Glide.with(context.getApplicationContext())
                 .load(foodElements.get(position).getPhoto())
                 .into(holder.image);
-        holder.price.setText(foodElements.get(position).getPrice());
+        holder.price.setText(foodElements.get(position).getTotalPrice());
         if(databaseEntry.totalQty(foodElements.get(position).getRate())<40){
             holder.add.setEnabled(true);
             databaseEntry.close();
@@ -56,12 +62,12 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 foodElements.get(position).setQty(qty);
                 databaseEntry = new DatabaseEntry(context);
                 Log.d("name",position+"");
-                databaseEntry.updateInRow(foodElements.get(position).getName()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
+                databaseEntry.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
-                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(foodElements.get(position).getRate())));
+                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
                 databaseEntry.close();
                 notifyDataSetChanged();
-                CartFragment.calculateGrandTotal(foodElements.get(position).getRate());
+                CartFragment.calculateGrandTotal(id);
             }
         });
         }else{
@@ -75,10 +81,9 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 if(qty>0) {
                     foodElements.get(position).setQty(qty);
                     databaseEntry = new DatabaseEntry(context);
-                    databaseEntry.updateInRow(foodElements.get(position).getName()+"_"+foodElements.get(position).getRate(), "cart_table", qty);
+                    databaseEntry.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(), "cart_table", qty);
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
-                    int id = foodElements.get(position).getRate();
                     CartFragment.calculateGrandTotal(id);
                     databaseEntry.close();
                     AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
@@ -94,7 +99,6 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 databaseEntry.close();
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
-                int id = foodElements.get(position).getRate();
                 CartFragment.calculateGrandTotal(id);
                 AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
             }

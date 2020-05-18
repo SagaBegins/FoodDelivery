@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#C3E1CE2B"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        app:cardCornerRadius="@dimen/dimen_15dp"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="@dimen/dimen_2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgView_food"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:contentDescription="@string/image_of_food"/>
+
+            <TextView
+                android:id="@+id/txtView_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/imgView_food"
+                android:textSize="@dimen/dimen_30dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="@string/name_of_food"/>
+            <TextView
+                android:id="@+id/txtView_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtView_food"
+                android:layout_toEndOf="@id/imgView_food"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:text="@string/quantity_of_item"
+                android:textSize="@dimen/dimen_15dp"
+                android:textColor="#0A186C" />
+            <TextView
+                android:id="@+id/txtView_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtView_quantity"
+                android:layout_toEndOf="@id/imgView_food"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:text="@string/price_of_item"
+                android:textSize="@dimen/dimen_20dp"
+                android:textColor="#155A01" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

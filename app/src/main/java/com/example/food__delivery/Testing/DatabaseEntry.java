@@ -160,7 +160,9 @@ public class DatabaseEntry extends SQLiteOpenHelper {
 
         SQLiteDatabase db= this.getWritableDatabase();
         db.execSQL(CREATE_FAV);
-        db.delete(TABLE, "url" + " = ? and rate =" , new String[] { url, rate+"" });
+        String query = "DELETE FROM "+ TABLE + " WHERE url = ? AND rate = ?";
+        db.execSQL(query, new String[] { url, rate+"" });
+        //db.delete(TABLE, "url = ? and rate = ?" , new String[] { url, rate+"" });
     }
 
     public void updateInRow(String name, String table, int qty){
@@ -168,7 +170,8 @@ public class DatabaseEntry extends SQLiteOpenHelper {
         db.execSQL(CREATE_FAV);
         ContentValues cv = new ContentValues();
         cv.put("qty", qty);
-        db.update(table, cv, "foodname="+"'"+name.trim()+"'",null);
+        String query = "UPDATE "+ CART_TABLE + " SET qty= ? WHERE foodname = ?";
+        db.execSQL(query, new String[] {qty+"", name});
     }
 
 

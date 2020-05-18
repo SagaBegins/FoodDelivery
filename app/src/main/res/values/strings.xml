@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Food Delivery</string>
 
-    <string name="facebook_app_id">com.example.fooddelivery</string>
-    <string name="fb_login_protocol_scheme">fbcom.example.fooddelivery</string>
+    <string name="facebook_app_id">581033482823166</string>
+    <string name="fb_login_protocol_scheme">fb581033482823166</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -29,5 +29,15 @@
     <string name="address">ADDRESS</string>
     <string name="zip_code">ZIP CODE</string>
     <string name="city">CITY</string>
+    <string name="view_details">View Details</string>
+    <string name="quantity_of_item">Quantity of item</string>
+    <string name="price_of_item">Price of Item</string>
+    <string name="name_of_food">Name of food</string>
+    <string name="image_of_food">Image of Food</string>
+    <string name="transaction_id">Transaction Id</string>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="image_of_restaurant">Image of restaurant</string>
+    <string name="price">Price</string>
+    <string name="remove">Remove</string>
 
 </resources>
