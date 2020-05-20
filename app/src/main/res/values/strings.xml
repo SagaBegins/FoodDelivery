@@ -18,7 +18,7 @@
     <string name="forgotpass">We just need your registered Email address to send you password reset instructions.</string>
     <string name="emptycart"><b>Your Cart is empty.</b>\n Your Cart lives to serve. Give it purpose fill it with Food. \n\n Continue Ordering or visit your Favourite Section.</string>
     <string name="title_activity_checkout">Checkout</string>
-    <string name="emptyfav">What\'s my favourite food? Once you order out..\n -ABIGAIL BRESLIN. </string>
+    <string name="emptyfav">No favorites items to display.\nPlease go back and add your favorite foods to access them easily.</string>
     <string name="sign_up">SIGN UP</string>
     <string name="string_divder">|</string>
     <string name="string_placeOrder">Place Order</string>
@@ -39,5 +39,8 @@
     <string name="image_of_restaurant">Image of restaurant</string>
     <string name="price">Price</string>
     <string name="remove">Remove</string>
+    <string name="congratulations_your_order_is_accepted">Congratulations! Your order is accepted.</string>
+    <string name="thank_you">Thank you for your purchase! Your items are on the way and should arrive shortly.</string>
+    <string name="continue_ordering">Continue Ordering</string>
 
 </resources>

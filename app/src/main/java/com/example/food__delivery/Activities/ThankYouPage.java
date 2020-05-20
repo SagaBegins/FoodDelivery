@@ -26,7 +26,7 @@ public class ThankYouPage extends AppCompatActivity {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseEntry = new DatabaseEntry(ThankYouPage.this);
+               /* databaseEntry = new DatabaseEntry(ThankYouPage.this);
                 SharedPreferences getData = getSharedPreferences("SHIPPING_ADDRESS", Context.MODE_PRIVATE);
                 String name1 = getData.getString("firstname", "");
                 String name2 = getData.getString("lastname", "");
@@ -39,9 +39,8 @@ public class ThankYouPage extends AppCompatActivity {
                 String time = getData1.getString("time","");
                 Log.e("Time Value", time);
                 databaseEntry.addToOrderTable(name, add, time);
-                databaseEntry.deleteAll();
-                Intent intent = new Intent(ThankYouPage.this, MainScreen.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                databaseEntry.deleteAll();*/
+                Intent intent = new Intent(getApplicationContext(), MainScreen.class);
                 startActivity(intent);
             }
         });

@@ -14,6 +14,16 @@ public class Menu {
     public ArrayList<FoodElement> breads;
     public ArrayList<FoodElement> beverages;
 
+    public final String Vegstarters = "vegstarters";
+    public final String Nonvegstarters = "nonvegstarters";
+    public final String Vegmaincourse = "vegmaincourse";
+    public final String Nonvegmaincourse = "nonvegmaincourse";
+    public final String Rice = "rice";
+    public final String Sweets = "sweets";
+    public final String Rolls = "rolls";
+    public final String Breads = "breads";
+    public final String Beverages = "beverages";
+
     public void setIndex(String index, ArrayList<FoodElement> items) {
         switch (index) {
             case "vegstarters":
@@ -43,6 +53,29 @@ public class Menu {
             case "beverages":
                 this.beverages = new ArrayList<FoodElement>(items);
         }
+    }
+    public ArrayList<FoodElement> getIndex(String index) {
+        switch (index) {
+            case "vegstarters":
+                return this.vegStarters;
+            case "nonvegstarters":
+                return this.nonVegStarters;
+            case "vegmaincourse":
+                return this.vegMainCourse;
+            case "nonvegmaincourse":
+                return this.nonVegMainCourse;
+            case "rice":
+                return this.rice;
+            case "rolls":
+                return this.rolls;
+            case "sweets":
+                return this.sweets;
+            case "breads":
+                return this.breads;
+            case "beverages":
+                return this.beverages;
+        }
+        return null;
     }
 
     public boolean containsFood(String food){

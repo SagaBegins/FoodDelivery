@@ -20,6 +20,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.MenuActivity.CategoryHandlerFragment;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.example.food__delivery.MenuActivity.BreadsFragment;
@@ -54,6 +56,7 @@ public class AfterMain extends AppCompatActivity {
      */
     FirebaseAuth auth;
     public static TextView tv;
+    private ArrayList<com.example.food__delivery.Helper.Menu> menuList = HomeFragment.menuList;
     private ViewPager mViewPager;
     private DatabaseEntry databaseEntry;
     private ArrayList<FoodElement> foodElements = new ArrayList<>();
@@ -133,15 +136,33 @@ public class AfterMain extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new VegStartersFragment(restaurantId), "Veg Starters");
-        adapter.addFrag(new NonVegStartersFragment(restaurantId), "Non-Veg Starters");
-        adapter.addFrag(new VegMainCourseFragment(restaurantId), "Veg Main Course");
-        adapter.addFrag(new NonVegMainCourseFragment(restaurantId), "Non-Veg Main Course");
-        adapter.addFrag(new SweetsFragment(restaurantId), "Sweets");
-        adapter.addFrag(new RollsFragment(restaurantId), "Rolls");
-        adapter.addFrag(new RiceFragment(restaurantId), "Rice");
-        adapter.addFrag(new BreadsFragment(restaurantId), "Breads");
-        adapter.addFrag(new BeveragesFragment(restaurantId), "Beverages");
+        if(menuList.get(restaurantId).vegStarters.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).vegStarters), "Veg Starters");
+
+        if(menuList.get(restaurantId).nonVegStarters.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).nonVegStarters), "Non-Veg Starters");
+
+        if(menuList.get(restaurantId).vegMainCourse.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).vegMainCourse), "Veg Main Course");
+
+        if(menuList.get(restaurantId).nonVegMainCourse.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).nonVegMainCourse), "Non-Veg Main Course");
+
+        if(menuList.get(restaurantId).sweets.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).sweets), "Sweets");
+
+        if(menuList.get(restaurantId).rolls.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).rolls), "Rolls");
+
+        if(menuList.get(restaurantId).rice.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).rice), "Rice");
+
+        if(menuList.get(restaurantId).breads.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).breads), "Breads");
+
+        if(menuList.get(restaurantId).beverages.size() > 0)
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).beverages), "Beverages");
+
         viewPager.setAdapter(adapter);
     }
 

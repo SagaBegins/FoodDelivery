@@ -11,19 +11,18 @@
         android:id="@+id/textView18"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="15dp"
-        android:fontFamily="cursive"
+        android:fontFamily="@font/marko_one"
+        android:gravity="center_horizontal"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="Congratulations! Your order is accepted."
+        android:text="@string/congratulations_your_order_is_accepted"
+        android:textAlignment="center"
         android:textColor="#008800"
         android:textSize="29sp"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:gravity="center_horizontal"
-        android:layout_alignParentLeft="true" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView23"
@@ -33,12 +32,13 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:fontFamily="serif"
+        android:gravity="center_horizontal"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
+        android:text="@string/thank_you"
         android:textAlignment="center"
-        android:text="Thank you for your purchase! Your items are on the way and should arrive shortly."
-        android:textSize="12sp"
-        android:gravity="center_horizontal" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/imageView6"
@@ -48,16 +48,15 @@
         android:layout_below="@+id/textView23"
         android:layout_alignParentStart="true"
         android:layout_marginTop="39dp"
-        android:layout_alignParentLeft="true" />
+        android:contentDescription="@string/thank_you" />
 
     <Button
         android:id="@+id/button16"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="Continue Ordering"
+        android:text="@string/continue_ordering"
         android:background="@drawable/corner"
         android:textColor="@android:color/white"
-
         android:layout_marginTop="31dp"
         android:layout_below="@+id/imageView6"
         android:layout_centerHorizontal="true" />

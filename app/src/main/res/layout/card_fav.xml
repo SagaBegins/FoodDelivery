@@ -7,19 +7,23 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="185dp"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="5dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#DFE1CE2B"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        app:cardCornerRadius="@dimen/dimen_15dp"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="@dimen/dimen_2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <ImageView
                 android:id="@+id/imagefav"
                 android:layout_width="150dp"
-                android:layout_height="170dp"
+                android:layout_height="150dp"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_margin="5dp"
@@ -32,7 +36,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/priceproduct"
                 android:layout_alignTop="@+id/imagefav"
-                android:fontFamily="cursive"
                 android:padding="8dp"
                 android:text="Name"
                 android:textColor="@android:color/black"
@@ -44,7 +47,7 @@
                 android:id="@+id/priceproduct"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Price"
+                android:text="@string/price"
                 android:padding="5dp"
                 android:textColor="@android:color/black"
                 android:layout_above="@+id/relativeLayout2"
@@ -69,7 +72,7 @@
                     android:text="Remove"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@android:color/white"
+                    android:background="@null"
                     android:textColor="#BB0000"
                     android:layout_toEndOf="@+id/button12"
                     android:layout_alignParentRight="true"
@@ -79,7 +82,7 @@
                     android:id="@+id/button12"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@android:color/white"
+                    android:background="@null"
                     android:textColor="#0000BB"
                     android:padding="7dp"
                     android:layout_alignParentTop="true"

@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Fragment.CartFragment;
 import com.example.food__delivery.Helper.FoodElement;
@@ -39,16 +41,16 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.food_name.setText(foodElements.get(position).getFoodType());
+        holder.food_name.setText(foodElements.get(position).getName());
         Glide.with(context.getApplicationContext())
-                .load(foodElements.get(position).getPhoto())
+                .load(foodElements.get(position).getPhoto()).transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());
         holder.movetocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.insertIntoCart(foodElements.get(position).getFoodType(),foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
+                databaseEntry.insertIntoCart(foodElements.get(position).getName(),foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
                 databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"favour_table");
                 foodElements.remove(position);
                 notifyItemRemoved(position);

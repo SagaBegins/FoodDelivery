@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@drawable/home_back"
+    android:background="@color/colorPrimaryDark"
     tools:context="com.example.food__delivery.Activities.Checkout">
 
     <com.google.android.material.appbar.AppBarLayout

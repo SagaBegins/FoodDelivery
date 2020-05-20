@@ -27,6 +27,7 @@ import com.example.food__delivery.Shipping;
 import com.example.food__delivery.Testing.CustomViewPager;
 import com.example.food__delivery.Testing.DatabaseEntry;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -116,8 +117,8 @@ public class Checkout extends AppCompatActivity {
 
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     //Success Transaction
-                    Toast.makeText(this.getApplicationContext(), "Transaction Success", Toast.LENGTH_LONG).show();
-                    intent = new Intent(this, MainScreen.class);
+                    Toast.makeText(this, "Transaction Success", Toast.LENGTH_LONG).show();
+                    intent = new Intent(this, ThankYouPage.class);
                     DatabaseEntry successOperations = new DatabaseEntry(this);
                     OrderList orderList = new OrderList();
                     orderList.foodList = (ArrayList<FoodElement>) successOperations.getDataFromDB("cart_table", restaurantId);
@@ -147,7 +148,7 @@ public class Checkout extends AppCompatActivity {
                     Log.d("Succesful", "Line 109 Checkout");
                 } else {
                     //Failure Transaction
-                    Toast.makeText(this.getApplicationContext(), "Transaction Failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Transaction Failed", Toast.LENGTH_LONG).show();
                     Log.d("Failure", "Line 112 Checkout");
                 }
 

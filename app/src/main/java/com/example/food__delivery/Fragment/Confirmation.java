@@ -7,33 +7,25 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.icu.util.TimeZone;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.util.TimeUtils;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.zxing.aztec.encoder.Encoder;
-import com.payu.custombrowser.PayUSurePayWebViewClient;
 import com.payu.india.Extras.PayUChecksum;
 import com.payu.india.Interfaces.OneClickPaymentListener;
 import com.payu.india.Model.PaymentParams;
@@ -43,7 +35,6 @@ import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
 import com.payumoney.core.PayUmoneySdkInitializer;
-import com.payumoney.sdkui.ui.activities.BaseActivity;
 import com.example.food__delivery.Adapter.Adapter_Confirm;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.R;
@@ -55,7 +46,6 @@ import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,12 +57,10 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -84,7 +72,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     private String salt = "clorzgwwte";
     private String txntime;
     private final String productName = "Food Delivery";
-    private final String txnid = UUID.randomUUID().toString();
+    private final String txnid = System.currentTimeMillis()+"";
     //private String authHeader = "Acf5JnJZSaHq5z5UfnrIvcybuasyk58qlXXGBQr6TI4=";
     private PayuConfig payuConfig;
     static TextView shipname;
@@ -979,6 +967,60 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
             }else{
                 Toast.makeText(getActivity(), "Payment Failed!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    /**
+     * A simple {@link androidx.fragment.app.Fragment} subclass.
+     * Use the {@link OrderDetailsFragment#newInstance} factory method to
+     * create an instance of this fragment.
+     */
+    public static class OrderDetailsFragment extends androidx.fragment.app.Fragment {
+        // TODO: Rename parameter arguments, choose names that match
+        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+        private static final String ARG_PARAM1 = "param1";
+        private static final String ARG_PARAM2 = "param2";
+
+        // TODO: Rename and change types of parameters
+        private String mParam1;
+        private String mParam2;
+
+        public OrderDetailsFragment() {
+            // Required empty public constructor
+        }
+
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment OrderDetailsFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        public static OrderDetailsFragment newInstance(String param1, String param2) {
+            OrderDetailsFragment fragment = new OrderDetailsFragment();
+            Bundle args = new Bundle();
+            args.putString(ARG_PARAM1, param1);
+            args.putString(ARG_PARAM2, param2);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            if (getArguments() != null) {
+                mParam1 = getArguments().getString(ARG_PARAM1);
+                mParam2 = getArguments().getString(ARG_PARAM2);
+            }
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            return inflater.inflate(R.layout.fragment_order_details, container, false);
         }
     }
 }

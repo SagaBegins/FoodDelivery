@@ -8,7 +8,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#C3E1CE2B"
+        app:cardBackgroundColor="#DFE1CE2B"
         android:layout_marginTop="@dimen/dimen_10dp"
         app:cardCornerRadius="@dimen/dimen_15dp"
         app:strokeColor="@color/blue"
@@ -23,14 +23,10 @@
 
             <ImageView
                 android:id="@+id/imagecart"
+                android:layout_margin="@dimen/dimen_5dp"
                 android:layout_width="150dp"
-                android:layout_height="170dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="3dp"
-                android:scaleType="centerCrop"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp" />
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"/>
 
             <TextView
                 android:id="@+id/nameofproduct"
@@ -92,11 +88,11 @@
                 android:background="#CAF10B0B"
                 android:textColor="@color/colorPrimaryDark"
                 android:text="@string/remove"
-                android:layout_alignBaseline="@+id/quantity"
-                android:layout_alignBottom="@+id/quantity"
-                android:layout_toEndOf="@+id/add1"
+                android:layout_alignBaseline="@id/quantity"
+                android:layout_alignBottom="@id/quantity"
+                android:layout_toEndOf="@id/add1"
                 android:layout_marginStart="10dp"
-                android:layout_toRightOf="@+id/add1"
+                android:layout_toRightOf="@id/add1"
                 android:layout_marginLeft="10dp" />
 
             <TextView
@@ -106,12 +102,12 @@
                 android:layout_alignTop="@+id/sub1"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_toEndOf="@+id/sub1"
+                android:layout_toEndOf="@id/sub1"
                 android:gravity="center"
                 android:text="1"
                 android:textAlignment="center"
                 android:textColor="@color/payumoney_black"
-                android:layout_toRightOf="@+id/sub1" />
+                android:layout_toRightOf="@id/sub1" />
 
         </RelativeLayout>
 

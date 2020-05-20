@@ -13,6 +13,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Testing.DatabaseEntry;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Fragment.CartFragment;
@@ -49,7 +51,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
         holder.food_name.setText(foodElements.get(position).getName().split("_")[0]);
         databaseEntry = new DatabaseEntry(context);
         Glide.with(context.getApplicationContext())
-                .load(foodElements.get(position).getPhoto())
+                .load(foodElements.get(position).getPhoto()).transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getTotalPrice());
         if(databaseEntry.totalQty(foodElements.get(position).getRate())<40){

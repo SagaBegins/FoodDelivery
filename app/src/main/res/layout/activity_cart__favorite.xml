@@ -5,10 +5,9 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/cart_back"
     android:orientation="vertical"
-    android:background="@drawable/home_back"
     tools:context="com.example.food__delivery.Activities.Cart_Favorite">
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -28,25 +27,24 @@
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true">
-    </FrameLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_weight="1"></FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#4FFFFFFF"
-        android:layout_gravity="bottom"
         android:layout_below="@id/content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/navigation"
+        android:backgroundTint="#4FFFFFFF"
         app:itemIconTint="@android:color/white"
         app:itemTextColor="@android:color/white"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true" />
+        app:menu="@menu/navigation" />
 
 </LinearLayout>

@@ -3,6 +3,7 @@ package com.example.food__delivery.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class Cart_Favorite extends AppCompatActivity {
     Fragment fragment;
     Toolbar toolbar;
     private int restaurantId;
+    LinearLayout l;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,15 +31,20 @@ public class Cart_Favorite extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            l = findViewById(R.id.container);
             switch (item.getItemId()) {
                 case R.id.navigation_favorite:
                     getSupportActionBar().setTitle("Favourite");
                     fragment = new FavouriteFragment(restaurantId);
+                    l = findViewById(R.id.container);
+                    l.setBackgroundResource(R.drawable.fav_back);
                     fragmentTransaction.replace(R.id.content, fragment).commit();
                     return true;
                 case R.id.navigation_cart:
                     getSupportActionBar().setTitle("Cart");
+                    l = findViewById(R.id.container);
                     fragment = new CartFragment(restaurantId);
+                    l.setBackgroundResource(R.drawable.cart_back);
                     fragmentTransaction.replace(R.id.content, fragment).commit();
                     return true;
             }
@@ -59,13 +66,16 @@ public class Cart_Favorite extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_cart);
         Intent intent = getIntent();
+        l = findViewById(R.id.container);
         switch (intent.getIntExtra("ViewPager", 0)) {
             case 0:
                 getSupportActionBar().setTitle("Cart");
+                l.setBackgroundResource(R.drawable.cart_back);
                 navigation.setSelectedItemId(R.id.navigation_cart);
                 break;
             case 1:
                 getSupportActionBar().setTitle("Favourite");
+                l.setBackgroundResource(R.drawable.fav_back);
                 navigation.setSelectedItemId(R.id.navigation_favorite);
                 break;
         }

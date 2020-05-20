@@ -51,8 +51,8 @@ import java.util.TimerTask;
  */
 public class HomeFragment extends androidx.fragment.app.Fragment {
 
-    public static List<Restaurant> restaurantList  = new ArrayList<>();
-    public static List<Menu> menuList = new ArrayList<>();
+    public static ArrayList<Restaurant> restaurantList  = new ArrayList<>();
+    public static ArrayList<Menu> menuList = new ArrayList<>();
 
     ProgressDialog loading;
     RecyclerView recyclerView;
@@ -186,7 +186,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             super.onPreExecute();
             // Showing progress dialog
             loading = new ProgressDialog(getActivity());
-            loading.setMessage("One cannot think well, love well, sleep well, if one has not dined well! :)");
+            loading.setMessage("After Dinner Rest a While; After Supper Walk a Mile");
             loading.setCancelable(false);
             loading.show();
 
