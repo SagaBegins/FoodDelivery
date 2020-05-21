@@ -89,7 +89,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         databaseEntry.close();
         textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
         proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
-        reAdapterFav = new Adapter_Cart(foodElementsList,(CartFragment) this);
+        reAdapterFav = new Adapter_Cart(foodElementsList,this);
         totalp=(TextView)view.findViewById(R.id.textView_cartTotalPrice);
         recyclerView.setAdapter(reAdapterFav);
         double tot = calculateGrandTotal(restaurantId);

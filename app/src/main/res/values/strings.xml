@@ -42,5 +42,6 @@
     <string name="congratulations_your_order_is_accepted">Congratulations! Your order is accepted.</string>
     <string name="thank_you">Thank you for your purchase! Your items are on the way and should arrive shortly.</string>
     <string name="continue_ordering">Continue Ordering</string>
+    <string name="add_to_cart">ADD TO CART</string>
 
 </resources>

@@ -74,19 +74,19 @@
                     android:layout_alignParentEnd="true"
                     android:background="@null"
                     android:textColor="#BB0000"
-                    android:layout_toEndOf="@+id/button12"
+                    android:layout_toEndOf="@+id/addtocart"
                     android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@+id/button12" />
+                    android:layout_toRightOf="@+id/addtocart" />
 
                 <Button
-                    android:id="@+id/button12"
+                    android:id="@+id/addtocart"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@null"
                     android:textColor="#0000BB"
                     android:padding="7dp"
                     android:layout_alignParentTop="true"
-                    android:text="MOVE TO CART" />
+                    android:text="@string/add_to_cart" />
 
             </RelativeLayout>
 

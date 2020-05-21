@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.Fragment.AllCartsFragment;
+import com.example.food__delivery.Fragment.AllFavouriteFragment;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -279,9 +280,8 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.favourite: {
-                //fragment = new AllFavoriteFragemnt();
-                fragment = new FavouriteFragment(0);
-                setTitle("Favourite");
+                fragment = new AllFavouriteFragment();
+                setTitle("Favourites");
                 FragmentManager fm = getSupportFragmentManager();
                 fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();

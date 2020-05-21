@@ -49,7 +49,7 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
         databaseEntry.close();
         quote = (TextView)view.findViewById(R.id.textView16);
         quote.setVisibility(View.GONE);
-        recyclerViewAdapter = new Adapter_Fav(foodElementsList, getActivity().getApplicationContext());
+        recyclerViewAdapter = new Adapter_Fav(foodElementsList, this);
         recyclerView.setAdapter(recyclerViewAdapter);
         reLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(reLayoutManager);

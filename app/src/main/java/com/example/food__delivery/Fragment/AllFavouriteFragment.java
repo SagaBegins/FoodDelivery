@@ -2,6 +2,10 @@ package com.example.food__delivery.Fragment;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -9,11 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.OrderList;
@@ -25,10 +24,10 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllCartsFragment extends Fragment {
+public class AllFavouriteFragment extends Fragment {
 
     private View view;
-    private ArrayList<CartFragment> adapterItems = new ArrayList<>();
+    private ArrayList<FavouriteFragment> adapterItems = new ArrayList<>();
     private ArrayList<OrderList> orderList = new ArrayList<>();
     ViewGroup c;
     private ViewPager pager;
@@ -37,7 +36,7 @@ public class AllCartsFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AllCartsFragment() {
+    public AllFavouriteFragment() {
     }
 
     @Override
@@ -73,14 +72,14 @@ public class AllCartsFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         DatabaseEntry db = new DatabaseEntry(getContext());
-        for(int i=0;i< HomeFragment.menuList.size();i++){
+        for(int i = 0; i< HomeFragment.menuList.size(); i++){
             ArrayList<FoodElement> f;
-            f = (ArrayList<FoodElement>) db.getDataFromDB("cart_table", i);
+            f = (ArrayList<FoodElement>) db.getDataFromDB("favour_table", i);
             if(f.size() == 0){
                 continue;
             }
             f.clear();
-            adapterItems.add(new CartFragment(i));
+            adapterItems.add(new FavouriteFragment(i));
             adapter.addFrag(adapterItems.get(adapter.getCount()) , HomeFragment.restaurantList.get(i).restaurantName);
         }
         db.close();
@@ -118,12 +117,12 @@ public class AllCartsFragment extends Fragment {
 
         @Override
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            try{
-            FragmentManager manager = ((Fragment)object).getFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction();
-            trans.remove((Fragment)object);
-            trans.commit();
-            super.destroyItem(container, position, object);
+            try {
+                FragmentManager manager = ((Fragment) object).getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.remove((Fragment) object);
+                trans.commit();
+                super.destroyItem(container, position, object);
             }catch (Exception e){
                 e.printStackTrace();
             }

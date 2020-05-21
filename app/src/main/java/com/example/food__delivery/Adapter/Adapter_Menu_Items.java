@@ -28,8 +28,8 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
 
     private List<FoodElement> foodElements;
     Context context;
-    boolean isPressed = false;
-    int rate = 0;
+    boolean isFav = false;
+    int id;
     RelativeLayout card;
 
     DatabaseEntry databaseEntry;
@@ -37,6 +37,11 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
         public Adapter_Menu_Items(Context context, List<FoodElement> foodElements) {
         this.foodElements = foodElements;
         this.context = context;
+        try{
+            this.id = foodElements.get(0).getRate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         }
 
         @Override
@@ -72,6 +77,12 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     .load(foodElements.get(position).getPhoto())
                     .into(holder.image);
             holder.price.setText("₹"+foodElements.get(position).getPrice());
+            databaseEntry = new DatabaseEntry(context);
+            if(databaseEntry.isFav(foodElements.get(position).getName()+"_"+id)) {
+                holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
+                isFav = true;
+            }
+            databaseEntry.close();
             if(databaseEntry.totalQty(foodElements.get(position).getRate())<40) {
                 holder.add.setEnabled(true);
                 databaseEntry.close();
@@ -79,8 +90,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     @Override
                     public void onClick(View view) {
                         databaseEntry = new DatabaseEntry(context);
-                        rate = foodElements.get(position).getRate();
-                        databaseEntry.insertIntoCart(foodElements.get(position).getName()+"_"+rate, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        databaseEntry.insertIntoCart(foodElements.get(position).getName()+"_"+id, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), id, 1);
                         //Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT).show();
                         databaseEntry.close();
                         AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(foodElements.get(position).getRate())));
@@ -94,20 +104,19 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
             holder.fav.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    if(!isPressed) {
+                    if(!isFav) {
                         holder.fav.setImageResource(R.drawable.ic_favorite_black_24dp);
                         databaseEntry = new DatabaseEntry(context);
-                        databaseEntry.insertIntoFav(foodElements.get(position).getName(), foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), rate, 1);
+                        databaseEntry.insertIntoFav(foodElements.get(position).getName()+"_"+id, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), id, 1);
                         databaseEntry.close();
                         Toast.makeText(context, "Food Added to Favourites.", Toast.LENGTH_SHORT);
-                    }else if(isPressed){
+                    }else{
                         databaseEntry = new DatabaseEntry(context);
                         databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(), "favour_table");
                         databaseEntry.close();
                         holder.fav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
                     }
-                    isPressed = !isPressed;
+                    isFav = !isFav;
                 }
             });
         }

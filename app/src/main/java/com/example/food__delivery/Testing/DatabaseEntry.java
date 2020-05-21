@@ -75,6 +75,22 @@ public class DatabaseEntry extends SQLiteOpenHelper {
 
         
     }
+
+    public boolean isFav(String foodname){
+        String sqlQuery = "select count(*) from "+ this.FAV_TABLE + " where  foodname= ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor i = db.rawQuery(sqlQuery, new String[]{foodname});
+        if(i.moveToFirst()){
+            if(i.getInt(0) == 0){
+                return false;
+            }else{
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public void insertIntoFav(String foodname,String url,String price,int rate, int qty){
 
         SQLiteDatabase db = this.getWritableDatabase();

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Activities.AfterMain;
-import com.example.food__delivery.Fragment.CartFragment;
+import com.example.food__delivery.Fragment.FavouriteFragment;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
@@ -26,19 +26,19 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
 
     private List<FoodElement> foodElements;
     Context context;
-    CartFragment parent;
+    FavouriteFragment parent;
     DatabaseEntry databaseEntry;
+    int id;
 
-    public Adapter_Fav(List<FoodElement> foodElementsList, CartFragment parent) {
+    public Adapter_Fav(List<FoodElement> foodElementsList, FavouriteFragment parent) {
         this.context = parent.getActivity();
         this.parent = parent;
         this.foodElements = foodElementsList;
-    }
-
-    public Adapter_Fav(List<FoodElement> foodElementsList, Context context) {
-        this.context = context;
-        this.parent = null;
-        this.foodElements = foodElementsList;
+        try {
+            this.id = foodElements.get(0).getRate();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -49,26 +49,16 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.food_name.setText(foodElements.get(position).getName());
+        holder.food_name.setText(foodElements.get(position).getName().split("_")[0]);
         Glide.with(context.getApplicationContext())
                 .load(foodElements.get(position).getPhoto()).transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());
-        holder.movetocart.setOnClickListener(new View.OnClickListener() {
+        holder.addtocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.insertIntoCart(foodElements.get(position).getName(),foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"favour_table");
-                foodElements.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position,foodElements.size());
-                int id = foodElements.get(position).getRate();
-                try {
-                    parent.calculateGrandTotal(id);
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+                databaseEntry.insertIntoCart(foodElements.get(position).getName().split("_")[0]+"_"+id,foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
                 AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
             }
         });
@@ -76,7 +66,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
             @Override
             public void onClick(View view) {
                 databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"favour_table");
+                databaseEntry.deleteARow(foodElements.get(position).getPhoto(), foodElements.get(position).getRate(),"favour_table");
                 foodElements.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
@@ -92,7 +82,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
     public class ViewHolder extends RecyclerView.ViewHolder{
         private TextView food_name, price;
         private ImageView image;
-        private Button movetocart, delete;
+        private Button addtocart, delete;
 
 
         public ViewHolder(View itemView) {
@@ -100,7 +90,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
             food_name = (TextView) itemView.findViewById(R.id.nameproduct);
             price = (TextView)itemView.findViewById(R.id.priceproduct);
             image = (ImageView) itemView.findViewById(R.id.imagefav);
-            movetocart = (Button) itemView.findViewById(R.id.button12);
+            addtocart = (Button) itemView.findViewById(R.id.addtocart);
             delete=(Button)itemView.findViewById(R.id.deletebutton);
         }
     }
