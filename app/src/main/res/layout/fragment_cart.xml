@@ -83,7 +83,7 @@
             android:layout_alignTop="@+id/recycler11"
 
             android:layout_marginTop="109dp"
-            android:fontFamily="cursive"
+
             android:lineSpacingExtra="8sp"
             android:padding="15dp"
             android:text="@string/emptycart"

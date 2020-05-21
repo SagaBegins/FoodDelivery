@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/use"
-        android:isScrollContainer="true"
+        android:isScrollContainer="false"
         tools:context="com.example.food__delivery.Login">
 
 

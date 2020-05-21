@@ -201,6 +201,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new HomeFragment();
                 setTitle("Home");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
@@ -209,6 +210,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new HomeFragment();
                 setTitle("A La Carte");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
@@ -217,6 +219,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new AboutFragment();
                 setTitle("About Us");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
@@ -252,6 +255,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new RateFragment();
                 setTitle("Rate Us");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
@@ -260,14 +264,16 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new AllOrders();
                 setTitle("Order");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
             }
             case R.id.cartnav: {
                 fragment = new AllCartsFragment();
-                setTitle("Your Cart");
+                setTitle("Your Carts");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
@@ -277,6 +283,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragment = new FavouriteFragment(0);
                 setTitle("Favourite");
                 FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;

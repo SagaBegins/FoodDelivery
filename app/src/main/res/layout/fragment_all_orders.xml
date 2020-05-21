@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:scrollbars="horizontal"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             tools:tabGravity="center"
             tools:tabMode="scrollable" />
 

@@ -26,10 +26,18 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
 
     private List<FoodElement> foodElements;
     Context context;
+    CartFragment parent;
     DatabaseEntry databaseEntry;
+
+    public Adapter_Fav(List<FoodElement> foodElementsList, CartFragment parent) {
+        this.context = parent.getActivity();
+        this.parent = parent;
+        this.foodElements = foodElementsList;
+    }
 
     public Adapter_Fav(List<FoodElement> foodElementsList, Context context) {
         this.context = context;
+        this.parent = null;
         this.foodElements = foodElementsList;
     }
 
@@ -56,7 +64,11 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
                 int id = foodElements.get(position).getRate();
-                CartFragment.calculateGrandTotal(id);
+                try {
+                    parent.calculateGrandTotal(id);
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
             }
         });

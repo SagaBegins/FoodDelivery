@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,7 +35,7 @@ import java.util.List;
  */
 public class CartFragment extends androidx.fragment.app.Fragment {
 
-    private static DatabaseEntry databaseEntrytotal;
+    private  DatabaseEntry databaseEntrytotal;
     RecyclerView recyclerView;
     Adapter_Cart reAdapterFav;
     DatabaseEntry databaseEntry;
@@ -41,24 +43,43 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     RecyclerView.LayoutManager layoutManager;
     int price=0;
 
-    static TextView totalp;
-    static TextView textget ;
+     TextView totalp;
+     TextView textget ;
 
-    static RelativeLayout proceed;
+     RelativeLayout proceed;
     private int restaurantId;
 
     public CartFragment(int rate) {
         this.restaurantId = rate;
         // Required empty public constructor
     }
-    @SuppressLint("StaticFieldLeak")
-    static View view;
+    private View view;
+     Context context;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("TAG", "onCreate: Runs this one");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_cart, container, false);
+        Log.d("cartfrag","This is running "+ this.restaurantId);
+        setUpView();
+        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d("TAG", "onDestroy: CartFrag this is run too");
+        super.onDestroy();
+    }
+
+    private void setUpView(){
+        context = view.getContext();
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler11);
         databaseEntry = new DatabaseEntry(getActivity());
         foodElementsList = new ArrayList<>();
@@ -68,7 +89,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         databaseEntry.close();
         textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
         proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
-        reAdapterFav = new Adapter_Cart(foodElementsList,getActivity());
+        reAdapterFav = new Adapter_Cart(foodElementsList,(CartFragment) this);
         totalp=(TextView)view.findViewById(R.id.textView_cartTotalPrice);
         recyclerView.setAdapter(reAdapterFav);
         double tot = calculateGrandTotal(restaurantId);
@@ -78,7 +99,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         totalPrice = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = totalPrice.edit();
         editor.putString("total", totalvalue);
-        editor.commit();
+        editor.apply();
 
 
         //Confirmation.priceTextview(totalvalue);
@@ -87,47 +108,23 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         if(!foodElementsList.isEmpty()){
             textget.setVisibility(View.GONE);
             proceed.setVisibility(View.VISIBLE);
-        proceed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), Checkout.class);
-                intent.putExtra("restaurantId", restaurantId);
-                startActivity(intent);
-            }
-        });
+            proceed.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getActivity(), Checkout.class);
+                    intent.putExtra("restaurantId", restaurantId);
+                    startActivity(intent);
+                }
+            });
         }else{
             textget.setVisibility(View.VISIBLE);
         }
-        return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        databaseEntry.close();
-    }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        databaseEntry.close();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        databaseEntry.close();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //databaseEntry = ();
-    }
-    public static double calculateGrandTotal(int rate){
+    public double calculateGrandTotal(int rate){
         double total;
-        Activity activity = (Activity)view.getContext();
-
+        Activity activity = (Activity)context;
         databaseEntrytotal = new DatabaseEntry(activity);
         total = databaseEntrytotal.total(rate);
         databaseEntrytotal.close();
@@ -141,5 +138,9 @@ public class CartFragment extends androidx.fragment.app.Fragment {
             proceed.setVisibility(View.VISIBLE);
         }
         return total;
+    }
+
+    public int getRestaurantId(){
+        return this.restaurantId;
     }
 }

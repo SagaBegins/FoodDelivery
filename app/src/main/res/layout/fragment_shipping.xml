@@ -180,7 +180,7 @@
 
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/firstnametext"
-                android:fontFamily="cursive"
+
                 android:padding="10dp"
                 android:text="Shipping Address"
                 android:textColor="@android:color/white"

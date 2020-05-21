@@ -1,58 +1,59 @@
 package com.example.food__delivery.Adapter;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.fragment.app.Fragment;
 
-import com.example.food__delivery.Fragment.AllCartsFragment.OnListFragmentInteractionListener;
+import com.example.food__delivery.Fragment.CartFragment;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.OrderList;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link OrderList} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<MyallcartRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<OrderList> mValues;
-    private final OnListFragmentInteractionListener mListener;
+    private Context context;
+    private View view;
 
-    public MyallcartRecyclerViewAdapter(ArrayList<OrderList> items, OnListFragmentInteractionListener listener) {
+    public MyallcartRecyclerViewAdapter(ArrayList<OrderList> items) {
         mValues = items;
-        mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_all_carts, parent, false);
+        context = view.getContext();
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position).restaurantId;
-        holder.mIdView.setText(mValues.get(position).restaurantId);
-        holder.mContentView.setText("View Cart");
 
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
+        holder.mIdView.setText(HomeFragment.restaurantList.get(holder.mItem).restaurantName);
+        //Adapter_Cart ac = new Adapter_Cart(mValues.get(position).foodList, context);
+
+       /* while(holder.rv.getChildCount() < mValues.get(position).foodList.size()){
+            Log.d("l", holder.rv.getChildCount()+"");};
+        /*FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        Fragment cf = new CartFragment(holder.mItem);
+        fragmentTransaction.replace(R.id.shop_fragment, cf).commit();*/
     }
 
     @Override
@@ -60,22 +61,20 @@ public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<Myallcart
         return mValues.size();
     }
 
+    private void onChange(){
+        super.notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
         public int mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.item_number);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.restaurant_Name);
         }
 
-        @Override
-        public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
-        }
     }
 }
