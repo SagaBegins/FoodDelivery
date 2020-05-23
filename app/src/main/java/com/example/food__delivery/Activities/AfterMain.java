@@ -22,19 +22,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MenuActivity.CategoryHandlerFragment;
-import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.example.food__delivery.MenuActivity.BreadsFragment;
-import com.example.food__delivery.MenuActivity.SweetsFragment;
-import com.example.food__delivery.MenuActivity.NonVegMainCourseFragment;
-import com.example.food__delivery.MenuActivity.BeveragesFragment;
-import com.example.food__delivery.MenuActivity.VegStartersFragment;
-import com.example.food__delivery.MenuActivity.RiceFragment;
-import com.example.food__delivery.MenuActivity.RollsFragment;
-import com.example.food__delivery.MenuActivity.VegMainCourseFragment;
-import com.example.food__delivery.MenuActivity.NonVegStartersFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
+import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -136,7 +127,7 @@ public class AfterMain extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if(menuList.get(restaurantId).vegStarters.size() > 0)
+        /*if(menuList.get(restaurantId).vegStarters.size() > 0)
             adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).vegStarters), "Veg Starters");
 
         if(menuList.get(restaurantId).nonVegStarters.size() > 0)
@@ -161,7 +152,17 @@ public class AfterMain extends AppCompatActivity {
             adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).breads), "Breads");
 
         if(menuList.get(restaurantId).beverages.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).beverages), "Beverages");
+            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).beverages), "Beverages");*/
+
+        for(String category: com.example.food__delivery.Helper.Menu.categories){
+            try {
+                ArrayList<FoodElement> temp = menuList.get(restaurantId).getIndex(category);
+                if (temp.size() > 0)
+                    adapter.addFrag(new CategoryHandlerFragment(restaurantId, temp, category), category);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
 
         viewPager.setAdapter(adapter);
     }

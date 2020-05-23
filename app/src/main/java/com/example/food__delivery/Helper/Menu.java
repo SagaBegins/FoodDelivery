@@ -1,5 +1,7 @@
 package com.example.food__delivery.Helper;
 
+import android.util.Log;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -14,15 +16,17 @@ public class Menu {
     public ArrayList<FoodElement> breads;
     public ArrayList<FoodElement> beverages;
 
-    public final String Vegstarters = "vegstarters";
-    public final String Nonvegstarters = "nonvegstarters";
-    public final String Vegmaincourse = "vegmaincourse";
-    public final String Nonvegmaincourse = "nonvegmaincourse";
-    public final String Rice = "rice";
-    public final String Sweets = "sweets";
-    public final String Rolls = "rolls";
-    public final String Breads = "breads";
-    public final String Beverages = "beverages";
+    public static final String Vegstarters = "Veg Starters";
+    public static final String Nonvegstarters = "Non-Veg Starters";
+    public static final String Vegmaincourse = "Veg Main Course";
+    public static final String Nonvegmaincourse = "Non-Veg Main Course";
+    public static final String Rice = "Rice";
+    public static final String Sweets = "Sweets";
+    public static final String Rolls = "Rolls";
+    public static final String Breads = "Breads";
+    public static final String Beverages = "Beverages";
+    public static final String[] categories = {Vegstarters, Nonvegstarters, Vegmaincourse, Nonvegmaincourse,
+                                        Rice, Sweets, Rolls, Breads, Beverages};
 
     public void setIndex(String index, ArrayList<FoodElement> items) {
         switch (index) {
@@ -56,23 +60,23 @@ public class Menu {
     }
     public ArrayList<FoodElement> getIndex(String index) {
         switch (index) {
-            case "vegstarters":
+            case Vegstarters:
                 return this.vegStarters;
-            case "nonvegstarters":
+            case Nonvegstarters:
                 return this.nonVegStarters;
-            case "vegmaincourse":
+            case Vegmaincourse:
                 return this.vegMainCourse;
-            case "nonvegmaincourse":
+            case Nonvegmaincourse:
                 return this.nonVegMainCourse;
-            case "rice":
+            case Rice:
                 return this.rice;
-            case "rolls":
+            case Rolls:
                 return this.rolls;
-            case "sweets":
+            case Sweets:
                 return this.sweets;
-            case "breads":
+            case Breads:
                 return this.breads;
-            case "beverages":
+            case Beverages:
                 return this.beverages;
         }
         return null;

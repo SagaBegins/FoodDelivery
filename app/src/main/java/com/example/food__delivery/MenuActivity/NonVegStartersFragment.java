@@ -55,7 +55,7 @@ public class NonVegStartersFragment extends androidx.fragment.app.Fragment {
         if(foodElements.size() == 0) {
         }
         else{
-            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
+            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements, "");
             recyclerView.setAdapter(recyclerViewadapter);
         }
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 1);

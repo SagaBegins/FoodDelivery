@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Visibility;
 
@@ -31,12 +32,13 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
     boolean isFav = false;
     int id;
     RelativeLayout card;
-
+    String filter ="";
     DatabaseEntry databaseEntry;
 
-        public Adapter_Menu_Items(Context context, List<FoodElement> foodElements) {
+        public Adapter_Menu_Items(Context context, List<FoodElement> foodElements, String filter) {
         this.foodElements = foodElements;
         this.context = context;
+        this.filter = filter;
         try{
             this.id = foodElements.get(0).getRate();
         }catch (Exception e){
@@ -71,7 +73,9 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     }
                 }
             });
-
+            if(!foodElements.get(position).getName().toLowerCase().contains(filter.toLowerCase())){
+                holder.card.setVisibility(View.GONE);
+            }
             holder.food_name.setText(foodElements.get(position).getName());
             Glide.with(context.getApplicationContext())
                     .load(foodElements.get(position).getPhoto())
@@ -130,6 +134,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
             private ImageView image;
             private ImageButton add, fav;
             private RelativeLayout bottom;
+            private CardView card;
 
             public ViewHolder(View view) {
                 super(view);
@@ -140,6 +145,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                 fav = (ImageButton)view.findViewById(R.id.imageButton4);
                 description = (TextView) view.findViewById(R.id.food_description);
                 bottom = (RelativeLayout) view.findViewById(R.id.bottom_section);
+                card = (CardView) view.findViewById(R.id.food_holder);
             }
         }
     }

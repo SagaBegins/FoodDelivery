@@ -75,6 +75,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount2, R.drawable.discount3, R.drawable.discount4};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    TextWatcher tw;
+    TextInputEditText searchFilter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -87,14 +89,14 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
-        TextInputEditText searchFilter = (TextInputEditText) view.findViewById(R.id.editText_search);
+        searchFilter = (TextInputEditText) view.findViewById(R.id.editText_search);
         //EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
         searchFilter.setTextColor(Color.WHITE);
         searchFilter.setHintTextColor(Color.WHITE);
         searchFilter.setHint("Food Search");
         searchFilter.setSingleLine();
         searchFilter.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        searchFilter.addTextChangedListener(new TextWatcher() {
+        tw = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -109,7 +111,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             public void afterTextChanged(Editable s) {
                 onKeyFilter(s);
             }
-        });
+        };
+        searchFilter.addTextChangedListener(tw);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);

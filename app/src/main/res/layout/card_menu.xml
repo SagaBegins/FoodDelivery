@@ -8,6 +8,7 @@
     android:layout_marginTop="@dimen/dimen_10dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/food_holder"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:cardCornerRadius="5dp"
