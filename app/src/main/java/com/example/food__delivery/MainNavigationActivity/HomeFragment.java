@@ -206,7 +206,48 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             DatabaseReference restaurantRef = mDatabase.child("restaurants");
             DatabaseReference menuRef = mDatabase.child("menu");
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            DatabaseReference orderRef = mDatabase.child("Orders").child(auth.getCurrentUser().getUid());
+            try {
+                DatabaseReference orderRef = mDatabase.child("Orders").child(auth.getCurrentUser().getUid());
+                orderRef.orderByKey().addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ArrayList<FoodElement> foodElements = new ArrayList<>();
+                        for (DataSnapshot order : dataSnapshot.getChildren()) {
+                            OrderList orderList = new OrderList();
+                            orderList.txnId = order.getKey();
+                            orderList.txnTime = order.child("txnTime").getValue(String.class);
+                            orderList.txnTime = orderList.txnTime.split("GMT")[0];
+                            orderList.restaurantId = order.child("restaurantId").getValue(Integer.class);
+                            orderList.amount = order.child("amount").getValue(String.class);
+                            Log.d("TAG", "onDataChange: "+ orderList.amount);
+                            orderList.status = order.child("status").getValue(String.class);
+                            for (DataSnapshot food : order.child("foodList").getChildren()) {
+                                FoodElement foodElement = new FoodElement();
+                                foodElement.setPhoto(food.child("image").getValue(String.class));
+                                foodElement.setName(food.child("name").getValue(String.class));
+                                foodElement.setFoodType(food.child("category").getValue(String.class));
+                                foodElement.setPrice(food.child("price").getValue(String.class));
+                                foodElement.setQty(food.child("qty").getValue(Integer.class));
+                                foodElement.setDescription(food.child("description").getValue(String.class));
+                                foodElement.setRate(food.child("rate").getValue(Integer.class));
+                                foodElements.add(foodElement);
+                            }
+                            orderList.foodList = (ArrayList<FoodElement>) foodElements.clone();
+                            foodElements.clear();
+                            ordersList.add(0, orderList);
+                        }
+                        orderDone = true;
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }catch(Exception e){
+                orderDone = true;
+                e.printStackTrace();
+            }
             Log.d("Adding Ref", menuRef.toString());
             restaurantRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -252,43 +293,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                         menuList.add(menuItem);
                     }
                     menuDone = true;
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-
-            orderRef.orderByKey().addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    ArrayList<FoodElement> foodElements = new ArrayList<>();
-                    for (DataSnapshot order : dataSnapshot.getChildren()) {
-                        OrderList orderList = new OrderList();
-                        orderList.txnId = order.getKey();
-                        orderList.txnTime = order.child("txnTime").getValue(String.class);
-                        orderList.txnTime = orderList.txnTime.split("GMT")[0];
-                        orderList.restaurantId = order.child("restaurantId").getValue(Integer.class);
-                        orderList.amount = order.child("amount").getValue(String.class);
-                        Log.d("TAG", "onDataChange: "+ orderList.amount);
-                        orderList.status = order.child("status").getValue(String.class);
-                        for (DataSnapshot food : order.child("foodList").getChildren()) {
-                            FoodElement foodElement = new FoodElement();
-                            foodElement.setPhoto(food.child("image").getValue(String.class));
-                            foodElement.setName(food.child("name").getValue(String.class));
-                            foodElement.setFoodType(food.child("category").getValue(String.class));
-                            foodElement.setPrice(food.child("price").getValue(String.class));
-                            foodElement.setQty(food.child("qty").getValue(Integer.class));
-                            foodElement.setDescription(food.child("description").getValue(String.class));
-                            foodElement.setRate(food.child("rate").getValue(Integer.class));
-                            foodElements.add(foodElement);
-                        }
-                        orderList.foodList = (ArrayList<FoodElement>) foodElements.clone();
-                        foodElements.clear();
-                        ordersList.add(0, orderList);
-                    }
-                    orderDone = true;
                 }
 
                 @Override

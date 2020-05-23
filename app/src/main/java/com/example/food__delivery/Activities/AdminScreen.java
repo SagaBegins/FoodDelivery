@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,14 +83,20 @@ public class AdminScreen extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        auth.signOut();
+    }
 
     public void exitByBackKey() {
         AlertDialog alertbox = new AlertDialog.Builder(this)
-                .setMessage("Do you want to exit application?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setMessage("You will be logged out when you leave")
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 
                     // do something when the button is clicked
                     public void onClick(DialogInterface arg0, int arg1) {
+                        auth.signOut();
                         finishAffinity();
                         //close();
                     }
@@ -104,11 +111,11 @@ public class AdminScreen extends AppCompatActivity {
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByBackKey();
-
             //moveTaskToBack(false);
-
+            auth.signOut();
             return true;
         }
         return super.onKeyDown(keyCode, event);

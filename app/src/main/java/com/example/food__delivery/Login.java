@@ -170,7 +170,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 submitForm();
-                loading.setMessage("com.example.fooddelivery.Login Please Wait...");
+                loading.setMessage("Loggin in Please Wait...");
                 loading.show();
                 eid = ed1.getText().toString();
                 password = ed2.getText().toString();
