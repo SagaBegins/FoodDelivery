@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -179,11 +180,22 @@ public class Login extends AppCompatActivity {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(Login.this, "Invalid Email or Password.", Toast.LENGTH_SHORT).show();
                             } else {
-                                firebaseDatabase.child("users").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                                firebaseDatabase.child("users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                        Log.d("TAG", "onDataChange: "+ isAdmin);
                                         isSet = true;
+                                        if(isAdmin){
+                                            Intent intent = new Intent(Login.this, AdminScreen.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }else {
+                                            Intent intent = new Intent(Login.this, MainScreen.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                        loading.dismiss();
                                     }
 
                                     @Override
@@ -191,17 +203,9 @@ public class Login extends AppCompatActivity {
 
                                     }
                                 });
-                                while(!isSet);
-                                if(isAdmin){
-                                    Intent intent = new Intent(Login.this, AdminScreen.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                                Intent intent = new Intent(Login.this, MainScreen.class);
-                                startActivity(intent);
-                                finish();
+
                             }
-                            loading.dismiss();
+
                         }
                     });
             }

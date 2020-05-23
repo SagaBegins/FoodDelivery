@@ -66,28 +66,19 @@ public class AdminScreen extends AppCompatActivity {
         FacebookSdk.setApplicationId("581033482823166");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_admin_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        setSupportActionBar(toolbar);
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View view = navigationView.getRootView();
-        view.setBackgroundResource(R.drawable.home_back);
+
+        //Add chat fragment or something
         fragment = new HomeFragment();
         setTitle("Home");
         databaseEntry = new DatabaseEntry(AdminScreen.this);
         databaseEntry.createTable();
         databaseEntry.close();
-        navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
-        navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
-        nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textView2);
-        photo = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.imageView);
-        sign = (Button)navigationView.getHeaderView(0).findViewById(R.id.button15);
         auth = FirebaseAuth.getInstance();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+        fragmentTransaction.replace(R.id.content_frame_admin, fragment).commit();
         user = FirebaseAuth.getInstance().getCurrentUser();
         }
 

@@ -33,6 +33,10 @@
             android:name="com.example.food__delivery.Activities.MainScreen"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name="com.example.food__delivery.Activities.AdminScreen"
+            android:theme="@style/AppTheme">
+        </activity>
 
         <activity android:name="com.example.food__delivery.Activities.ForgotPasswordActivity" />
 

@@ -7,14 +7,22 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food__delivery.Activities.AdminScreen;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.food__delivery.Activities.MainScreen;
 import com.example.food__delivery.Activities.OpenScreen;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Method;
 
@@ -22,10 +30,12 @@ public class SplashActivity extends AppCompatActivity {
     RelativeLayout splash;
     FirebaseAuth auth;
     FirebaseUser user;
-
+    DatabaseReference firebaseDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        firebaseDatabase = database.getReference();
         setContentView(R.layout.activity_splash);
         auth = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -42,9 +52,31 @@ public class SplashActivity extends AppCompatActivity {
                         startActivity(i);
                         finish();
                     }else{
-                        Intent i = new Intent(SplashActivity.this, MainScreen.class);
+                        firebaseDatabase.child("users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                Log.d("TAG", "onDataChange: "+ isAdmin);
+                                if(isAdmin){
+                                    Intent intent = new Intent(SplashActivity.this, AdminScreen.class);
+                                    startActivity(intent);
+                                    finish();
+                                }else {
+                                    Intent intent = new Intent(SplashActivity.this, MainScreen.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        /*Intent i = new Intent(SplashActivity.this, MainScreen.class);
                         startActivity(i);
-                        finish();
+                        finish();*/
                     }
                 }
                 else{
