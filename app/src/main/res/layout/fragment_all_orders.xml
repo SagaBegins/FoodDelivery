@@ -1,36 +1,125 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.food__delivery.AllOrders">
+    android:background="@color/colorPrimaryDark"
+    tools:context=".AllOrders">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderslist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:listitem="@layout/list_order_description" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabsorder"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:scrollbars="horizontal"
-            app:tabMode="scrollable"
-            tools:tabGravity="center"
-            tools:tabMode="scrollable" />
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/containerorder"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/order_popup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="#9A000000"
+        android:visibility="gone">
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_below="@+id/tabsorder"
-            android:layout_alignParentLeft="true">
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginBottom="@dimen/dimen_30dp"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginEnd="@dimen/dimen_10dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <RelativeLayout
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#E3D134">
+                        <TextView
+                            android:id="@+id/restaurant_Name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/restaurant_name"
+                            android:layout_centerHorizontal="true"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/dimen_20dp"/>
 
-    </RelativeLayout>
+                        <ImageView
+                            android:id="@+id/exit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:clickable="true"
+                            app:srcCompat="@drawable/ic_close_black_24dp" />
+                        <TextView
+                            android:id="@+id/txnId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/transaction_id"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:layout_below="@id/restaurant_Name"/>
+                        <TextView
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/restaurant_Name"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:text="Status"/>
+                        <TextView
+                            android:id="@+id/order_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/restaurant_Name"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:text="@string/order_date"/>
 
-</FrameLayout>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/order_content"
+                        android:layout_below="@id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/order_food_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:listitem="@layout/list_order_details"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="#4CAF50">
+
+                        <TextView
+                            android:id="@+id/total_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10sp"
+                            android:text="@string/total_amount"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="@dimen/dimen_20dp" />
+                        <TextView
+                            android:id="@+id/amount"
+                            android:textSize="@dimen/dimen_20dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10sp"
+                            android:layout_toEndOf="@id/total_title"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:text="@string/price"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

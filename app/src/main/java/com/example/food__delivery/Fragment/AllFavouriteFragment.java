@@ -47,7 +47,7 @@ public class AllFavouriteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_all_orders, container, false);
+        view = inflater.inflate(R.layout.fragment_all_cart_fav, container, false);
         c = container;
         pager = (ViewPager) view.findViewById(R.id.containerorder);
         setUpView();

@@ -28,7 +28,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.Menu;
+import com.example.food__delivery.Helper.OrderList;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +43,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -51,8 +54,9 @@ import java.util.TimerTask;
  */
 public class HomeFragment extends androidx.fragment.app.Fragment {
 
-    public static ArrayList<Restaurant> restaurantList  = new ArrayList<>();
+    public static ArrayList<Restaurant> restaurantList = new ArrayList<>();
     public static ArrayList<Menu> menuList = new ArrayList<>();
+    public static ArrayList<OrderList> ordersList = new ArrayList<>();
 
     ProgressDialog loading;
     RecyclerView recyclerView;
@@ -60,8 +64,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     Adapter_Menu recyclerViewadapter;
     boolean done;
     boolean menuDone;
+    boolean orderDone;
     private static ViewPager mPager;
     private static boolean[] filteredMenu = new boolean[5];
+
     private static List<Restaurant> filteredRestaurant = new ArrayList<>();
     private GetElements getElements = new GetElements();
     private static int currentPage = 0;
@@ -69,6 +75,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount2, R.drawable.discount3, R.drawable.discount4};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -80,13 +87,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
-        TextInputEditText searchFilter = (TextInputEditText)  view.findViewById(R.id.editText_search);
+        TextInputEditText searchFilter = (TextInputEditText) view.findViewById(R.id.editText_search);
         //EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
         searchFilter.setTextColor(Color.WHITE);
         searchFilter.setHintTextColor(Color.WHITE);
         searchFilter.setHint("Food Search");
         searchFilter.setSingleLine();
-        searchFilter.setInputType(InputType.TYPE_CLASS_TEXT| InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        searchFilter.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -106,15 +113,14 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
-        if(restaurantList.size() == 0) {
+        if (restaurantList.size() == 0) {
             getElements.execute();
-        }
-        else{
+        } else {
             recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
             recyclerView.setAdapter(recyclerViewadapter);
         }
 
-        reLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext()){
+        reLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -196,13 +202,16 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         protected List<Restaurant> doInBackground(String... arg0) {
             done = false;
             menuDone = false;
+            orderDone = false;
             DatabaseReference restaurantRef = mDatabase.child("restaurants");
             DatabaseReference menuRef = mDatabase.child("menu");
-            Log.d("Adding Ref",menuRef.toString());
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            DatabaseReference orderRef = mDatabase.child("Orders").child(auth.getCurrentUser().getUid());
+            Log.d("Adding Ref", menuRef.toString());
             restaurantRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot child:dataSnapshot.getChildren()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Restaurant Restaurant = new Restaurant();
                         Restaurant.photo = (child.child("Imagepath").getValue(String.class));
                         Restaurant.restaurantName = (child.child("Category").getValue(String.class));
@@ -222,12 +231,12 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     ArrayList<FoodElement> foodElements = new ArrayList<>();
                     String nameOfKey;
-                    for(DataSnapshot child:dataSnapshot.getChildren()) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Menu menuItem = new Menu();
-                        for(DataSnapshot category: child.getChildren()) {
+                        for (DataSnapshot category : child.getChildren()) {
                             nameOfKey = category.getKey();
-                            Log.d("category", "Line 195 Home Fragment,"+nameOfKey+" "+ category.getRef().toString());
-                            for(DataSnapshot food: category.getChildren()) {
+                            Log.d("category", "Line 195 Home Fragment," + nameOfKey + " " + category.getRef().toString());
+                            for (DataSnapshot food : category.getChildren()) {
                                 FoodElement foodElement = new FoodElement();
                                 foodElement.setPhoto(food.child("image").getValue(String.class));
                                 foodElement.setName(food.child("name").getValue(String.class));
@@ -251,8 +260,46 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 }
             });
 
-            while(!done);
-            while(!menuDone);
+            orderRef.orderByKey().addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ArrayList<FoodElement> foodElements = new ArrayList<>();
+                    for (DataSnapshot order : dataSnapshot.getChildren()) {
+                        OrderList orderList = new OrderList();
+                        orderList.txnId = order.getKey();
+                        orderList.txnTime = order.child("txnTime").getValue(String.class);
+                        orderList.txnTime = orderList.txnTime.split("GMT")[0];
+                        orderList.restaurantId = order.child("restaurantId").getValue(Integer.class);
+                        orderList.amount = order.child("amount").getValue(String.class);
+                        Log.d("TAG", "onDataChange: "+ orderList.amount);
+                        orderList.status = order.child("status").getValue(String.class);
+                        for (DataSnapshot food : order.child("foodList").getChildren()) {
+                            FoodElement foodElement = new FoodElement();
+                            foodElement.setPhoto(food.child("image").getValue(String.class));
+                            foodElement.setName(food.child("name").getValue(String.class));
+                            foodElement.setFoodType(food.child("category").getValue(String.class));
+                            foodElement.setPrice(food.child("price").getValue(String.class));
+                            foodElement.setQty(food.child("qty").getValue(Integer.class));
+                            foodElement.setDescription(food.child("description").getValue(String.class));
+                            foodElement.setRate(food.child("rate").getValue(Integer.class));
+                            foodElements.add(foodElement);
+                        }
+                        orderList.foodList = (ArrayList<FoodElement>) foodElements.clone();
+                        foodElements.clear();
+                        ordersList.add(0, orderList);
+                    }
+                    orderDone = true;
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            while (!done) ;
+            while (!menuDone) ;
+            while (!orderDone) ;
             return restaurantList;
         }
 
@@ -270,9 +317,9 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         }
     }
 
-    private boolean[] setBoolArrayTo(boolean bool, int size){
+    private boolean[] setBoolArrayTo(boolean bool, int size) {
         boolean[] newBool = new boolean[size];
-        for(int i=0; i< size; i++){
+        for (int i = 0; i < size; i++) {
             newBool[i] = bool;
         }
         return newBool;
@@ -281,19 +328,19 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     private void onKeyFilter(Editable v) {
         String filterText = v.toString();
         filteredMenu = setBoolArrayTo(false, filteredMenu.length);
-        Log.d("Text", "Line 81 Home Fragement "+ filterText);
+        Log.d("Text", "Line 81 Home Fragement " + filterText);
         int iter = 0;
-        if(filterText.equals("") || filterText.equals(" ")){
+        if (filterText.equals("") || filterText.equals(" ")) {
             filteredMenu = setBoolArrayTo(true, filteredMenu.length);
         }
-        for(Menu m: menuList){
+        for (Menu m : menuList) {
             filteredMenu[iter] = m.containsFood(filterText);
             iter++;
         }
 
         filteredRestaurant.clear();
-        for(int i=0;i<5;i++){
-            if(filteredMenu[i]){
+        for (int i = 0; i < 5; i++) {
+            if (filteredMenu[i]) {
                 filteredRestaurant.add(restaurantList.get(i));
             }
         }

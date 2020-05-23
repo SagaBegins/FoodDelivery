@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/imgView_food"
-                android:textSize="@dimen/dimen_30dp"
+                android:textSize="@dimen/dimen_15dp"
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:textColor="@color/colorPrimaryDark"
@@ -46,9 +47,9 @@
                 android:layout_below="@id/txtView_food"
                 android:layout_toEndOf="@id/imgView_food"
                 android:layout_marginStart="@dimen/dimen_10dp"
-                android:layout_marginTop="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
                 android:text="@string/quantity_of_item"
-                android:textSize="@dimen/dimen_15dp"
+                android:textSize="@dimen/dimen_10dp"
                 android:textColor="#0A186C" />
             <TextView
                 android:id="@+id/txtView_price"
@@ -59,7 +60,7 @@
                 android:layout_marginStart="@dimen/dimen_10dp"
                 android:layout_marginTop="@dimen/dimen_10dp"
                 android:text="@string/price_of_item"
-                android:textSize="@dimen/dimen_20dp"
+                android:textSize="@dimen/dimen_15dp"
                 android:textColor="#155A01" />
         </RelativeLayout>
 

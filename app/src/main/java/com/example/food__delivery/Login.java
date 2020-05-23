@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food__delivery.Activities.AdminScreen;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -35,10 +36,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.food__delivery.Activities.ForgotPasswordActivity;
 import com.example.food__delivery.Activities.MainScreen;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,6 +76,8 @@ public class Login extends AppCompatActivity {
     LoginButton lb;
     String eid, password;
     Button b1, b2, b3;
+    private boolean isAdmin= false;
+    private boolean isSet= false;
     private FirebaseAuth auth;
     ProgressDialog loading;
     TextInputLayout email, pass;
@@ -173,6 +179,24 @@ public class Login extends AppCompatActivity {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(Login.this, "Invalid Email or Password.", Toast.LENGTH_SHORT).show();
                             } else {
+                                firebaseDatabase.child("users").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                        isSet = true;
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                                while(!isSet);
+                                if(isAdmin){
+                                    Intent intent = new Intent(Login.this, AdminScreen.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
                                 Intent intent = new Intent(Login.this, MainScreen.class);
                                 startActivity(intent);
                                 finish();
