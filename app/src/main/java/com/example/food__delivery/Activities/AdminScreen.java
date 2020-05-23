@@ -46,9 +46,6 @@ import com.example.food__delivery.AllOrders;
 import com.example.food__delivery.Fragment.CartFragment;
 import com.example.food__delivery.Fragment.FavouriteFragment;
 import com.example.food__delivery.Login;
-import com.example.food__delivery.AdminNavigationActivity.AboutFragment;
-import com.example.food__delivery.AdminNavigationActivity.HomeFragment;
-import com.example.food__delivery.AdminNavigationActivity.RateFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
 
@@ -93,18 +90,7 @@ public class AdminScreen extends AppCompatActivity {
         fragmentTransaction.replace(R.id.content_frame, fragment).commit();
         user = FirebaseAuth.getInstance().getCurrentUser();
         }
-    }
 
-    @Override
-    public void onBackPressed() {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }else{
-            super.onBackPressed();
-        }
-    }
 
     public void exitByBackKey() {
         AlertDialog alertbox = new AlertDialog.Builder(this)
