@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,6 @@ import android.widget.EditText;
 
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.food__delivery.Activities.Checkout;
 import com.example.food__delivery.Fragment.Confirmation;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;

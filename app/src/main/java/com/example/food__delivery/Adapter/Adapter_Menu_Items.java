@@ -12,15 +12,12 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.transition.Visibility;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
-
 
 import java.util.List;
 
@@ -54,6 +51,10 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
+            if(!foodElements.get(position).getName().toLowerCase().contains(filter.toLowerCase())){
+                holder.card.setVisibility(View.GONE);
+                return;
+            }
             databaseEntry = new DatabaseEntry(context);
             holder.description.setText(foodElements.get(position).getDescription());
             holder.image.setClickable(true);
@@ -73,9 +74,6 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                     }
                 }
             });
-            if(!foodElements.get(position).getName().toLowerCase().contains(filter.toLowerCase())){
-                holder.card.setVisibility(View.GONE);
-            }
             holder.food_name.setText(foodElements.get(position).getName());
             Glide.with(context.getApplicationContext())
                     .load(foodElements.get(position).getPhoto())

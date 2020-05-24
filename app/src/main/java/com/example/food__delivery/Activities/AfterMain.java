@@ -3,7 +3,6 @@ package com.example.food__delivery.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,10 @@ import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MenuActivity.CategoryHandlerFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -49,6 +51,10 @@ public class AfterMain extends AppCompatActivity {
     public static TextView tv;
     private ArrayList<com.example.food__delivery.Helper.Menu> menuList = HomeFragment.menuList;
     private ViewPager mViewPager;
+    public FloatingActionButton fab;
+    public TextInputLayout foodsearchparent;
+    public TextInputEditText foodsearch;
+
     private DatabaseEntry databaseEntry;
     private ArrayList<FoodElement> foodElements = new ArrayList<>();
     public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -61,14 +67,19 @@ public class AfterMain extends AppCompatActivity {
         this.savedInstanceState = savedInstanceState;
         Intent intent = getIntent();
         restaurantId = intent.getIntExtra("restaurantId" ,0);
+
         setContentView(R.layout.activity_after_main);
+        foodsearch = findViewById(R.id.food_search);
+        foodsearchparent = findViewById(R.id.food_search_parent);
+        fab = findViewById(R.id.floatingActionButton);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
-        //mViewPager.setOffscreenPageLimit(2);
+        //mViewPager.setOffscreenPageLimit(9);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));
@@ -158,7 +169,7 @@ public class AfterMain extends AppCompatActivity {
             try {
                 ArrayList<FoodElement> temp = menuList.get(restaurantId).getIndex(category);
                 if (temp.size() > 0)
-                    adapter.addFrag(new CategoryHandlerFragment(restaurantId, temp, category), category);
+                    adapter.addFrag(new CategoryHandlerFragment(restaurantId, temp, this), category);
             }catch (Exception e){
                 e.printStackTrace();
             }

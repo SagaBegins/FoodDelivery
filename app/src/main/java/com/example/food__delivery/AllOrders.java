@@ -1,10 +1,7 @@
 package com.example.food__delivery;
 
 import android.app.Fragment;
-import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -21,10 +16,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.food__delivery.Adapter.AdapterOrderDescription;
 import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**

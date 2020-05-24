@@ -1,17 +1,5 @@
 package com.example.food__delivery;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,8 +18,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.food__delivery.Fragment.CartFragment;
+import com.example.food__delivery.Fragment.FavouriteFragment;
+import com.example.food__delivery.MainNavigationActivity.AboutFragment;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.MainNavigationActivity.RateFragment;
+import com.example.food__delivery.Testing.DatabaseEntry;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -42,13 +47,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Fragment.FavouriteFragment;
-import com.example.food__delivery.MainNavigationActivity.AboutFragment;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
-import com.example.food__delivery.MainNavigationActivity.RateFragment;
-import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
 
 public class MainActivity extends AppCompatActivity
        implements NavigationView.OnNavigationItemSelectedListener {

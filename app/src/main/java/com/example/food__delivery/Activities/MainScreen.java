@@ -29,8 +29,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.food__delivery.AllOrders;
 import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.AllFavouriteFragment;
+import com.example.food__delivery.Login;
+import com.example.food__delivery.MainNavigationActivity.AboutFragment;
+import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.MainNavigationActivity.RateFragment;
+import com.example.food__delivery.R;
+import com.example.food__delivery.Testing.DatabaseEntry;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -41,15 +48,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.example.food__delivery.AllOrders;
-import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Fragment.FavouriteFragment;
-import com.example.food__delivery.Login;
-import com.example.food__delivery.MainNavigationActivity.AboutFragment;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
-import com.example.food__delivery.MainNavigationActivity.RateFragment;
-import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
 
 public class MainScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     Fragment fragment;

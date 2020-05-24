@@ -27,7 +27,6 @@ import com.example.food__delivery.Shipping;
 import com.example.food__delivery.Testing.CustomViewPager;
 import com.example.food__delivery.Testing.DatabaseEntry;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

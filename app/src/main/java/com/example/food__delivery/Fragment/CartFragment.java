@@ -1,7 +1,6 @@
 package com.example.food__delivery.Fragment;
 
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;

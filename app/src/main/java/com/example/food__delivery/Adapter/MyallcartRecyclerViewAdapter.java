@@ -1,22 +1,13 @@
 package com.example.food__delivery.Adapter;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.fragment.app.Fragment;
 
-import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Helper.FoodElement;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;

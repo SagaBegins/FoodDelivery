@@ -2,31 +2,25 @@ package com.example.food__delivery.MenuActivity;
 
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
 import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +42,15 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
     private FloatingActionButton fab;
     private TextInputEditText foodsearch;
     private TextInputLayout foodsearchparent;
-    private String category;
+    private AfterMain parent;
 
-    public CategoryHandlerFragment(int restaurantId, ArrayList<FoodElement> foodElements, String category) {
+    public CategoryHandlerFragment(int restaurantId, ArrayList<FoodElement> foodElements, AfterMain parent) {
         this.restaurantId = restaurantId;
         this.foodElements = foodElements;
-        this.category = category;
+        this.parent = parent;
+        this.foodsearch = parent.foodsearch;
+        this.foodsearchparent = parent.foodsearchparent;
+        this.fab = parent.fab;
     }
 
     @Override
@@ -61,12 +58,9 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categoryhandler, container, false);
-        fab = view.findViewById(R.id.floatingActionButton);
-        foodsearch = view.findViewById(R.id.food_search);
-        foodsearchparent = view.findViewById(R.id.food_search_parent);
         recyclerView = (RecyclerView) view.findViewById(R.id.categoryRecycler);
         recyclerView.setHasFixedSize(true);
-        foodsearch.setHint(category+" Search");
+        //foodsearch.setHint(category+" Search");
 
         if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
         }
@@ -117,5 +111,12 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 1);
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements, foodsearch.getText().toString());
+        recyclerView.setAdapter(recyclerViewadapter);
     }
 }
