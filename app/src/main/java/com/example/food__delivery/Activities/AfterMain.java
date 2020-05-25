@@ -50,7 +50,7 @@ public class AfterMain extends AppCompatActivity {
     FirebaseAuth auth;
     public static TextView tv;
     private ArrayList<com.example.food__delivery.Helper.Menu> menuList = HomeFragment.menuList;
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     public FloatingActionButton fab;
     public TextInputLayout foodsearchparent;
     public TextInputEditText foodsearch;

@@ -29,13 +29,12 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
     boolean isFav = false;
     int id;
     RelativeLayout card;
-    String filter ="";
     DatabaseEntry databaseEntry;
 
-        public Adapter_Menu_Items(Context context, List<FoodElement> foodElements, String filter) {
+        public Adapter_Menu_Items(Context context, List<FoodElement> foodElements) {
         this.foodElements = foodElements;
         this.context = context;
-        this.filter = filter;
+
         try{
             this.id = foodElements.get(0).getRate();
         }catch (Exception e){
@@ -51,10 +50,6 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, final int position) {
-            if(!foodElements.get(position).getName().toLowerCase().contains(filter.toLowerCase())){
-                holder.card.setVisibility(View.GONE);
-                return;
-            }
             databaseEntry = new DatabaseEntry(context);
             holder.description.setText(foodElements.get(position).getDescription());
             holder.image.setClickable(true);

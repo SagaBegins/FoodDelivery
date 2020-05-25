@@ -58,7 +58,7 @@ public class SweetsFragment extends androidx.fragment.app.Fragment {
         if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
         }
         else{
-            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements, "");
+            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
         }
         reLayoutManager = new GridLayoutManager(getActivity().getApplicationContext(), 1);

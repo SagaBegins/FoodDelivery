@@ -9,8 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
@@ -36,6 +40,7 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
 
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
+    public ArrayList<FoodElement> filteredFoodElements = new ArrayList<>();
     boolean done;
     public final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private int restaurantId;
@@ -65,7 +70,7 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
         if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
         }
         else{
-            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements, "");
+            recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
         }
 
@@ -99,10 +104,11 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s != null) {
-                    recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements,s.toString());
+                    filteredFoodElements = filterFood((ArrayList<FoodElement>) foodElements, s.toString().toLowerCase());
+                    recyclerViewadapter = new Adapter_Menu_Items(getActivity(), filteredFoodElements);
                     recyclerView.setAdapter(recyclerViewadapter);
                 }else{
-                    recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements,"");
+                    recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
                     recyclerView.setAdapter(recyclerViewadapter);
                 }
             }
@@ -116,7 +122,17 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements, foodsearch.getText().toString());
+        filteredFoodElements = filterFood((ArrayList<FoodElement>) foodElements, foodsearch.getText().toString());
+        recyclerViewadapter = new Adapter_Menu_Items(getActivity(), filteredFoodElements);
         recyclerView.setAdapter(recyclerViewadapter);
+    }
+
+    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter){
+        ArrayList<FoodElement> filtered = new ArrayList<>();
+        for(FoodElement food:foodElements){
+            if(food.getName().toLowerCase().contains(filter))
+                filtered.add(food);
+        }
+        return filtered;
     }
 }
