@@ -3,6 +3,9 @@ package com.example.food__delivery.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,12 +13,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
@@ -54,6 +61,7 @@ public class AfterMain extends AppCompatActivity {
     public FloatingActionButton fab;
     public TextInputLayout foodsearchparent;
     public TextInputEditText foodsearch;
+    public TabLayout tabLayout;
 
     private DatabaseEntry databaseEntry;
     private ArrayList<FoodElement> foodElements = new ArrayList<>();
@@ -72,7 +80,7 @@ public class AfterMain extends AppCompatActivity {
         foodsearch = findViewById(R.id.food_search);
         foodsearchparent = findViewById(R.id.food_search_parent);
         fab = findViewById(R.id.floatingActionButton);
-
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
@@ -80,10 +88,32 @@ public class AfterMain extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         setupViewPager(mViewPager);
         //mViewPager.setOffscreenPageLimit(9);
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));
         auth = FirebaseAuth.getInstance();
+        mViewPager.addOnAdapterChangeListener(new ViewPager.OnAdapterChangeListener() {
+            @Override
+            public void onAdapterChanged(@NonNull ViewPager viewPager, @Nullable PagerAdapter oldAdapter, @Nullable PagerAdapter newAdapter) {
+                newAdapter.startUpdate(viewPager);
+            }
+        });
+
+        foodsearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                setupViewPager(mViewPager);
+            }
+        });
     }
 
     @Override
@@ -166,8 +196,9 @@ public class AfterMain extends AppCompatActivity {
             adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).beverages), "Beverages");*/
 
         for(String category: com.example.food__delivery.Helper.Menu.categories){
+            Log.d("TAG", "setupViewPager: "+foodsearch.getText().toString().toLowerCase());
             try {
-                ArrayList<FoodElement> temp = menuList.get(restaurantId).getIndex(category);
+                ArrayList<FoodElement> temp = filterFood(menuList.get(restaurantId).getIndex(category),foodsearch.getText().toString().toLowerCase());
                 if (temp.size() > 0)
                     adapter.addFrag(new CategoryHandlerFragment(restaurantId, temp, this), category);
             }catch (Exception e){
@@ -176,9 +207,10 @@ public class AfterMain extends AppCompatActivity {
         }
 
         viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -221,6 +253,15 @@ public class AfterMain extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         databaseEntry.close();
+    }
+
+    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter){
+        ArrayList<FoodElement> filtered = new ArrayList<>();
+        for(FoodElement food:foodElements){
+            if(food.getName().toLowerCase().contains(filter))
+                filtered.add(food);
+        }
+        return filtered;
     }
 
 }

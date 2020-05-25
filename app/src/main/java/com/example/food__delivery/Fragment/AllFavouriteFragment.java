@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
@@ -64,9 +65,9 @@ public class AllFavouriteFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        for(int i =0; i < pager.getAdapter().getCount();i++)
+        /*for(int i =0; i < pager.getAdapter().getCount();i++)
             pager.getAdapter().destroyItem(c,i, adapterItems.get(i));
-        adapterItems.clear();
+        adapterItems.clear();*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -85,10 +86,9 @@ public class AllFavouriteFragment extends Fragment {
         db.close();
         Log.d("TAG", "setupViewPager: "+adapter.getCount());
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(0);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -115,17 +115,5 @@ public class AllFavouriteFragment extends Fragment {
             return mFragmentTitleList.get(position);
         }
 
-        @Override
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            try {
-                FragmentManager manager = ((Fragment) object).getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
-                trans.remove((Fragment) object);
-                trans.commit();
-                super.destroyItem(container, position, object);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
     }
 }
