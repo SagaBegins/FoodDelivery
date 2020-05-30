@@ -2,6 +2,7 @@ package com.example.food__delivery.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.food__delivery.InboxActivity;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Testing.DatabaseEntry;
@@ -36,23 +38,26 @@ public class AdminScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        FacebookSdk.setApplicationId("581033482823166");
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_admin_screen);
+//        FacebookSdk.setApplicationId("581033482823166");
+//        FacebookSdk.sdkInitialize(getApplicationContext());
+//        setContentView(R.layout.activity_admin_screen);
+//
+//        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//
+//        //Add chat fragment or something
+//        fragment = new HomeFragment();
+//        setTitle("Home");
+//        databaseEntry = new DatabaseEntry(AdminScreen.this);
+//        databaseEntry.createTable();
+//        databaseEntry.close();
+//        auth = FirebaseAuth.getInstance();
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+//        fragmentTransaction.replace(R.id.content_frame_admin, fragment).commit();
+//        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-
-        //Add chat fragment or something
-        fragment = new HomeFragment();
-        setTitle("Home");
-        databaseEntry = new DatabaseEntry(AdminScreen.this);
-        databaseEntry.createTable();
-        databaseEntry.close();
-        auth = FirebaseAuth.getInstance();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame_admin, fragment).commit();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        Intent i = new Intent(this, InboxActivity.class);
+        startActivity(i);
         }
 
     @Override

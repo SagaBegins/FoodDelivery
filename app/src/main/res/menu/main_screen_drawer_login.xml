@@ -7,10 +7,6 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Home" />
-        <item
-            android:id="@+id/nav_dine"
-            android:icon="@drawable/dining"
-            android:title="A La Carte" />
 
         <item
             android:id="@+id/order"
@@ -25,6 +21,11 @@
             android:title="Shopping Carts"
             android:id="@+id/cartnav"
             android:icon="@drawable/ic_shopping_cart_black_menu_24dp"
+            />
+        <item
+            android:title="Inbox"
+            android:id="@+id/nav_inbox"
+            android:icon="@drawable/ic_inbox_black_24dp"
             />
 
 

@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.example.food__delivery.AllOrders;
 import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.AllFavouriteFragment;
+import com.example.food__delivery.InboxActivity;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.MainNavigationActivity.AboutFragment;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
@@ -222,6 +223,10 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
+            }
+            case R.id.nav_inbox: {
+                Intent i =  new Intent(this, InboxActivity.class);
+                startActivity(i);
             }
             case R.id.nav_call:
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

@@ -9,9 +9,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/nav_img"
-        android:scaleType="centerCrop"
-        android:alpha="0.5"
+        android:src="@drawable/navback"
+        android:scaleType="fitXY"
         />
 
     <ImageView

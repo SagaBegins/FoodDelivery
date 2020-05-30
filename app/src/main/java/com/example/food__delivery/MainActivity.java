@@ -48,7 +48,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity
+public class  MainActivity extends AppCompatActivity
        implements NavigationView.OnNavigationItemSelectedListener {
         Fragment fragment;
         DrawerLayout drawer;
@@ -208,6 +208,9 @@ public class MainActivity extends AppCompatActivity
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+            } else if (id == R.id.nav_inbox) {
+                Intent i = new Intent(this, InboxActivity.class);
+                startActivity(i);
             } else if (id == R.id.nav_about) {
                 fragment = new AboutFragment();
                 setTitle("About Us");
