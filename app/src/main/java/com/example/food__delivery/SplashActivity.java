@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
     RelativeLayout splash;
     FirebaseAuth auth;
     FirebaseUser user;
+    boolean isAdmin;
     DatabaseReference firebaseDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,12 @@ public class SplashActivity extends AppCompatActivity {
                         firebaseDatabase.child("users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                boolean isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                try {
+                                    isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                }
+                                catch(Exception e){
+                                    isAdmin = false;
+                                }
                                 Log.d("TAG", "onDataChange: "+ isAdmin);
                                 if(isAdmin){
                                     Intent intent = new Intent(SplashActivity.this, AdminScreen.class);

@@ -3,6 +3,7 @@ package com.example.food__delivery;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,11 +37,9 @@ public class InboxActivity extends AppCompatActivity {
     ArrayList<String> mChats;
     List<Object> uqChatList;
     TextView inb;
-    String[] uq;
+    List<String> uq;
 
-    String[] maintitle ={
-            "Admin"
-    };
+    List<String> maintitle = new ArrayList<>();
 
     Integer[] imgid={
             R.drawable.logo
@@ -49,7 +49,11 @@ public class InboxActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inbox);
+        maintitle.add("Admin");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle("Inbox");
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        setSupportActionBar(toolbar);
 //        inb = (TextView)findViewById(R.id.inb);
         mChats = new ArrayList<>();
         uqChatList = new ArrayList<>();
@@ -88,6 +92,9 @@ public class InboxActivity extends AppCompatActivity {
 
             Log.d("myTag", mChats.toString());
         }else {
+
+            Intent i = new Intent(InboxActivity.this, ChatActivity.class);
+            startActivity(i);
             InboxAdapter adapter = new InboxAdapter(this, maintitle);
             list=(ListView)findViewById(R.id.list);
             list.setAdapter(adapter);
@@ -126,14 +133,14 @@ public class InboxActivity extends AppCompatActivity {
     }
 
     private void displayInfo(){
-        uq = new String[uqChatList.size()];
+        uq = new ArrayList<>();
+        int minus = 0;
         if(uqChatList != null){
             for(int i = 0; i < uqChatList.size(); i++){
                 String a = uqChatList.get(i).toString();
                 if(a.equals(adminemail)){
-
                 }else {
-                    uq[i] = a;
+                    uq.add(a);
                 }
 
             }
@@ -151,7 +158,7 @@ public class InboxActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
 
                 int pos = position;
-                String fromEmail = uq[pos];
+                String fromEmail = uq.get(pos);
                 Log.d("From Email", fromEmail);
                 Intent intent = new Intent(InboxActivity.this, ChatActivity.class);
                 intent.putExtra("fromEmail", fromEmail);

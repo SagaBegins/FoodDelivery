@@ -65,7 +65,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     private GetElements getElements = new GetElements();
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
-    private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount2, R.drawable.discount3, R.drawable.discount4};
+    private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount3, R.drawable.discount4};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
     public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     TextWatcher tw;

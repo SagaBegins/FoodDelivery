@@ -11,12 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import java.util.List;
+
 public class InboxAdapter extends ArrayAdapter<String> {
     private final Activity context;
-    private final String[] maintitle;
+    private final List<String> maintitle;
 //    private final Integer[] imgid;
 
-    public InboxAdapter(Activity context, String[] maintitle) {
+    public InboxAdapter(Activity context, List<String> maintitle) {
         super(context, R.layout.inbox_listitem, maintitle);
         // TODO Auto-generated constructor stub
 
@@ -33,7 +35,7 @@ public class InboxAdapter extends ArrayAdapter<String> {
         TextView titleText = (TextView) rowView.findViewById(R.id.title);
 //        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
 
-        titleText.setText(maintitle[position]);
+        titleText.setText(maintitle.get(position));
 //        imageView.setImageResource(imgid[position]);
 
         return rowView;

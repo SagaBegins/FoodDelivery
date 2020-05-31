@@ -34,7 +34,7 @@ public class Adapter_Confirm extends RecyclerView.Adapter<Adapter_Confirm.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        holder.food_name.setText(foodElements.get(position).getName());
+        holder.food_name.setText(foodElements.get(position).getName().split("_")[0]);
         Glide.with(context.getApplicationContext()).load(foodElements.get(position).getPhoto())
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());

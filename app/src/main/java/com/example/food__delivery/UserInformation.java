@@ -2,6 +2,7 @@ package com.example.food__delivery;
 
 public class UserInformation {
     public String num, name, id;
+    public boolean admin;
 
     public UserInformation() {
     }
@@ -9,6 +10,7 @@ public class UserInformation {
     public UserInformation(String num, String name) {
         this.num = num;
         this.name = name;
+        this.admin = false;
     }
 
     public UserInformation(String name, String num, String id) {

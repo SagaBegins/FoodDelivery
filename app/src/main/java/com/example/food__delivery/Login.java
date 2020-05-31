@@ -183,8 +183,12 @@ public class Login extends AppCompatActivity {
                                 firebaseDatabase.child("users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
-                                        Log.d("TAG", "onDataChange: "+ isAdmin);
+                                        try {
+                                            isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                                            Log.d("TAG", "onDataChange: " + isAdmin);
+                                        }catch(Exception e){
+                                            isAdmin = false;
+                                        }
                                         isSet = true;
                                         if(isAdmin){
                                             Intent intent = new Intent(Login.this, AdminScreen.class);

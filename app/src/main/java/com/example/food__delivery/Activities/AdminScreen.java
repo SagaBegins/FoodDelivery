@@ -50,7 +50,7 @@ public class AdminScreen extends AppCompatActivity {
 //        databaseEntry = new DatabaseEntry(AdminScreen.this);
 //        databaseEntry.createTable();
 //        databaseEntry.close();
-//        auth = FirebaseAuth.getInstance();
+       auth = FirebaseAuth.getInstance();
 //        FragmentManager fm = getSupportFragmentManager();
 //        FragmentTransaction fragmentTransaction = fm.beginTransaction();
 //        fragmentTransaction.replace(R.id.content_frame_admin, fragment).commit();

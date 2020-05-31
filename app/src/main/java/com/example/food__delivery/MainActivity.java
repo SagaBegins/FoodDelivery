@@ -202,12 +202,6 @@ public class  MainActivity extends AppCompatActivity
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-            } else if (id == R.id.nav_dine) {
-                fragment = new HomeFragment();
-                setTitle("A La Carte");
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
             } else if (id == R.id.nav_inbox) {
                 Intent i = new Intent(this, InboxActivity.class);
                 startActivity(i);

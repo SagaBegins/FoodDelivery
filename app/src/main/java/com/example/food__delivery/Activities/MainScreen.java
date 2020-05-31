@@ -54,7 +54,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
     Fragment fragment;
     DrawerLayout drawer;
     TextView nametext;
-    FirebaseAuth auth;
+    public static FirebaseAuth auth;
     String idf, namef;
     ImageView photo;
     FirebaseUser user;
@@ -206,15 +206,6 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 fragmentTransaction.replace(R.id.content_frame, fragment).commit();
                 break;
             }
-            case R.id.nav_dine: {
-                fragment = new HomeFragment();
-                setTitle("A La Carte");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-                break;
-            }
             case R.id.nav_about: {
                 fragment = new AboutFragment();
                 setTitle("About Us");
@@ -227,6 +218,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
             case R.id.nav_inbox: {
                 Intent i =  new Intent(this, InboxActivity.class);
                 startActivity(i);
+                break;
             }
             case R.id.nav_call:
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

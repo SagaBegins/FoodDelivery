@@ -22,12 +22,6 @@
             android:id="@+id/cartnav"
             android:icon="@drawable/ic_shopping_cart_black_menu_24dp"
             />
-        <item
-            android:title="Inbox"
-            android:id="@+id/nav_inbox"
-            android:icon="@drawable/ic_inbox_black_24dp"
-            />
-
 
     </group>
 
@@ -41,6 +35,12 @@
                 android:id="@+id/nav_rate"
                 android:icon="@drawable/ic_grade_black_24dp"
                 android:title="Rate Us" />
+
+            <item
+                android:title="Text Us"
+                android:id="@+id/nav_inbox"
+                android:icon="@drawable/ic_inbox_black_24dp"
+                />
 
             <item
                 android:id="@+id/nav_call"
