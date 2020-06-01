@@ -1,4 +1,4 @@
-package com.example.food__delivery;
+package com.example.food__delivery.Fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,12 +17,7 @@ import com.example.food__delivery.Activities.AdminScreen;
 import com.example.food__delivery.Adapter.AdapterOrderDescription;
 import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.food__delivery.R;
 
 import java.util.ArrayList;
 
@@ -31,14 +25,9 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AllOrders extends androidx.fragment.app.Fragment {
+public class AdminOrder extends androidx.fragment.app.Fragment {
 
-    public ArrayList<OrderList> orderlist = HomeFragment.ordersList;
-    public ArrayList<OrderList> allorderslist = AdminScreen.adminordersList;
-
-    boolean isAdmin;
-    FirebaseAuth auth;
-    FirebaseDatabase database;
+    private final ArrayList<OrderList> orderlist = AdminScreen.adminordersList;
     public RecyclerView orderdetails;
     public CardView orderpopup;
 
@@ -47,12 +36,12 @@ public class AllOrders extends androidx.fragment.app.Fragment {
     public TextView txnDate;
     public TextView status;
     public TextView amount;
-    AdapterOrderDescription adapter;
+
     public RecyclerView fullorderdetails;
     public ImageView exit;
     private View view;
 
-    public AllOrders() {
+    public AdminOrder() {
         // Required empty public constructor
     }
 
@@ -67,11 +56,6 @@ public class AllOrders extends androidx.fragment.app.Fragment {
         restaurantName = (TextView) view.findViewById(R.id.restaurant_Name);
         txnId = (TextView) view.findViewById(R.id.txnId);
         txnDate = (TextView) view.findViewById(R.id.order_date);
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference users = database.getReference().child("users").child(auth.getCurrentUser().getUid());
-
-
         status = (TextView) view.findViewById(R.id.status);
         amount = (TextView) view.findViewById(R.id.amount);
         fullorderdetails = (RecyclerView) view.findViewById(R.id.order_food_list);
@@ -82,27 +66,10 @@ public class AllOrders extends androidx.fragment.app.Fragment {
                 orderpopup.setVisibility(View.GONE);
             }
         });
-        users.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
-                if(!isAdmin) {
-                    adapter = new AdapterOrderDescription(orderlist, AllOrders.this);
-                }else{
-                    adapter = new AdapterOrderDescription(allorderslist, AllOrders.this);
-                }
-                orderdetails.setAdapter(adapter);
-                orderdetails.setLayoutManager(new LinearLayoutManager(getContext()));
-                fullorderdetails.setLayoutManager(new LinearLayoutManager(getContext()));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
+        AdapterOrderDescription adapter = new AdapterOrderDescription(orderlist, this);
+        orderdetails.setAdapter(adapter);
+        orderdetails.setLayoutManager(new LinearLayoutManager(getContext()));
+        fullorderdetails.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
     }

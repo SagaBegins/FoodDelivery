@@ -207,6 +207,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 orderRef.orderByKey().addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        ordersList.clear();
                         ArrayList<FoodElement> foodElements = new ArrayList<>();
                         for (DataSnapshot order : dataSnapshot.getChildren()) {
                             OrderList orderList = new OrderList();
@@ -219,9 +220,9 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                             orderList.status = order.child("status").getValue(String.class);
                             for (DataSnapshot food : order.child("foodList").getChildren()) {
                                 FoodElement foodElement = new FoodElement();
-                                foodElement.setPhoto(food.child("image").getValue(String.class));
+                                foodElement.setPhoto(food.child("photo").getValue(String.class));
                                 foodElement.setName(food.child("name").getValue(String.class));
-                                foodElement.setFoodType(food.child("category").getValue(String.class));
+                                foodElement.setFoodType(food.child("foodType").getValue(String.class));
                                 foodElement.setPrice(food.child("price").getValue(String.class));
                                 foodElement.setQty(food.child("qty").getValue(Integer.class));
                                 foodElement.setDescription(food.child("description").getValue(String.class));

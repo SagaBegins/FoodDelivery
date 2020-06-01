@@ -1,6 +1,7 @@
 package com.example.food__delivery.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,10 @@ public class AdapterOrderContent extends RecyclerView.Adapter<AdapterOrderConten
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Glide.with(context.getApplicationContext()).load(foodElements.get(position).getPhoto()).into(holder.foodimage);
+        Glide.with(context.getApplicationContext())
+                .load(foodElements.get(position).getPhoto())
+                .into(holder.foodimage);
+        Log.d("TAG", "onBindViewHolder: "+ foodElements.get(position).getPhoto());
         holder.food.setText(foodElements.get(position).getName().split("_")[0]);
         holder.quantity.setText(foodElements.get(position).getQty()+"");
         holder.price.setText(foodElements.get(position).getTotalPrice());

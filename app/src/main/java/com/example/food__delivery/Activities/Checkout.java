@@ -125,7 +125,7 @@ public class Checkout extends AppCompatActivity {
                     String txnId = getIntent().getStringExtra("txnId");
                     orderList.txnTime = getIntent().getStringExtra("txnTime");
                     orderList.amount = getIntent().getStringExtra("amount");
-                    orderList.status = "Will be delivered soon";
+                    orderList.status = "Pending";
                     successOperations.deleteCart(restaurantId, "cart_table");
                     successOperations.close();
 

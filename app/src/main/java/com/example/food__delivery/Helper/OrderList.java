@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class OrderList {
     public ArrayList<FoodElement> foodList = new ArrayList<>();
+    public String userID;
     public String txnId;
     public String status;
     public String amount;

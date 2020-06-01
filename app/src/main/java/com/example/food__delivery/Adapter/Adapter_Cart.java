@@ -1,6 +1,7 @@
 package com.example.food__delivery.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,6 +77,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 databaseEntry.close();
                 notifyDataSetChanged();
                 parent.calculateGrandTotal(id);
+                updateTotal(id);
             }
         });
         }else{
@@ -93,6 +95,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
                     parent.calculateGrandTotal(id);
+                    updateTotal(id);
                     databaseEntry.close();
                     try {
                         AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
@@ -112,6 +115,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
                 parent.calculateGrandTotal(id);
+                updateTotal(id);
                 try {
                     AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
                 }catch(Exception e){
@@ -141,5 +145,15 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
             qty = (TextView)itemView.findViewById(R.id.quantity);
             delete = (Button)itemView.findViewById(R.id.delete_from_cart);
         }
+    }
+
+    private void updateTotal(int restaurantId){
+        double tot = parent.calculateGrandTotal(restaurantId);
+        String totalvalue = String.format("%.2f",tot);
+        SharedPreferences totalPrice;
+        totalPrice = parent.getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = totalPrice.edit();
+        editor.putString("total", totalvalue);
+        editor.apply();
     }
 }

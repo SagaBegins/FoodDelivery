@@ -30,8 +30,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.AllOrders;
+import com.example.food__delivery.ChatActivity;
 import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.AllFavouriteFragment;
+import com.example.food__delivery.Fragment.InboxFragment;
 import com.example.food__delivery.InboxActivity;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.MainNavigationActivity.AboutFragment;
@@ -216,8 +218,14 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
             }
             case R.id.nav_inbox: {
-                Intent i =  new Intent(this, InboxActivity.class);
+                Intent i =  new Intent(this, ChatActivity.class);
                 startActivity(i);
+                /*fragment = new InboxFragment();
+                setTitle("Inbox");
+                FragmentManager fm = getSupportFragmentManager();
+                fm.popBackStack();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment).commit();*/
                 break;
             }
             case R.id.nav_call:
