@@ -20,8 +20,8 @@ import com.example.food__delivery.CurrentOrder;
 import com.example.food__delivery.Helper.OrderElements;
 import com.example.food__delivery.Helper.PreviousData;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
-import com.example.food__delivery.Testing.Utility;
+import com.example.food__delivery.Additional.DatabaseInstance;
+import com.example.food__delivery.Additional.Utility;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Adapter_Order extends RecyclerView.Adapter<Adapter_Order.ViewHolder
     private List<OrderElements>foodElements;
     Context context;
     boolean isPressed = false;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
 
     public Adapter_Order(List<OrderElements> foodElements, Context context) {
         this.foodElements = foodElements;
@@ -51,10 +51,10 @@ public class Adapter_Order extends RecyclerView.Adapter<Adapter_Order.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        databaseEntry = new DatabaseEntry(context);
-        SharedPreferences pricetotal;
-        pricetotal = context.getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
-        String text = pricetotal.getString("total", null);
+        databaseInstance = new DatabaseInstance(context);
+        SharedPreferences cartTotal;
+        cartTotal = context.getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
+        String text = cartTotal.getString("total", null);
         holder.name.setText(foodElements.get(position).getName());
         holder.id.setText(foodElements.get(position).getTransactionID());
         holder.address.setText(foodElements.get(position).getAddress());
@@ -75,7 +75,7 @@ public class Adapter_Order extends RecyclerView.Adapter<Adapter_Order.ViewHolder
             }
         });
         data = new ArrayList<PreviousData>();
-        data= databaseEntry.getDataForList();
+        data= databaseInstance.getDataForList();
         adapter_list = new Adapter_List(data, context);
         holder.listView.setAdapter(adapter_list);
         Utility.setListViewHeightBasedOnChildren(holder.listView);
@@ -94,8 +94,8 @@ public class Adapter_Order extends RecyclerView.Adapter<Adapter_Order.ViewHolder
                     case 2:
                         holder.status.setText("Order Delivered.");
                         //databaseEntry.deleteAll();
-                        databaseEntry.addToPreviousOrder();
-                        databaseEntry.deleteTable();
+                        databaseInstance.addToPreviousOrder();
+                        databaseInstance.deleteTable();
                         foodElements.clear();
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -156,7 +156,7 @@ public class Adapter_Order extends RecyclerView.Adapter<Adapter_Order.ViewHolder
 
                                 // do something when the button is clicked
                                 public void onClick(DialogInterface arg0, int arg1) {
-                                    databaseEntry.deleteTable();
+                                    databaseInstance.deleteTable();
                                     foodElements.clear();
                                     notifyItemRangeRemoved(0, foodElements.size());
                                     CurrentOrder.checkData(foodElements);

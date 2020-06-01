@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.food__delivery.Helper.PreviousData;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.List;
 
 public class Adapter_Previous_Order extends RecyclerView.Adapter<Adapter_Previous_Order.ViewHolder> {
 
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     List<PreviousData> dataop;
     Context context;
 
@@ -36,13 +36,13 @@ public class Adapter_Previous_Order extends RecyclerView.Adapter<Adapter_Previou
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.priceo.setText(dataop.get(position).getPrice());
-        holder.nameo.setText(dataop.get(position).getName());
+        holder.priceOrder.setText(dataop.get(position).getPrice());
+        holder.nameOrder.setText(dataop.get(position).getName());
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(dataop.get(position).getUrl(), dataop.get(position).getRate(),"order_previous");
+                databaseInstance = new DatabaseInstance(context);
+                databaseInstance.deleteARow(dataop.get(position).getUrl(), dataop.get(position).getRate(),"order_previous");
                 dataop.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,dataop.size());
@@ -60,15 +60,15 @@ public class Adapter_Previous_Order extends RecyclerView.Adapter<Adapter_Previou
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageButton delete;
-        TextView nameo, priceo;
+        TextView nameOrder, priceOrder;
         ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             delete = (ImageButton)itemView.findViewById(R.id.deletebutton);
             imageView = (ImageView)itemView.findViewById(R.id.product_image);
-            nameo = (TextView)itemView.findViewById(R.id.nameorderpre);
-            priceo = (TextView)itemView.findViewById(R.id.priceorderpre);
+            nameOrder = (TextView)itemView.findViewById(R.id.nameorderpre);
+            priceOrder = (TextView)itemView.findViewById(R.id.priceorderpre);
         }
     }
 }

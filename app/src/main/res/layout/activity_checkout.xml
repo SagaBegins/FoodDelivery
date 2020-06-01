@@ -33,7 +33,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.example.food__delivery.Testing.CustomViewPager
+    <com.example.food__delivery.Additional.CustomViewPager
         android:id="@+id/container1"
         android:layout_width="match_parent"
         android:layout_height="343dp"

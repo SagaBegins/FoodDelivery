@@ -29,7 +29,7 @@ import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MenuActivity.CategoryHandlerFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
@@ -63,7 +63,7 @@ public class AfterMain extends AppCompatActivity {
     public TextInputEditText foodsearch;
     public TabLayout tabLayout;
 
-    private DatabaseEntry databaseEntry;
+    private DatabaseInstance databaseInstance;
     private ArrayList<FoodElement> foodElements = new ArrayList<>();
     public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     Bundle savedInstanceState;
@@ -119,13 +119,13 @@ public class AfterMain extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_after_main, menu);
-        databaseEntry = new DatabaseEntry(this);
+        databaseInstance = new DatabaseInstance(this);
         MenuItem item = menu.findItem(R.id.action_cart);
         MenuItemCompat.setActionView(item, R.layout.badge_layout);
         RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(item);
         tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
         imageView = (ImageView)notifCount.findViewById(R.id.imagenotif);
-        tv.setText(String.valueOf(databaseEntry.totalQty(restaurantId)));
+        tv.setText(String.valueOf(databaseInstance.totalQty(restaurantId)));
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +137,7 @@ public class AfterMain extends AppCompatActivity {
             }
         });
 
-        databaseEntry.close();
+        databaseInstance.close();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -246,13 +246,13 @@ public class AfterMain extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        databaseEntry.close();
+        databaseInstance.close();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        databaseEntry.close();
+        databaseInstance.close();
     }
 
     private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter){

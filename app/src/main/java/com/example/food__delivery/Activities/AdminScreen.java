@@ -2,7 +2,6 @@ package com.example.food__delivery.Activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -16,18 +15,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.AllOrders;
-import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.InboxFragment;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.InboxActivity;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.facebook.FacebookSdk;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,7 +47,7 @@ public class AdminScreen extends AppCompatActivity {
     FirebaseUser user;
     Button sign;
     boolean orderDone;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     ViewPager pager;
     TabLayout tablayout;
 

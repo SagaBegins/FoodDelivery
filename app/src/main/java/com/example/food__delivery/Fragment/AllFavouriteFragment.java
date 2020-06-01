@@ -7,19 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -72,7 +69,7 @@ public class AllFavouriteFragment extends Fragment {
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        DatabaseEntry db = new DatabaseEntry(getContext());
+        DatabaseInstance db = new DatabaseInstance(getContext());
         for(int i = 0; i< HomeFragment.menuList.size(); i++){
             ArrayList<FoodElement> f;
             f = (ArrayList<FoodElement>) db.getDataFromDB("favour_table", i);

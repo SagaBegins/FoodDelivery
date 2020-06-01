@@ -1,4 +1,4 @@
-package com.example.food__delivery.Testing;
+package com.example.food__delivery.Additional;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class DatabaseEntry extends SQLiteOpenHelper {
+public class DatabaseInstance extends SQLiteOpenHelper {
     private static final String DATABASE_NAME="FoodDeliveryApp";
     private static final int DATABASE_VERSION = 1;
     private static final String CART_TABLE = "cart_table";
@@ -33,7 +33,7 @@ public class DatabaseEntry extends SQLiteOpenHelper {
     Context context;
 
 
-    public DatabaseEntry(Context context) {
+    public DatabaseInstance(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }

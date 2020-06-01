@@ -17,7 +17,7 @@ import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Fragment.FavouriteFragment;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
     private List<FoodElement> foodElements;
     Context context;
     FavouriteFragment parent;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     int id;
 
     public Adapter_Fav(List<FoodElement> foodElementsList, FavouriteFragment parent) {
@@ -57,16 +57,16 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
         holder.addtocart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseEntry = new DatabaseEntry(context);
-                databaseEntry.insertIntoCart(foodElements.get(position).getName().split("_")[0]+"_"+id,foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
-                AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
+                databaseInstance = new DatabaseInstance(context);
+                databaseInstance.insertIntoCart(foodElements.get(position).getName().split("_")[0]+"_"+id,foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
+                AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(), foodElements.get(position).getRate(),"favour_table");
+                databaseInstance = new DatabaseInstance(context);
+                databaseInstance.deleteARow(foodElements.get(position).getPhoto(), foodElements.get(position).getRate(),"favour_table");
                 foodElements.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());

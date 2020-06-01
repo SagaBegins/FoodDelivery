@@ -24,8 +24,8 @@ import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Shipping;
-import com.example.food__delivery.Testing.CustomViewPager;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.CustomViewPager;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -118,7 +118,7 @@ public class Checkout extends AppCompatActivity {
                     //Success Transaction
                     Toast.makeText(this, "Transaction Success", Toast.LENGTH_LONG).show();
                     intent = new Intent(this, ThankYouPage.class);
-                    DatabaseEntry successOperations = new DatabaseEntry(this);
+                    DatabaseInstance successOperations = new DatabaseInstance(this);
                     OrderList orderList = new OrderList();
                     orderList.foodList = (ArrayList<FoodElement>) successOperations.getDataFromDB("cart_table", restaurantId);
                     orderList.restaurantId = restaurantId;

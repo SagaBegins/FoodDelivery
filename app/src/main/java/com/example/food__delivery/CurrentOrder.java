@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Order;
 import com.example.food__delivery.Helper.OrderElements;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class CurrentOrder extends androidx.fragment.app.Fragment {
 
     static RecyclerView recyclerViewOrder;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     RecyclerView.LayoutManager layoutManager;
     List<OrderElements> foodElementsList;
     Adapter_Order reAdapterOrder;
@@ -41,9 +41,9 @@ public class CurrentOrder extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_current_order, container, false);
         recyclerViewOrder = (RecyclerView)view.findViewById(R.id.recycler_order);
-        databaseEntry = new DatabaseEntry(getActivity());
+        databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList = new ArrayList<OrderElements>();
-        foodElementsList = databaseEntry.getDataFromOrder();
+        foodElementsList = databaseInstance.getDataFromOrder();
         Log.e("name", ""+foodElementsList.size());
         order = (TextView)view.findViewById(R.id.orderno);
             checkData(foodElementsList);

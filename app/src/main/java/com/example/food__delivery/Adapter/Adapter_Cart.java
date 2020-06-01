@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Fragment.CartFragment;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.example.food__delivery.Activities.AfterMain;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
@@ -29,7 +29,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
     private List<FoodElement> foodElements;
     CartFragment parent;
     private Context context;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     private int id;
     public Adapter_Cart(List<FoodElement> foodElements, CartFragment parent) {
         this.foodElements = foodElements;
@@ -52,29 +52,29 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.food_name.setText(foodElements.get(position).getName().split("_")[0]);
-        databaseEntry = new DatabaseEntry(context);
+        databaseInstance = new DatabaseInstance(context);
         Glide.with(context.getApplicationContext())
                 .load(foodElements.get(position).getPhoto()).transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getTotalPrice());
-        if(databaseEntry.totalQty(foodElements.get(position).getRate())<40){
+        if(databaseInstance.totalQty(foodElements.get(position).getRate())<40){
             holder.add.setEnabled(true);
-            databaseEntry.close();
+            databaseInstance.close();
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int qty = foodElements.get(position).getQty()+1;
                 foodElements.get(position).setQty(qty);
-                databaseEntry = new DatabaseEntry(context);
+                databaseInstance = new DatabaseInstance(context);
                 Log.d("name",position+"");
-                databaseEntry.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
+                databaseInstance.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
                 try {
-                    AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
+                    AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                databaseEntry.close();
+                databaseInstance.close();
                 notifyDataSetChanged();
                 parent.calculateGrandTotal(id);
                 updateTotal(id);
@@ -82,7 +82,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
         });
         }else{
             holder.add.setEnabled(false);
-            databaseEntry.close();
+            databaseInstance.close();
         }
         holder.sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,15 +90,15 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 int qty = foodElements.get(position).getQty()-1;
                 if(qty>0) {
                     foodElements.get(position).setQty(qty);
-                    databaseEntry = new DatabaseEntry(context);
-                    databaseEntry.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(), "cart_table", qty);
+                    databaseInstance = new DatabaseInstance(context);
+                    databaseInstance.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(), "cart_table", qty);
                     holder.qty.setText("" + foodElements.get(position).getQty());
                     notifyDataSetChanged();
                     parent.calculateGrandTotal(id);
                     updateTotal(id);
-                    databaseEntry.close();
+                    databaseInstance.close();
                     try {
-                        AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
+                        AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -108,16 +108,16 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseEntry = new DatabaseEntry(context);
-                databaseEntry.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"cart_table");
+                databaseInstance = new DatabaseInstance(context);
+                databaseInstance.deleteARow(foodElements.get(position).getPhoto(),foodElements.get(position).getRate(),"cart_table");
                 foodElements.remove(position);
-                databaseEntry.close();
+                databaseInstance.close();
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,foodElements.size());
                 parent.calculateGrandTotal(id);
                 updateTotal(id);
                 try {
-                    AfterMain.tv.setText(String.valueOf(databaseEntry.totalQty(id)));
+                    AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                 }catch(Exception e){
                     e.printStackTrace();
                 }

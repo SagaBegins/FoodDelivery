@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.food__delivery.Adapter.Adapter_Fav;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 public class FavouriteFragment extends androidx.fragment.app.Fragment {
 
     RecyclerView recyclerView;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     TextView quote;
     List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager reLayoutManager;
@@ -43,10 +43,10 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_favourite, container, false);
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler10);
-        databaseEntry = new DatabaseEntry(getActivity());
+        databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList  = new ArrayList<>();
-        foodElementsList = databaseEntry.getDataFromDB("favour_table", restaurantId);
-        databaseEntry.close();
+        foodElementsList = databaseInstance.getDataFromDB("favour_table", restaurantId);
+        databaseInstance.close();
         quote = (TextView)view.findViewById(R.id.textView16);
         quote.setVisibility(View.GONE);
         recyclerViewAdapter = new Adapter_Fav(foodElementsList, this);

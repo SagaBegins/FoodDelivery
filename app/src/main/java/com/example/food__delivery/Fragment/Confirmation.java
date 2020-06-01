@@ -39,7 +39,7 @@ import com.example.food__delivery.Adapter.Adapter_Confirm;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Signup;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.payumoney.sdkui.ui.activities.PayUmoneyActivity;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 
@@ -87,7 +87,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     RecyclerView.LayoutManager layoutManager;
     Context context;
     Adapter_Confirm reAdapterconfirm;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     ViewPager viewPager;
     List<FoodElement> foodElementsList;
     FirebaseAuth auth;
@@ -133,9 +133,9 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         });
         recyclerViewconfirm = (RecyclerView) view.findViewById(R.id.recyclerView);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        databaseEntry = new DatabaseEntry(getActivity());
+        databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList = new ArrayList<>();
-        foodElementsList = databaseEntry.getDataFromDB("cart_table", restaurantId);
+        foodElementsList = databaseInstance.getDataFromDB("cart_table", restaurantId);
         reAdapterconfirm = new Adapter_Confirm(foodElementsList, getActivity());
         recyclerViewconfirm.setAdapter(reAdapterconfirm);
         recyclerViewconfirm.setLayoutManager(layoutManager);

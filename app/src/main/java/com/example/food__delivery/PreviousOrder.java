@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Previous_Order;
 import com.example.food__delivery.Helper.PreviousData;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class PreviousOrder extends androidx.fragment.app.Fragment {
     RecyclerView recyclerViewpo;
     Adapter_Previous_Order adapter_previous_order;
     List<PreviousData> foodElements;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     RecyclerView.LayoutManager layoutManager;
 
     public PreviousOrder() {
@@ -39,8 +39,8 @@ public class PreviousOrder extends androidx.fragment.app.Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_previous_order, container, false);
-        databaseEntry = new DatabaseEntry(getActivity());
-        foodElements = getData(databaseEntry);
+        databaseInstance = new DatabaseInstance(getActivity());
+        foodElements = getData(databaseInstance);
         adapter_previous_order = new Adapter_Previous_Order(foodElements,getActivity());
         recyclerViewpo = (RecyclerView)view.findViewById(R.id.recyclerpreviousorder);
         recyclerViewpo.setAdapter(adapter_previous_order);
@@ -50,9 +50,9 @@ public class PreviousOrder extends androidx.fragment.app.Fragment {
         recyclerViewpo.setNestedScrollingEnabled(false);
         return view;
     }
-    public static List<PreviousData> getData(DatabaseEntry databaseEntry){
+    public static List<PreviousData> getData(DatabaseInstance databaseInstance){
         List<PreviousData> foodElements = new ArrayList<PreviousData>();
-        foodElements = databaseEntry.getDataFromPrevious();
+        foodElements = databaseInstance.getDataFromPrevious();
         return foodElements;
     }
 }

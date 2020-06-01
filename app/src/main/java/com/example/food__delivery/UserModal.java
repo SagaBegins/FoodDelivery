@@ -1,19 +1,19 @@
 package com.example.food__delivery;
 
-public class UserInformation {
+public class UserModal {
     public String num, name, id;
     public boolean admin;
 
-    public UserInformation() {
+    public UserModal() {
     }
 
-    public UserInformation(String num, String name) {
+    public UserModal(String num, String name) {
         this.num = num;
         this.name = name;
         this.admin = false;
     }
 
-    public UserInformation(String name, String num, String id) {
+    public UserModal(String name, String num, String id) {
         this.id = id;
         this.num = num;
         this.name = name;

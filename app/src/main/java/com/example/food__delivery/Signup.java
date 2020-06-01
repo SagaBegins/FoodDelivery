@@ -109,9 +109,9 @@ public class Signup extends AppCompatActivity {
     private void saveUserInformation() {
         String name1 = name.getText().toString().trim();
         String num = number.getText().toString().trim();
-        UserInformation userInformation = new UserInformation(num,name1);
+        UserModal userModal = new UserModal(num,name1);
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        firebaseDatabase.child("users").child(user.getUid()).setValue(userInformation).addOnSuccessListener(
+        firebaseDatabase.child("users").child(user.getUid()).setValue(userModal).addOnSuccessListener(
                 new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

@@ -36,7 +36,7 @@ import com.example.food__delivery.Fragment.FavouriteFragment;
 import com.example.food__delivery.MainNavigationActivity.AboutFragment;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MainNavigationActivity.RateFragment;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -58,7 +58,7 @@ public class  MainActivity extends AppCompatActivity
         ImageView photo;
         FirebaseUser user;
         Button sign;
-        DatabaseEntry databaseEntry;
+        DatabaseInstance databaseInstance;
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
@@ -83,8 +83,8 @@ public class  MainActivity extends AppCompatActivity
             view.setBackgroundResource(R.drawable.home_back);
             fragment = new HomeFragment();
             setTitle("Home");
-            databaseEntry = new DatabaseEntry(MainActivity.this);
-            databaseEntry.createTable();
+            databaseInstance = new DatabaseInstance(MainActivity.this);
+            databaseInstance.createTable();
             navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
             navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
             nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textView2);

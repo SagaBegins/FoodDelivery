@@ -26,7 +26,7 @@ import com.example.food__delivery.Helper.Menu;
 import com.example.food__delivery.Helper.OrderList;
 import com.example.food__delivery.Helper.Restaurant;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.SlidingImage_Adapter;
+import com.example.food__delivery.Additional.SlidingImage_Adapter;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -136,8 +136,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         indicator.setViewPager(mPager);
 
         final float density = getResources().getDisplayMetrics().density;
-
-//Set circle indicator radius
         indicator.setRadius(3 * density);
 
         NUM_PAGES = IMAGES.length;
@@ -160,7 +158,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             }
         }, 7500, 7500);
 
-        // Pager listener over indicator
         indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -186,7 +183,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Showing progress dialog
             loading = new ProgressDialog(getActivity());
             loading.setMessage("After Dinner Rest a While; After Supper Walk a Mile");
             loading.setCancelable(false);
@@ -307,12 +303,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         @Override
         protected void onPostExecute(List<Restaurant> result) {
             super.onPostExecute(result);
-            // Dismiss the progress dialog
             if (loading.isShowing())
                 loading.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
             recyclerViewadapter = new Adapter_Menu(getActivity(), restaurantList);
             recyclerView.setAdapter(recyclerViewadapter);
         }

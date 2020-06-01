@@ -33,14 +33,12 @@ import com.example.food__delivery.AllOrders;
 import com.example.food__delivery.ChatActivity;
 import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.AllFavouriteFragment;
-import com.example.food__delivery.Fragment.InboxFragment;
-import com.example.food__delivery.InboxActivity;
 import com.example.food__delivery.Login;
 import com.example.food__delivery.MainNavigationActivity.AboutFragment;
 import com.example.food__delivery.MainNavigationActivity.HomeFragment;
 import com.example.food__delivery.MainNavigationActivity.RateFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -61,7 +59,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
     ImageView photo;
     FirebaseUser user;
     Button sign;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +82,9 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
         view.setBackgroundResource(R.drawable.home_back);
         fragment = new HomeFragment();
         setTitle("Home");
-        databaseEntry = new DatabaseEntry(MainScreen.this);
-        databaseEntry.createTable();
-        databaseEntry.close();
+        databaseInstance = new DatabaseInstance(MainScreen.this);
+        databaseInstance.createTable();
+        databaseInstance.close();
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
         navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
         nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textView2);
@@ -320,9 +318,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exitByBackKey();
-
             //moveTaskToBack(false);
-
             return true;
         }
         return super.onKeyDown(keyCode, event);

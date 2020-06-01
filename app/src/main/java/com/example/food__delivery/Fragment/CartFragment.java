@@ -22,7 +22,7 @@ import com.example.food__delivery.Activities.Checkout;
 import com.example.food__delivery.Adapter.Adapter_Cart;
 import com.example.food__delivery.Helper.FoodElement;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Testing.DatabaseEntry;
+import com.example.food__delivery.Additional.DatabaseInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ import java.util.List;
  */
 public class CartFragment extends androidx.fragment.app.Fragment {
 
-    private  DatabaseEntry databaseEntrytotal;
+    private DatabaseInstance databaseEntrytotal;
     RecyclerView recyclerView;
     Adapter_Cart reAdapterFav;
-    DatabaseEntry databaseEntry;
+    DatabaseInstance databaseInstance;
     List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager layoutManager;
     int price=0;
@@ -79,12 +79,12 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     private void setUpView(){
         context = view.getContext();
         recyclerView = (RecyclerView)view.findViewById(R.id.recycler11);
-        databaseEntry = new DatabaseEntry(getActivity());
+        databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList = new ArrayList<>();
         recyclerView.hasFixedSize();
 
-        foodElementsList = databaseEntry.getDataFromDB("cart_table", restaurantId);
-        databaseEntry.close();
+        foodElementsList = databaseInstance.getDataFromDB("cart_table", restaurantId);
+        databaseInstance.close();
         textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
         proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
         reAdapterFav = new Adapter_Cart(foodElementsList,this);
@@ -123,7 +123,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     public double calculateGrandTotal(int rate){
         double total;
         Activity activity = (Activity)context;
-        databaseEntrytotal = new DatabaseEntry(activity);
+        databaseEntrytotal = new DatabaseInstance(activity);
         total = databaseEntrytotal.total(rate);
         databaseEntrytotal.close();
         String tot = String.format("%.2f",total);

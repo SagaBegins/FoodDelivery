@@ -241,10 +241,10 @@ public class Login extends AppCompatActivity {
     }
     private  void saveData(){
         String num = "Facebook user";
-        UserInformation userInformation = new UserInformation(facebookname, num, url);
+        UserModal userModal = new UserModal(facebookname, num, url);
         FirebaseUser user = auth.getCurrentUser();
 
-        firebaseDatabase.child("users").child(user.getUid()).setValue(userInformation);
+        firebaseDatabase.child("users").child(user.getUid()).setValue(userModal);
     }
     class MyTextWatcher implements TextWatcher {
         private View view;
