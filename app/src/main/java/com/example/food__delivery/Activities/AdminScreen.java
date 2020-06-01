@@ -1,6 +1,7 @@
 package com.example.food__delivery.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,10 +18,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.food__delivery.AllOrders;
+import com.example.food__delivery.Fragment.AllOrders;
 import com.example.food__delivery.Fragment.InboxFragment;
-import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.Helper.OrderList;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
+import com.example.food__delivery.HelperModal.FoodElement;
+import com.example.food__delivery.HelperModal.OrderList;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 import com.facebook.FacebookSdk;
@@ -50,6 +52,7 @@ public class AdminScreen extends AppCompatActivity {
     DatabaseInstance databaseInstance;
     ViewPager pager;
     TabLayout tablayout;
+    ProgressDialog loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,6 @@ public class AdminScreen extends AppCompatActivity {
         pager = findViewById(R.id.adminviewpager);
         tablayout = findViewById(R.id.admintablayout);
         adminordersList = new ArrayList<>();
-        
         ViewPagerAdapter pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         pagerAdapter.addFrag(new InboxFragment(), "Inbox");
         pagerAdapter.addFrag(new AllOrders(), "All Orders");
@@ -88,6 +90,9 @@ public class AdminScreen extends AppCompatActivity {
         orderDone = false;
         auth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        loading = new ProgressDialog(this);
+        loading.setCancelable(false);
+        loading.show();
         try {
             DatabaseReference orderRef = mDatabase.child("Orders");
             orderRef.addValueEventListener(new ValueEventListener() {
@@ -123,6 +128,7 @@ public class AdminScreen extends AppCompatActivity {
                             adminordersList.add(0, orderList);
                         }
                     }
+                    loading.dismiss();
                     orderDone = true;
                 }
 

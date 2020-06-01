@@ -15,8 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Activities.AdminScreen;
 import com.example.food__delivery.Adapter.AdapterOrderDescription;
-import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.HelperModal.OrderList;
 import com.example.food__delivery.R;
 
 import java.util.ArrayList;

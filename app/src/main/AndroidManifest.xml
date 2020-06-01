@@ -21,11 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:roundIcon">
-        <activity android:name=".ChatActivity"></activity>
-        <activity android:name=".InboxActivity" />
+        <activity android:name=".Activities.ChatActivity"></activity>
+        <activity android:name=".Activities.InboxActivity" />
         <activity android:name=".Activities.OpenScreen" />
-        <activity android:name=".Login" />
-        <activity android:name=".Signup" />
+        <activity android:name=".Activities.SigninActivity" />
+        <activity android:name=".Activities.SignupActivity" />
         <activity
             android:name=".Activities.MainScreen"
             android:theme="@style/AppTheme" />
@@ -34,13 +34,13 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".Activities.ForgotPasswordActivity" />
         <activity
-            android:name=".Activities.AfterMain"
+            android:name=".Activities.MenuActivity"
             android:label="Menu"
             android:parentActivityName=".Activities.MainScreen"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Activities.Cart_Favorite"
-            android:parentActivityName=".Activities.AfterMain" />
+            android:parentActivityName=".Activities.MenuActivity" />
         <activity
             android:name=".Activities.Checkout"
             android:label="@string/title_activity_checkout"
@@ -79,7 +79,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Food Delivery"
             android:theme="@style/FullscreenTheme">

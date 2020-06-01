@@ -6,10 +6,10 @@
 
 
     <Button
-        android:id="@+id/button7"
+        android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_below="@+id/textView35"
+        android:layout_below="@+id/loginorsignup"
         android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
@@ -19,20 +19,20 @@
         android:textColor="@android:color/white" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_below="@+id/button7"
+        android:layout_below="@+id/signup"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/line" />
+        app:srcCompat="@drawable/dividerblack" />
 
     <Button
-        android:id="@+id/button11"
+        android:id="@+id/login"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignStart="@+id/button7"
-        android:layout_below="@+id/imageView10"
+        android:layout_alignStart="@+id/signup"
+        android:layout_below="@+id/divider"
         android:layout_centerInParent="true"
         android:layout_marginBottom="30dp"
         android:layout_marginTop="15dp"
@@ -40,10 +40,10 @@
         android:fontFamily="serif"
         android:text="LOGIN"
         android:textColor="@android:color/white"
-        android:layout_alignLeft="@+id/button7" />
+        android:layout_alignLeft="@+id/signup" />
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/loginorsignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

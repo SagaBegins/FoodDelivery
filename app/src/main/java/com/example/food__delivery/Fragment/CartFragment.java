@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Activities.Checkout;
 import com.example.food__delivery.Adapter.Adapter_Cart;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 

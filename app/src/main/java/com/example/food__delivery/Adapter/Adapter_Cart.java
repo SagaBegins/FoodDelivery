@@ -18,8 +18,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.food__delivery.Fragment.CartFragment;
 import com.example.food__delivery.Additional.DatabaseInstance;
-import com.example.food__delivery.Activities.AfterMain;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.Activities.MenuActivity;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 
 import java.util.List;
@@ -70,7 +70,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 databaseInstance.updateInRow(holder.food_name.getText()+"_"+foodElements.get(position).getRate(),"cart_table",qty);
                 holder.qty.setText(""+foodElements.get(position).getQty());
                 try {
-                    AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
+                    MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -98,7 +98,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                     updateTotal(id);
                     databaseInstance.close();
                     try {
-                        AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
+                        MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                     }catch(Exception e){
                         e.printStackTrace();
                     }
@@ -117,7 +117,7 @@ public class Adapter_Cart  extends RecyclerView.Adapter<Adapter_Cart.ViewHolder>
                 parent.calculateGrandTotal(id);
                 updateTotal(id);
                 try {
-                    AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
+                    MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
                 }catch(Exception e){
                     e.printStackTrace();
                 }

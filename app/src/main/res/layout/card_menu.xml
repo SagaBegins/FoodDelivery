@@ -82,7 +82,7 @@
                 android:background="@color/colorPrimaryDark">
 
                 <ImageButton
-                    android:id="@+id/imageButton4"
+                    android:id="@+id/fav"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_centerHorizontal="true"
@@ -93,10 +93,10 @@
                     tools:ignore="VectorDrawableCompat" />
 
                 <ImageButton
-                    android:id="@+id/imageButton3"
+                    android:id="@+id/addtocart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_alignTop="@+id/imageButton4"
+                    android:layout_alignTop="@+id/fav"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"

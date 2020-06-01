@@ -10,9 +10,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.Helper.OrderElements;
-import com.example.food__delivery.Helper.PreviousData;
+import com.example.food__delivery.HelperModal.FoodElement;
+import com.example.food__delivery.HelperModal.OrderElements;
+import com.example.food__delivery.HelperModal.PreviousData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -234,7 +234,7 @@ public class DatabaseInstance extends SQLiteOpenHelper {
                 db.execSQL(CREATE_PREORDER);
             }catch (SQLiteException exe){
                 exe.printStackTrace();
-                Log.d("Database Exception", "Error thrown on line 189 DatabaseEntry.java");
+                Log.d("Database Exception", "Error thrown on dividerblack 189 DatabaseEntry.java");
             }
             
         }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/AppTheme.AppBarOverlay"
-    tools:context="com.example.food__delivery.MainNavigationActivity.RateFragment">
+    tools:context=".Fragment.MainScreenFragment.RateFragment">
 
 
     <RelativeLayout

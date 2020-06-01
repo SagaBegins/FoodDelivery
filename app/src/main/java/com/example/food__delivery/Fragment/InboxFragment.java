@@ -2,8 +2,6 @@ package com.example.food__delivery.Fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -18,9 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import com.example.food__delivery.ChatActivity;
-import com.example.food__delivery.ChatModel;
-import com.example.food__delivery.InboxAdapter;
+import com.example.food__delivery.Activities.ChatActivity;
+import com.example.food__delivery.HelperModal.ChatModel;
+import com.example.food__delivery.Adapter.InboxAdapter;
 import com.example.food__delivery.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

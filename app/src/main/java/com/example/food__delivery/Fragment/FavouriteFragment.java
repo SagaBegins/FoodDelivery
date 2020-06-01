@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.Adapter.Adapter_Fav;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 
@@ -47,7 +47,7 @@ public class FavouriteFragment extends androidx.fragment.app.Fragment {
         foodElementsList  = new ArrayList<>();
         foodElementsList = databaseInstance.getDataFromDB("favour_table", restaurantId);
         databaseInstance.close();
-        quote = (TextView)view.findViewById(R.id.textView16);
+        quote = (TextView)view.findViewById(R.id.emptyfav);
         quote.setVisibility(View.GONE);
         recyclerViewAdapter = new Adapter_Fav(foodElementsList, this);
         recyclerView.setAdapter(recyclerViewAdapter);

@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.example.food__delivery.Activities.AfterMain;
-import com.example.food__delivery.Helper.Restaurant;
+import com.example.food__delivery.Activities.MenuActivity;
+import com.example.food__delivery.HelperModal.Restaurant;
 import com.example.food__delivery.R;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class Adapter_Menu extends RecyclerView.Adapter<Adapter_Menu.ViewHolder> 
             @Override
             public void onClick(View view) {
                 Context context = view.getContext();
-                Intent intent = new Intent(context, AfterMain.class);
+                Intent intent = new Intent(context, MenuActivity.class);
                 intent.putExtra("restaurantId", position);
                 context.startActivity(intent);
             }
@@ -65,8 +65,8 @@ public class Adapter_Menu extends RecyclerView.Adapter<Adapter_Menu.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
             view.setClipToOutline(true);
-            food_name = (TextView) view.findViewById(R.id.textview27);
-            image = (ImageView) view.findViewById(R.id.imageViewHero);
+            food_name = (TextView) view.findViewById(R.id.restaurantname);
+            image = (ImageView) view.findViewById(R.id.restaurantimage);
             cardView = (CardView)view.findViewById(R.id.card);
         }
     }

@@ -12,9 +12,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.HelperModal.FoodElement;
+import com.example.food__delivery.HelperModal.OrderList;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 import com.google.android.material.tabs.TabLayout;

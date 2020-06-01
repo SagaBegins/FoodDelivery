@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/splash"
-    tools:context="com.example.food__delivery.SplashActivity">
+    tools:context="com.example.food__delivery.Activities.SplashActivity">
 
     <ImageView
-        android:id="@+id/imgPlaylistItemBg"
+        android:id="@+id/background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"

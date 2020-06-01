@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.AllOrders;
+import com.example.food__delivery.Fragment.AllOrders;
 import com.example.food__delivery.Fragment.AdminOrder;
-import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.Helper.Restaurant;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.HelperModal.OrderList;
+import com.example.food__delivery.HelperModal.Restaurant;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
 
 import java.util.ArrayList;

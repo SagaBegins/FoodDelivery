@@ -29,14 +29,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.AllOrders;
-import com.example.food__delivery.ChatActivity;
+import com.example.food__delivery.Fragment.AllOrders;
 import com.example.food__delivery.Fragment.AllCartsFragment;
 import com.example.food__delivery.Fragment.AllFavouriteFragment;
-import com.example.food__delivery.Login;
-import com.example.food__delivery.MainNavigationActivity.AboutFragment;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
-import com.example.food__delivery.MainNavigationActivity.RateFragment;
+import com.example.food__delivery.Fragment.MainScreenFragment.AboutFragment;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
+import com.example.food__delivery.Fragment.MainScreenFragment.RateFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 import com.facebook.FacebookSdk;
@@ -55,7 +53,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
     DrawerLayout drawer;
     TextView nametext;
     public static FirebaseAuth auth;
-    String idf, namef;
+    String facebookId, facebookName;
     ImageView photo;
     FirebaseUser user;
     Button sign;
@@ -87,9 +85,9 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
         databaseInstance.close();
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
         navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
-        nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.textView2);
-        photo = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.imageView);
-        sign = (Button)navigationView.getHeaderView(0).findViewById(R.id.button15);
+        nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.username);
+        photo = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.logo);
+        sign = (Button)navigationView.getHeaderView(0).findViewById(R.id.buttonloginorsignup);
         auth = FirebaseAuth.getInstance();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -101,18 +99,18 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
             databaseReference.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot){
-                        namef = String.valueOf(dataSnapshot.child("name").getValue());
-                        idf= String.valueOf(dataSnapshot.child("id").getValue());
-                        nametext.setText(namef);
-                        if(!idf.equalsIgnoreCase("null")){
+                        facebookName = String.valueOf(dataSnapshot.child("name").getValue());
+                        facebookId= String.valueOf(dataSnapshot.child("id").getValue());
+                        nametext.setText(facebookName);
+                        if(!facebookId.equalsIgnoreCase("null")){
                             sign.setText("Log Out");
-                            Glide.with(MainScreen.this).load("http://graph.facebook.com/" + idf + "/picture?type=normal").into(photo);
+                            Glide.with(MainScreen.this).load("http://graph.facebook.com/" + facebookId + "/picture?type=normal").into(photo);
                             sign.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     auth.signOut();
                                     LoginManager.getInstance().logOut();
-                                    Intent intent = new Intent(MainScreen.this, Login.class);
+                                    Intent intent = new Intent(MainScreen.this, SigninActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
@@ -126,7 +124,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                                 public void onClick(View view) {
 
                                     auth.signOut();
-                                    Intent intent = new Intent(MainScreen.this, Login.class);
+                                    Intent intent = new Intent(MainScreen.this, SigninActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(intent);
                                     finish();
@@ -142,13 +140,12 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
             });
         }else{
             navigationView.inflateMenu(R.menu.activity_main_screen_drawer);
-            //sign.setText("com.example.fooddelivery.Signup or com.example.fooddelivery.Login");
             nametext.setText("Guest User");
             photo.setImageResource(R.drawable.male3);
             sign.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(MainScreen.this, Login.class);
+                    Intent intent = new Intent(MainScreen.this, SigninActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();

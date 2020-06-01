@@ -8,8 +8,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.HelperModal.OrderList;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
 
 import java.util.ArrayList;

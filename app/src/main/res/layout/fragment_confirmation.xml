@@ -13,7 +13,7 @@
         android:background="@drawable/shippingback">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/itemsincart"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_above="@+id/textviewamount"
@@ -28,31 +28,31 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/textviewamount"
             android:layout_alignBottom="@+id/textviewamount"
-            android:layout_alignStart="@+id/recyclerView"
+            android:layout_alignStart="@+id/itemsincart"
             android:layout_marginRight="30dp"
             android:padding="5dp"
             android:text="TOTAL AMOUNT"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:layout_alignLeft="@+id/recyclerView" />
+            android:layout_alignLeft="@+id/itemsincart" />
 
         <TextView
             android:id="@+id/textviewamount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/relativeLayout5"
-            android:layout_alignEnd="@+id/recyclerView"
+            android:layout_above="@+id/paylayout"
+            android:layout_alignEnd="@+id/itemsincart"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="20dp"
             android:padding="5dp"
             android:text="TextView"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:layout_alignRight="@+id/recyclerView" />
+            android:layout_alignRight="@+id/itemsincart" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout5"
+            android:id="@+id/paylayout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
@@ -61,7 +61,7 @@
 
 
             <Button
-                android:id="@+id/button14"
+                android:id="@+id/pay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
@@ -73,10 +73,10 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/ordertitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/recyclerView"
+            android:layout_above="@+id/itemsincart"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
             android:padding="5dp"
@@ -87,20 +87,20 @@
             android:layout_alignParentLeft="true" />
 
         <TextView
-            android:id="@+id/textView22"
+            android:id="@+id/shippingto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView20"
-            android:layout_alignTop="@+id/button13"
+            android:layout_alignStart="@+id/ordertitle"
+            android:layout_alignTop="@+id/edit"
             android:padding="5dp"
             android:text="SHIPPING TO:"
             android:textColor="@android:color/white"
             android:textSize="12sp"
             android:textStyle="bold"
-            android:layout_alignLeft="@+id/textView20" />
+            android:layout_alignLeft="@+id/ordertitle" />
 
         <Button
-            android:id="@+id/button13"
+            android:id="@+id/edit"
             style="@style/Widget.AppCompat.Button.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -117,13 +117,13 @@
             android:id="@+id/shippingname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/textView22"
-            android:layout_below="@+id/textView22"
+            android:layout_alignStart="@+id/shippingto"
+            android:layout_below="@+id/shippingto"
             android:padding="5dp"
             android:text="TextView"
             android:textColor="@android:color/white"
             android:textSize="14sp"
-            android:layout_alignLeft="@+id/textView22" />
+            android:layout_alignLeft="@+id/shippingto" />
 
         <TextView
             android:id="@+id/shippingaddress"

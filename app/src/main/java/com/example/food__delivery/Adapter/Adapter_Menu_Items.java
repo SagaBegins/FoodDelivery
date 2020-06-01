@@ -14,8 +14,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.Activities.AfterMain;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.Activities.MenuActivity;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 
@@ -90,7 +90,7 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                         databaseInstance.insertIntoCart(foodElements.get(position).getName()+"_"+id, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), id, 1);
                         //Toast.makeText(context, "Food Added to Cart.", Toast.LENGTH_SHORT).show();
                         databaseInstance.close();
-                        AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(foodElements.get(position).getRate())));
+                        MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(foodElements.get(position).getRate())));
                     }
                 });
             }else{
@@ -134,8 +134,8 @@ public class Adapter_Menu_Items extends RecyclerView.Adapter<Adapter_Menu_Items.
                 food_name = (TextView) view.findViewById(R.id.menuItemName);
                 image = (ImageView) view.findViewById(R.id.dishimage);
                 price = (TextView)view.findViewById(R.id.priceofproduct);
-                add = (ImageButton)view.findViewById(R.id.imageButton3);
-                fav = (ImageButton)view.findViewById(R.id.imageButton4);
+                add = (ImageButton)view.findViewById(R.id.addtocart);
+                fav = (ImageButton)view.findViewById(R.id.fav);
                 description = (TextView) view.findViewById(R.id.food_description);
                 bottom = (RelativeLayout) view.findViewById(R.id.bottom_section);
                 card = (CardView) view.findViewById(R.id.food_holder);

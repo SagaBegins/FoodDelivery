@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.example.food__delivery.Login;
 import com.example.food__delivery.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -26,14 +25,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-        email = (EditText)findViewById(R.id.editText8);
-        send = (Button)findViewById(R.id.button9);
-        back = (Button)findViewById(R.id.button10);
+        email = (EditText)findViewById(R.id.enteremail);
+        send = (Button)findViewById(R.id.submit);
+        back = (Button)findViewById(R.id.back);
         auth = FirebaseAuth.getInstance();
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                startActivity(new Intent(ForgotPasswordActivity.this, Login.class));
+                startActivity(new Intent(ForgotPasswordActivity.this, SigninActivity.class));
             }
         });
         send.setOnClickListener(new View.OnClickListener() {

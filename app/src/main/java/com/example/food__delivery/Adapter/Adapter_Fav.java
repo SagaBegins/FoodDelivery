@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.example.food__delivery.Activities.AfterMain;
+import com.example.food__delivery.Activities.MenuActivity;
 import com.example.food__delivery.Fragment.FavouriteFragment;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
 
@@ -59,7 +59,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
             public void onClick(View view) {
                 databaseInstance = new DatabaseInstance(context);
                 databaseInstance.insertIntoCart(foodElements.get(position).getName().split("_")[0]+"_"+id,foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
-                AfterMain.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
+                MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
             }
         });
         holder.delete.setOnClickListener(new View.OnClickListener() {

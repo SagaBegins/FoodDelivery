@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/usage"
-    tools:context="com.example.food__delivery.Signup">
+    tools:context="com.example.food__delivery.Activities.SignupActivity">
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/logo"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginTop="18dp"
@@ -22,7 +22,7 @@ s
         android:id="@+id/namelayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView4"
+        android:layout_below="@+id/logo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:textColorHint="@android:color/white"
@@ -30,10 +30,10 @@ s
         app:errorEnabled="true">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/nameEditText"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView4"
+            android:layout_below="@+id/logo"
             android:layout_centerHorizontal="true"
             android:backgroundTint="@android:color/white"
             android:elevation="15dp"
@@ -54,17 +54,17 @@ s
         android:textColorHint="@android:color/white"
         android:layout_below="@+id/namelayout"
         android:layout_alignEnd="@+id/namelayout"
-        android:layout_alignStart="@+id/imageView4"
+        android:layout_alignStart="@+id/logo"
         android:layout_alignRight="@+id/namelayout"
-        android:layout_alignLeft="@+id/imageView4">
+        android:layout_alignLeft="@+id/logo">
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/phoneno"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/namelayout"
             android:layout_below="@+id/namelayout"
-            android:layout_toEndOf="@+id/textView4"
+            android:layout_toEndOf="@+id/code"
             android:backgroundTint="@android:color/white"
             android:ems="10"
             android:hint="Phone Number"
@@ -73,11 +73,11 @@ s
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:layout_alignRight="@+id/namelayout"
-            android:layout_toRightOf="@+id/textView4" />
+            android:layout_toRightOf="@+id/code" />
 </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
@@ -98,18 +98,18 @@ s
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/namelayout"
-        android:layout_alignStart="@+id/textView4"
+        android:layout_alignStart="@+id/code"
         android:layout_below="@+id/phonelayout"
-        android:layout_toEndOf="@+id/textView4"
+        android:layout_toEndOf="@+id/code"
         android:textColorHint="@android:color/white"
         android:theme="@style/TextLabel"
         app:errorEnabled="true"
         android:layout_alignRight="@+id/namelayout"
-        android:layout_alignLeft="@+id/textView4"
-        android:layout_toRightOf="@+id/textView4">
+        android:layout_alignLeft="@+id/code"
+        android:layout_toRightOf="@+id/code">
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/phonelayout"
@@ -130,7 +130,7 @@ s
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/emaillayout"
-        android:layout_alignStart="@+id/textView4"
+        android:layout_alignStart="@+id/code"
         android:layout_below="@+id/emaillayout"
         android:textColorHint="@android:color/white"
         android:theme="@style/TextLabel"
@@ -138,10 +138,10 @@ s
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@android:color/white"
         android:layout_alignRight="@+id/emaillayout"
-        android:layout_alignLeft="@+id/textView4">
+        android:layout_alignLeft="@+id/code">
 
         <EditText
-            android:id="@+id/editText4"
+            android:id="@+id/password"
             android:layout_width="279dp"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/emaillayout"
@@ -159,7 +159,7 @@ s
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/signup"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:background="@drawable/border"

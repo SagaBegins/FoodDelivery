@@ -19,11 +19,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.food__delivery.Fragment.Confirmation;
-import com.example.food__delivery.Helper.FoodElement;
-import com.example.food__delivery.Helper.OrderList;
-import com.example.food__delivery.MainNavigationActivity.HomeFragment;
+import com.example.food__delivery.HelperModal.FoodElement;
+import com.example.food__delivery.HelperModal.OrderList;
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Shipping;
+import com.example.food__delivery.Fragment.ShippingFragment;
 import com.example.food__delivery.Additional.CustomViewPager;
 import com.example.food__delivery.Additional.DatabaseInstance;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -71,7 +71,7 @@ public class Checkout extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new Shipping(restaurantId), "Shipping");
+        adapter.addFrag(new ShippingFragment(restaurantId), "ShippingFragment");
         adapter.addFrag(new Confirmation(restaurantId), "Confirmation");
         viewPager.setAdapter(adapter);
     }

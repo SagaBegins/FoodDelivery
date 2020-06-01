@@ -19,7 +19,7 @@ public class ThankYouPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you_page);
-        order=(Button)findViewById(R.id.button16);
+        order=(Button)findViewById(R.id.continueordering);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

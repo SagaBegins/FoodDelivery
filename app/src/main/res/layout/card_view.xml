@@ -17,7 +17,7 @@
         android:clipChildren="true"
         android:focusable="true">
         <ImageView
-            android:id="@+id/imageViewHero"
+            android:id="@+id/restaurantimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -25,7 +25,7 @@
             android:src="@drawable/splash" />
 
             <TextView
-                android:id="@+id/textview27"
+                android:id="@+id/restaurantname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

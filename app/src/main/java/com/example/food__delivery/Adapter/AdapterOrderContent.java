@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.food__delivery.AllOrders;
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.Fragment.AllOrders;
+import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
 
 import java.util.ArrayList;

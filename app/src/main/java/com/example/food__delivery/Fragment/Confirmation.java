@@ -21,7 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.food__delivery.Helper.FoodElement;
+import com.example.food__delivery.HelperModal.FoodElement;
+import com.example.food__delivery.Activities.SignupActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,9 +37,8 @@ import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
 import com.payumoney.core.PayUmoneySdkInitializer;
 import com.example.food__delivery.Adapter.Adapter_Confirm;
-import com.example.food__delivery.Login;
+import com.example.food__delivery.Activities.SigninActivity;
 import com.example.food__delivery.R;
-import com.example.food__delivery.Signup;
 import com.example.food__delivery.Additional.DatabaseInstance;
 import com.payumoney.sdkui.ui.activities.PayUmoneyActivity;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
@@ -73,7 +73,6 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     private String txntime;
     private final String productName = "Food Delivery";
     private final String txnid = System.currentTimeMillis()+"";
-    //private String authHeader = "Acf5JnJZSaHq5z5UfnrIvcybuasyk58qlXXGBQr6TI4=";
     private PayuConfig payuConfig;
     static TextView shipname;
     static TextView address;
@@ -110,8 +109,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         address = (TextView) view.findViewById(R.id.shippingaddress);
         amount = (TextView) view.findViewById(R.id.textviewamount);
         phone = (TextView) view.findViewById(R.id.phonenumberconfirm);
-        pay = (Button) view.findViewById(R.id.button14);
-        shipbutton = (Button) view.findViewById(R.id.button13);
+        pay = (Button) view.findViewById(R.id.pay);
+        shipbutton = (Button) view.findViewById(R.id.edit);
         SharedPreferences pricetotal, shipdetails;
         viewPager = (ViewPager) getActivity().findViewById(R.id.container1);
         pricetotal = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
@@ -131,7 +130,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                 viewPager.setCurrentItem(0);
             }
         });
-        recyclerViewconfirm = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerViewconfirm = (RecyclerView) view.findViewById(R.id.itemsincart);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList = new ArrayList<>();
@@ -151,15 +150,15 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     FacebookSdk.setApplicationId("581033482823166");
                     FacebookSdk.sdkInitialize(getActivity());
                     dialog.setContentView(R.layout.dialog);
-                    dialog.setTitle("Login OR Sign Up");
+                    dialog.setTitle("SigninActivity OR Sign Up");
                     dialog.show();
                     mCallbackManager = CallbackManager.Factory.create();
-                    Button sign = (Button)dialog.findViewById(R.id.button7);
-                    Button login = (Button)dialog.findViewById(R.id.button11);
+                    Button sign = (Button)dialog.findViewById(R.id.signup);
+                    Button login = (Button)dialog.findViewById(R.id.login);
                     sign.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), Signup.class);
+                            Intent intent = new Intent(getActivity(), SignupActivity.class);
                             startActivity(intent);
                             dialog.dismiss();
                         }
@@ -167,7 +166,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     login.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), Login.class);
+                            Intent intent = new Intent(getActivity(), SigninActivity.class);
                             startActivity(intent);
                             dialog.dismiss();
                         }
@@ -247,6 +246,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         }
     }
 
+
+    //Code to deploy live version provided by payu
     public void navigateToBase(){
 
         String id = String.valueOf(System.currentTimeMillis());
@@ -967,60 +968,6 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
             }else{
                 Toast.makeText(getActivity(), "Payment Failed!", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    /**
-     * A simple {@link androidx.fragment.app.Fragment} subclass.
-     * Use the {@link OrderDetailsFragment#newInstance} factory method to
-     * create an instance of this fragment.
-     */
-    public static class OrderDetailsFragment extends androidx.fragment.app.Fragment {
-        // TODO: Rename parameter arguments, choose names that match
-        // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-        private static final String ARG_PARAM1 = "param1";
-        private static final String ARG_PARAM2 = "param2";
-
-        // TODO: Rename and change types of parameters
-        private String mParam1;
-        private String mParam2;
-
-        public OrderDetailsFragment() {
-            // Required empty public constructor
-        }
-
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment OrderDetailsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        public static OrderDetailsFragment newInstance(String param1, String param2) {
-            OrderDetailsFragment fragment = new OrderDetailsFragment();
-            Bundle args = new Bundle();
-            args.putString(ARG_PARAM1, param1);
-            args.putString(ARG_PARAM2, param2);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            if (getArguments() != null) {
-                mParam1 = getArguments().getString(ARG_PARAM1);
-                mParam2 = getArguments().getString(ARG_PARAM2);
-            }
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            // Inflate the layout for this fragment
-            return inflater.inflate(R.layout.fragment_order_details, container, false);
         }
     }
 }
