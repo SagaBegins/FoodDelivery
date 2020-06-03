@@ -21,8 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.Activities.SignupActivity;
+import com.example.food__delivery.Singleton;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,8 +116,22 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         SharedPreferences pricetotal, shipdetails;
         viewPager = (ViewPager) getActivity().findViewById(R.id.container1);
         pricetotal = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
-        text = pricetotal.getString("total", null);
+        text = pricetotal.getString("total", "0.0");
+        Float savedTotal = pricetotal.getFloat("saved", 0.0f);
+        Float p = Float.parseFloat(text);
+        Float saved = 0.0f;
+        if(HomeFragment.off > 0.0f && p > HomeFragment.threshold){
+            saved = HomeFragment.off * p;
+            p -= saved;
+        }
+        TextView savedTextview = view.findViewById(R.id.savedText);
+        text = String.format("%.2f", p);
         priceTextview(text);
+        saved +=  savedTotal;
+        if(saved > 0.0f) {
+            savedTextview.setText(String.format("(Saved: %.2f)", saved));
+            savedTextview.setVisibility(View.VISIBLE);
+        }
         restaurantId = getActivity().getIntent().getIntExtra("restaurantId", 0);
         shipdetails = getActivity().getSharedPreferences("SHIPPING_ADDRESS", Context.MODE_PRIVATE);
         fname = shipdetails.getString("firstname", "----");
@@ -138,15 +154,15 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         reAdapterconfirm = new Adapter_Confirm(foodElementsList, getActivity());
         recyclerViewconfirm.setAdapter(reAdapterconfirm);
         recyclerViewconfirm.setLayoutManager(layoutManager);
-        auth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        auth = Singleton.auth;
+        user = Singleton.auth.getCurrentUser();
         email = user.getEmail();
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(user == null){
                     final Dialog dialog = new Dialog(getActivity());
-                    auth = FirebaseAuth.getInstance();
+                    auth = Singleton.auth;
                     FacebookSdk.setApplicationId("581033482823166");
                     FacebookSdk.sdkInitialize(getActivity());
                     dialog.setContentView(R.layout.dialog);
@@ -209,6 +225,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         getActivity().getIntent().putExtra("txnId", txnid);
         getActivity().getIntent().putExtra("txnTime", txntime);
         getActivity().getIntent().putExtra("amount", text);
+        getActivity().getIntent().putExtra("address", add+ " "+ zip);
         PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, true);
     }
 

@@ -91,6 +91,25 @@
                             tools:listitem="@layout/list_order_details"/>
                     </RelativeLayout>
                     <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/footer"
+                        android:layout_margin="@dimen/dimen_10dp">
+                        <Button
+                            android:id="@+id/accept"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Accept Order"
+                            android:visibility="gone"/>
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/messageuser"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Message User"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="gone"/>
+                    </RelativeLayout>
+                    <RelativeLayout
                         android:id="@+id/footer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

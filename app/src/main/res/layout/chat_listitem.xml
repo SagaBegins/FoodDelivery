@@ -9,6 +9,7 @@
             android:id="@+id/msg_card"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_10dp"
             android:layout_margin="@dimen/dimen_10dp"
             app:cardCornerRadius="@dimen/dimen_30dp"
             app:contentPadding="@dimen/dimen_10dp"

@@ -24,6 +24,7 @@
             android:layout_alignParentLeft="true" />
 
         <TextView
+            android:id="@+id/amountConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/textviewamount"
@@ -36,7 +37,18 @@
             android:textSize="12sp"
             android:textStyle="bold"
             android:layout_alignLeft="@+id/itemsincart" />
-
+        <TextView
+            android:id="@+id/savedText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/paylayout"
+            android:layout_toEndOf="@id/amountConfirm"
+            android:layout_toStartOf="@id/textviewamount"
+            android:padding="5dp"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:text="@string/add_amount"
+            android:visibility="gone"/>
         <TextView
             android:id="@+id/textviewamount"
             android:layout_width="wrap_content"

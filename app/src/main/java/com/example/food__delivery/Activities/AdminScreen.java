@@ -23,8 +23,10 @@ import com.example.food__delivery.Fragment.InboxFragment;
 import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.HelperModal.OrderList;
+import com.example.food__delivery.HelperModal.Restaurant;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
+import com.example.food__delivery.Singleton;
 import com.facebook.FacebookSdk;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,20 +38,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AdminScreen extends AppCompatActivity {
     public static ArrayList<OrderList> adminordersList;
-    Fragment fragment;
-    TextView nametext;
-    FirebaseAuth auth;
+    FirebaseAuth auth = Singleton.auth;
     DatabaseReference mDatabase;
-    String idf, namef;
-    ImageView photo;
-    FirebaseUser user;
-    Button sign;
+    public static HashMap<String, String> useridEmail = new HashMap<>();
     boolean orderDone;
-    DatabaseInstance databaseInstance;
     ViewPager pager;
     TabLayout tablayout;
     ProgressDialog loading;
@@ -65,7 +62,7 @@ public class AdminScreen extends AppCompatActivity {
         setTitle("Admin Home");
         toolbar.setTitleTextColor(0xFFFFFFFF);
         setSupportActionBar(toolbar);
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference databaseReference = Singleton.db.getReference();
         pager = findViewById(R.id.adminviewpager);
         tablayout = findViewById(R.id.admintablayout);
         adminordersList = new ArrayList<>();
@@ -76,20 +73,8 @@ public class AdminScreen extends AppCompatActivity {
         pager.setAdapter(pagerAdapter);
         tablayout.setupWithViewPager(pager);
 
-        //Add chat fragment or something
-        /*fragment = new InboxFragment();
-        setTitle("Admin Home");
-        databaseEntry = new DatabaseEntry(AdminScreen.this);
-        databaseEntry.createTable();
-        databaseEntry.close();
-        auth = FirebaseAuth.getInstance();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame_admin, fragment).commit();
-        user = FirebaseAuth.getInstance().getCurrentUser();*/
         orderDone = false;
-        auth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = Singleton.db.getReference();
         loading = new ProgressDialog(this);
         loading.setCancelable(false);
         loading.show();
@@ -106,6 +91,9 @@ public class AdminScreen extends AppCompatActivity {
                             OrderList orderList = new OrderList();
                             orderList.userID = userId;
                             orderList.txnId = order.getKey();
+                            //change this here later
+                            orderList.userEmail = order.child("userEmail").getValue(String.class);
+                            orderList.userEmail = "test@gmail.com";
                             orderList.txnTime = order.child("txnTime").getValue(String.class);
                             orderList.txnTime = orderList.txnTime.split("GMT")[0];
                             orderList.restaurantId = order.child("restaurantId").getValue(Integer.class);
@@ -137,6 +125,38 @@ public class AdminScreen extends AppCompatActivity {
 
                 }
             });
+            DatabaseReference restaurantRef = mDatabase.child("restaurants");
+            restaurantRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Restaurant Restaurant = new Restaurant();
+                        Restaurant.photo = (child.child("Imagepath").getValue(String.class));
+                        Restaurant.restaurantName = (child.child("Category").getValue(String.class));
+                        Singleton.restaurantList.add(Restaurant);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            DatabaseReference usersRef = mDatabase.child("users");
+            usersRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot user:dataSnapshot.getChildren()){
+                        String useremail = user.child("name").getValue(String.class);
+                        useridEmail.put(user.getKey(), useremail);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }catch(Exception e){
             orderDone = true;
             e.printStackTrace();
@@ -147,8 +167,8 @@ public class AdminScreen extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         auth.signOut();
+        super.onDestroy();
     }
 
     public void exitByBackKey() {

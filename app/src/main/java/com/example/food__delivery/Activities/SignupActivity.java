@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food__delivery.HelperModal.UserModal;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,11 +32,11 @@ import com.google.firebase.database.FirebaseDatabase;
 public class SignupActivity extends AppCompatActivity {
 
    // boolean isPressed = false;
-    private DatabaseReference firebaseDatabase;
+    private DatabaseReference firebaseDatabase = Singleton.db.getReference();
     ProgressDialog loading;
    // ImageButton ib;
     String namepattern = "^[a-zA-Z ]*$";
-    private FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth = Singleton.auth;
      EditText name, number, email, password;
      TextInputLayout nameLayout, phoneLayout, editLayout, passLayout;
     Button done;
@@ -43,9 +44,6 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        firebaseDatabase = database.getReference();
-        firebaseAuth = FirebaseAuth.getInstance();
 
         nameLayout = (TextInputLayout)findViewById(R.id.namelayout);
         phoneLayout = (TextInputLayout)findViewById(R.id.phonelayout);

@@ -37,6 +37,7 @@ import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.Fragment.MainScreenFragment.RateFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
+import com.example.food__delivery.Singleton;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.google.android.material.navigation.NavigationView;
@@ -74,7 +75,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference databaseReference = Singleton.db.getReference();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View view = navigationView.getRootView();
         view.setBackgroundResource(R.drawable.home_back);
@@ -88,12 +89,12 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
         nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.username);
         photo = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.logo);
         sign = (Button)navigationView.getHeaderView(0).findViewById(R.id.buttonloginorsignup);
-        auth = FirebaseAuth.getInstance();
+        auth = Singleton.auth;
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).commit();
         navigationView.setNavigationItemSelectedListener(this);
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        user = Singleton.auth.getCurrentUser();
         if(user != null){
             navigationView.inflateMenu(R.menu.main_screen_drawer_login);
             databaseReference.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {

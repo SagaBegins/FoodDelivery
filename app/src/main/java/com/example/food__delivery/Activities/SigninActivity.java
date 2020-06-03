@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food__delivery.HelperModal.UserModal;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -33,10 +34,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -78,25 +79,17 @@ public class SigninActivity extends AppCompatActivity {
     Button login, forgotPass, signup;
     private boolean isAdmin= false;
     private boolean isSet= false;
-    private FirebaseAuth auth;
+    private FirebaseAuth signInauth = Singleton.auth;
     ProgressDialog loading;
     TextInputLayout email, pass;
     String url;
-    DatabaseReference firebaseDatabase;
+    DatabaseReference firebaseDatabase = Singleton.db.getReference();
     CallbackManager callbackManager;
     private String facebookname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (firebaseDatabase == null) {
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            firebaseDatabase = database.getReference();
-        }else{
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            firebaseDatabase = database.getReference();
-        }
-        auth = FirebaseAuth.getInstance();
         FacebookSdk.setApplicationId("581033482823166");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
@@ -118,7 +111,7 @@ public class SigninActivity extends AppCompatActivity {
         loading = new ProgressDialog(this);
         email = (TextInputLayout)findViewById(R.id.emailinputlayout);
         pass = (TextInputLayout)findViewById(R.id.passwordinputlayout);
-        auth = FirebaseAuth.getInstance();
+        signInauth = Singleton.auth;
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -173,13 +166,13 @@ public class SigninActivity extends AppCompatActivity {
                 loading.show();
                 eid = emailText.getText().toString();
                 password = passwordText.getText().toString();
-                    auth.signInWithEmailAndPassword(eid, password).addOnCompleteListener(SigninActivity.this, new OnCompleteListener<AuthResult>() {
+                    signInauth.signInWithEmailAndPassword(eid, password).addOnCompleteListener(SigninActivity.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
                                 Toast.makeText(SigninActivity.this, "Invalid Email or Password.", Toast.LENGTH_SHORT).show();
                             } else {
-                                firebaseDatabase.child("users").child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+                                firebaseDatabase.child("users").child(signInauth.getUid()).addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         try {
@@ -223,7 +216,7 @@ public class SigninActivity extends AppCompatActivity {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
 
-        auth.signInWithCredential(credential)
+        signInauth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -241,7 +234,7 @@ public class SigninActivity extends AppCompatActivity {
     private  void saveData(){
         String num = "Facebook user";
         UserModal userModal = new UserModal(facebookname, num, url);
-        FirebaseUser user = auth.getCurrentUser();
+        FirebaseUser user = signInauth.getCurrentUser();
 
         firebaseDatabase.child("users").child(user.getUid()).setValue(userModal);
     }

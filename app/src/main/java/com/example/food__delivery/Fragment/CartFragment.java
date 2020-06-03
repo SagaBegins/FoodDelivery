@@ -32,6 +32,7 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class CartFragment extends androidx.fragment.app.Fragment {
+    public Float saved;
 
     private DatabaseInstance databaseEntrytotal;
     RecyclerView recyclerView;
@@ -39,6 +40,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     DatabaseInstance databaseInstance;
     List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager layoutManager;
+
     int price=0;
 
      TextView totalp;
@@ -49,6 +51,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
 
     public CartFragment(int rate) {
         this.restaurantId = rate;
+        this.saved = 0.0f;
         // Required empty public constructor
     }
     private View view;
@@ -97,6 +100,8 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         totalPrice = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = totalPrice.edit();
         editor.putString("total", totalvalue);
+        editor.apply();
+        editor.putFloat("saved",  saved);
         editor.apply();
 
 

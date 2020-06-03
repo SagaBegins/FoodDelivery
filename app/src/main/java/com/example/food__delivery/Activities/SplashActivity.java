@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,15 +30,18 @@ public class SplashActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
     boolean isAdmin;
+    private Singleton init;
     DatabaseReference firebaseDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = Singleton.db;
         firebaseDatabase = database.getReference();
         setContentView(R.layout.activity_splash);
-        auth = FirebaseAuth.getInstance();
-        user = FirebaseAuth.getInstance().getCurrentUser();
+        init = new Singleton();
+        auth = Singleton.auth;
+        auth = Singleton.auth;
+        user = Singleton.auth.getCurrentUser();
         splash=(RelativeLayout)findViewById(R.id.splash);
         splash.postDelayed(new Runnable() {
             @Override

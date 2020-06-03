@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.HelperModal.OrderElements;
-import com.example.food__delivery.HelperModal.PreviousData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,27 +263,7 @@ public class DatabaseInstance extends SQLiteOpenHelper {
             }
             return orderElements;
         }
-        public List<PreviousData> getDataFromPrevious(){
-            SQLiteDatabase db = this.getWritableDatabase();
-            String sql = "Select * from "+PREORDER_TABLE;
-            List<PreviousData> previousDatas = new ArrayList<PreviousData>();
-            try{
-                Cursor cursor = db.rawQuery(sql, null);
-                if(cursor.moveToFirst()){
-                    do{
-                        PreviousData data = new PreviousData();
-                        data.setName(cursor.getString(0));
-                        data.setUrl(cursor.getString(1));
-                        data.setPrice(cursor.getString(2));
-                        previousDatas.add(data);
-                    }while (cursor.moveToNext());
-                }
-            }catch (SQLiteException e){
-                e.printStackTrace();
-            }
-            
-            return previousDatas;
-        }
+
         public void addToPreviousOrder(){
             SQLiteDatabase db = this.getWritableDatabase();
             db.execSQL(CREATE_ORDER);
@@ -305,39 +284,8 @@ public class DatabaseInstance extends SQLiteOpenHelper {
             }
             
         }
-        public   ArrayList<PreviousData> getDataForList(){
-            SQLiteDatabase db = this.getWritableDatabase();
-            String sqlQuery = "Select * from "+ORDER_TABLE;
-            ArrayList<PreviousData> orderElements =new ArrayList<PreviousData>();
-            try{
-                Cursor cursor = db.rawQuery(sqlQuery,null);
-                if (cursor.moveToFirst()) {
-                    do {
-                        PreviousData order = new PreviousData();
-                        order.setName(cursor.getString(0));
-                        order.setUrl(cursor.getString(1));
-                        order.setPrice(cursor.getString(2));
-                        orderElements.add(order);
-                    } while (cursor.moveToNext());
-                }
-            }catch (SQLiteException exe){
-                exe.printStackTrace();
-            }
-            
-            return orderElements;
-        }
-        public void deleteTable(){
-            SQLiteDatabase db = this.getWritableDatabase();
-            try {
-                db.execSQL("DROP TABLE " + ORDER_TABLE);
-                db.execSQL(CREATE_ORDER);
-                
-            }catch (Exception e){
-                e.printStackTrace();
-                Log.e("","In delete");
-            }
-            
-        }
+
+
         public double total(int rate){
             SQLiteDatabase db = this.getWritableDatabase();
             double total = 0;

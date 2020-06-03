@@ -3,9 +3,15 @@ package com.example.food__delivery.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,8 +19,10 @@ import android.widget.ListView;
 
 
 import com.example.food__delivery.Adapter.ChatAdapter;
+import com.example.food__delivery.Fragment.InboxFragment;
 import com.example.food__delivery.HelperModal.ChatModel;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,12 +51,13 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setTitle("Chat");
+        createNotificationChannel();
         toolbar.setTitleTextColor(0xFFFFFFFF);
         setSupportActionBar(toolbar);
         editMsg = (EditText)findViewById(R.id.edt_message);
         btnSend = (Button)findViewById(R.id.btn_send);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser = Singleton.auth.getCurrentUser();
 
         if(mUser.getEmail().equals(adminemail)){
             Intent i= getIntent();
@@ -108,18 +117,18 @@ public class ChatActivity extends AppCompatActivity {
 
     //Send message
     private void send(String f, final String t, String m){
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = Singleton.db.getReference();
 
         HashMap<String, Object> hm = new HashMap<>();
         hm.put("from", f);
         hm.put("to", t);
         hm.put("msg", m);
-
+        InboxFragment.msgSent = true;
         databaseReference.child("Chat").push().setValue(hm);
 
 //        final String msgg = m;
 
-//        mRef = FirebaseDatabase.getInstance().getReference("Users").child(mUser.getUid());
+//        mRef = Singleton.db.getReference("Users").child(mUser.getUid());
 //        mRef.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -141,7 +150,7 @@ public class ChatActivity extends AppCompatActivity {
     private void displayMsg(final String f, final String t){
         mChatData = new ArrayList<>();
 
-        mRef = FirebaseDatabase.getInstance().getReference().child("Chat");
+        mRef = Singleton.db.getReference().child("Chat");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -151,12 +160,7 @@ public class ChatActivity extends AppCompatActivity {
                     if(chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)){
                         mChatData.add(chatmodel);
                     }
-//                    adapter = new ChatAdapter(ChatActivity.this, mChatData);
-//                    v.setAdapter(adapter);
-//                    v.scrollToPosition(mChatData.size() - 1);
 
-                    // Construct the data source
-                    //ArrayList<ChatModel> arrayOfUsers = new ArrayList<ChatModel>();
                     // Create the adapter to convert the array to views
                     adapter = new ChatAdapter(ChatActivity.this, mChatData);
                     // Attach the adapter to a ListView
@@ -178,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
     private void displayAdminMsg(final String f, final String t){
         mChatData = new ArrayList<>();
 
-        mRef = FirebaseDatabase.getInstance().getReference().child("Chat");
+        mRef = Singleton.db.getReference().child("Chat");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -188,9 +192,6 @@ public class ChatActivity extends AppCompatActivity {
                     if(chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)){
                         mChatData.add(chatmodel);
                     }
-//                    adapter = new ChatAdapter(ChatActivity.this, mChatData);
-//                    v.setAdapter(adapter);
-//                    v.scrollToPosition(mChatData.size() - 1);
 
                     // Construct the data source
                     ArrayList<ChatModel> arrayOfUsers = new ArrayList<ChatModel>();
@@ -209,4 +210,21 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("CHANNEL_ID", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
 }

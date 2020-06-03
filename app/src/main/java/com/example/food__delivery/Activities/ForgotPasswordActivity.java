@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food__delivery.Singleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         email = (EditText)findViewById(R.id.enteremail);
         send = (Button)findViewById(R.id.submit);
         back = (Button)findViewById(R.id.back);
-        auth = FirebaseAuth.getInstance();
+        auth = Singleton.auth;
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){

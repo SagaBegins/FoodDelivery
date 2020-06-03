@@ -26,6 +26,7 @@ import com.example.food__delivery.R;
 import com.example.food__delivery.Fragment.ShippingFragment;
 import com.example.food__delivery.Additional.CustomViewPager;
 import com.example.food__delivery.Additional.DatabaseInstance;
+import com.example.food__delivery.Singleton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,11 +121,13 @@ public class Checkout extends AppCompatActivity {
                     intent = new Intent(this, ThankYouPage.class);
                     DatabaseInstance successOperations = new DatabaseInstance(this);
                     OrderList orderList = new OrderList();
+                    orderList.userEmail = Singleton.auth.getCurrentUser().getEmail();
                     orderList.foodList = (ArrayList<FoodElement>) successOperations.getDataFromDB("cart_table", restaurantId);
                     orderList.restaurantId = restaurantId;
                     String txnId = getIntent().getStringExtra("txnId");
                     orderList.txnTime = getIntent().getStringExtra("txnTime");
                     orderList.amount = getIntent().getStringExtra("amount");
+                    orderList.address = getIntent().getStringExtra("address");
                     orderList.status = "Pending";
                     successOperations.deleteCart(restaurantId, "cart_table");
                     successOperations.close();
@@ -134,7 +137,7 @@ public class Checkout extends AppCompatActivity {
                     waitingToWrite.setCancelable(false);
                     waitingToWrite.show();
 
-                    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    String uid = Singleton.auth.getCurrentUser().getUid();
                     DatabaseReference currentOrder = HomeFragment.mDatabase.child("Orders").child(uid);
                     currentOrder.child(txnId).setValue(orderList).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

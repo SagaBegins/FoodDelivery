@@ -15,6 +15,7 @@ import androidx.cardview.widget.CardView;
 
 import com.example.food__delivery.HelperModal.ChatModel;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
 
     public ChatAdapter(@NonNull Context context, ArrayList<ChatModel> mChatData) {
         super(context, 0, mChatData);
-        auth = FirebaseAuth.getInstance();
+        auth = Singleton.auth;
     }
 
     @Override
@@ -54,6 +55,7 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             p.width = (int) (dp * getContext().getResources().getDisplayMetrics().density);
             p.gravity = Gravity.RIGHT;
+            p.bottomMargin = (int) (10 * getContext().getResources().getDisplayMetrics().density);
             msgCard.setLayoutParams(p);
         }else{
             msgCard.setCardBackgroundColor(Color.BLUE);
@@ -67,6 +69,7 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             p.width = (int) (dp * getContext().getResources().getDisplayMetrics().density);
             p.gravity = Gravity.LEFT;
+            p.bottomMargin = (int) (10 * getContext().getResources().getDisplayMetrics().density);
             msgCard.setLayoutParams(p);
         }
         // Populate the data into the template view using the data object

@@ -65,7 +65,7 @@ public class AdminOrder extends androidx.fragment.app.Fragment {
                 orderpopup.setVisibility(View.GONE);
             }
         });
-        AdapterOrderDescription adapter = new AdapterOrderDescription(orderlist, this);
+        AdapterOrderDescription adapter = new AdapterOrderDescription(orderlist, this, true);
         orderdetails.setAdapter(adapter);
         orderdetails.setLayoutManager(new LinearLayoutManager(getContext()));
         fullorderdetails.setLayoutManager(new LinearLayoutManager(getContext()));

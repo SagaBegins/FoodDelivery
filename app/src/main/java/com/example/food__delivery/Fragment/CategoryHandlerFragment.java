@@ -16,6 +16,7 @@ import com.example.food__delivery.Activities.MenuActivity;
 import com.example.food__delivery.Adapter.Adapter_Menu_Items;
 import com.example.food__delivery.HelperModal.FoodElement;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,7 +39,7 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
     Adapter_Menu_Items recyclerViewadapter;
     public ArrayList<FoodElement> filteredFoodElements = new ArrayList<>();
     boolean done;
-    public final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    public final DatabaseReference mDatabase = Singleton.db.getReference();
     private int restaurantId;
     private FloatingActionButton fab;
     private TextInputEditText foodsearch;

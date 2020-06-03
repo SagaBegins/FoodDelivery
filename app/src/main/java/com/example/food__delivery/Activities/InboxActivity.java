@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.example.food__delivery.HelperModal.ChatModel;
 import com.example.food__delivery.Adapter.InboxAdapter;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -59,10 +60,10 @@ public class InboxActivity extends AppCompatActivity {
 //        inb = (TextView)findViewById(R.id.inb);
         mChats = new ArrayList<>();
         uqChatList = new ArrayList<>();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser = Singleton.auth.getCurrentUser();
 
         if(mUser.getEmail().equals(adminemail)){
-            mRef = FirebaseDatabase.getInstance().getReference("Chat");
+            mRef = Singleton.db.getReference("Chat");
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

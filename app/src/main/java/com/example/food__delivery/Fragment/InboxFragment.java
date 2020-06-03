@@ -2,6 +2,8 @@ package com.example.food__delivery.Fragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Intent;
@@ -20,6 +22,7 @@ import com.example.food__delivery.Activities.ChatActivity;
 import com.example.food__delivery.HelperModal.ChatModel;
 import com.example.food__delivery.Adapter.InboxAdapter;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,16 +37,18 @@ import java.util.stream.Collectors;
 
 public class InboxFragment extends Fragment {
 
+    public static boolean msgSent = false;
+
     ListView list;
     FirebaseUser mUser;
     final String adminemail = "testadmin@gmail.com";
     DatabaseReference mRef;
     ArrayList<String> mChats;
+    ArrayList<String> mMsg;
     List<Object> uqChatList;
     TextView inb;
     List<String> uq;
     View view;
-
     List<String> maintitle = new ArrayList<>();
 
     Integer[] imgid={
@@ -56,10 +61,10 @@ public class InboxFragment extends Fragment {
         maintitle.add("Admin");
         mChats = new ArrayList<>();
         uqChatList = new ArrayList<>();
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser = Singleton.auth.getCurrentUser();
 
         if(mUser.getEmail().equals(adminemail)){
-            mRef = FirebaseDatabase.getInstance().getReference("Chat");
+            mRef = Singleton.db.getReference("Chat");
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -70,14 +75,31 @@ public class InboxFragment extends Fragment {
                             //Getting all the chats that user sent
                             if(cm.getFrom().equals(mUser.getEmail())){
                                 mChats.add(cm.getTo());
+                                msgSent = true;
                             }
                             //Getting all the chats sent to the user
                             if(cm.getTo().equals(mUser.getEmail())){
                                 mChats.add(cm.getFrom());
+                                msgSent = false;
                             }
+                            mMsg.add(cm.getMsg());
                         }
                     }
+                    if(mChats.size()>0)
+                        if(!mChats.get(mChats.size()-1).equals(Singleton.auth.getCurrentUser().getEmail()) && !msgSent){
+                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "CHANNEL_ID")
+                                    .setSmallIcon(R.drawable.logo1)
+                                    .setContentTitle(mChats.get(mChats.size()-1))
+                                    .setContentText("New message received")
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(mMsg.get(mChats.size()-1)))
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setAutoCancel(true);
 
+                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getActivity());
+                            Log.d("TAG", "onDataChange: Before build");
+                            notificationManager.notify(0, builder.build());
+                        }
+                    msgSent = false;
                     chats();
                     displayInfo();
 
@@ -162,8 +184,6 @@ public class InboxFragment extends Fragment {
                 Intent intent = new Intent(getContext(), ChatActivity.class);
                 intent.putExtra("fromEmail", fromEmail);
                 startActivity(intent);
-
-
 
             }
         });

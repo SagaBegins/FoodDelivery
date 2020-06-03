@@ -30,6 +30,7 @@ import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.Fragment.CategoryHandlerFragment;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.DatabaseInstance;
+import com.example.food__delivery.Singleton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputEditText;
@@ -65,7 +66,6 @@ public class MenuActivity extends AppCompatActivity {
 
     private DatabaseInstance databaseInstance;
     private ArrayList<FoodElement> foodElements = new ArrayList<>();
-    public static DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     Bundle savedInstanceState;
     ImageView imageView;
     public int restaurantId;
@@ -90,7 +90,7 @@ public class MenuActivity extends AppCompatActivity {
         //mViewPager.setOffscreenPageLimit(9);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));
-        auth = FirebaseAuth.getInstance();
+        auth = Singleton.auth;
         mViewPager.addOnAdapterChangeListener(new ViewPager.OnAdapterChangeListener() {
             @Override
             public void onAdapterChanged(@NonNull ViewPager viewPager, @Nullable PagerAdapter oldAdapter, @Nullable PagerAdapter newAdapter) {

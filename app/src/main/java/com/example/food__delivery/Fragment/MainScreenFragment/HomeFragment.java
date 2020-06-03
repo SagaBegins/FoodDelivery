@@ -27,6 +27,7 @@ import com.example.food__delivery.HelperModal.OrderList;
 import com.example.food__delivery.HelperModal.Restaurant;
 import com.example.food__delivery.R;
 import com.example.food__delivery.Additional.SlidingImage_Adapter;
+import com.example.food__delivery.Singleton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -47,9 +48,12 @@ import java.util.TimerTask;
  */
 public class HomeFragment extends androidx.fragment.app.Fragment {
 
-    public static ArrayList<Restaurant> restaurantList = new ArrayList<>();
-    public static ArrayList<Menu> menuList = new ArrayList<>();
+    public static ArrayList<Restaurant> restaurantList = Singleton.restaurantList;
+    public static ArrayList<Menu> menuList = Singleton.menuList;
     public static ArrayList<OrderList> ordersList = new ArrayList<>();
+    public static Float off = 0.15f;
+    public static Float threshold = 2000f;
+
 
     ProgressDialog loading;
     RecyclerView recyclerView;
@@ -60,14 +64,13 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     boolean orderDone;
     private static ViewPager mPager;
     private static boolean[] filteredMenu = new boolean[5];
-
     private static List<Restaurant> filteredRestaurant = new ArrayList<>();
     private GetElements getElements = new GetElements();
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount3, R.drawable.discount4};
     private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-    public final static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    public final static DatabaseReference mDatabase = Singleton.db.getReference();
     TextWatcher tw;
     TextInputEditText searchFilter;
 
@@ -197,7 +200,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             orderDone = false;
             DatabaseReference restaurantRef = mDatabase.child("restaurants");
             DatabaseReference menuRef = mDatabase.child("menu");
-            FirebaseAuth auth = FirebaseAuth.getInstance();
+            FirebaseAuth auth = Singleton.auth;
             try {
                 DatabaseReference orderRef = mDatabase.child("Orders").child(auth.getCurrentUser().getUid());
                 orderRef.orderByKey().addValueEventListener(new ValueEventListener() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.example.food__delivery.Adapter.AdapterOrderDescription;
 import com.example.food__delivery.HelperModal.OrderList;
 import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,8 +53,13 @@ public class AllOrders extends androidx.fragment.app.Fragment {
     AdapterOrderDescription adapter;
     public RecyclerView fullorderdetails;
     public ImageView exit;
+    public Button accept;
+
     private View view;
 
+
+    public AllOrders(boolean isAdmin){
+    }
     public AllOrders() {
         // Required empty public constructor
     }
@@ -68,8 +75,10 @@ public class AllOrders extends androidx.fragment.app.Fragment {
         restaurantName = (TextView) view.findViewById(R.id.restaurant_Name);
         txnId = (TextView) view.findViewById(R.id.txnId);
         txnDate = (TextView) view.findViewById(R.id.order_date);
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
+        accept = view.findViewById(R.id.accept);
+
+        auth = Singleton.auth;
+        database = Singleton.db;
         DatabaseReference users = database.getReference().child("users").child(auth.getCurrentUser().getUid());
 
 
@@ -86,11 +95,16 @@ public class AllOrders extends androidx.fragment.app.Fragment {
         users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                try {
+                    isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
+                }
+                catch (Exception e){
+                    isAdmin = false;
+                }
                 if(!isAdmin) {
-                    adapter = new AdapterOrderDescription(orderlist, AllOrders.this);
+                    adapter = new AdapterOrderDescription(orderlist, AllOrders.this, isAdmin);
                 }else{
-                    adapter = new AdapterOrderDescription(allorderslist, AllOrders.this);
+                    adapter = new AdapterOrderDescription(allorderslist, AllOrders.this, isAdmin);
                 }
                 orderdetails.setAdapter(adapter);
                 orderdetails.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food__delivery.HelperModal.OrderList;
-import com.example.food__delivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.food__delivery.R;
+import com.example.food__delivery.Singleton;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<Myallcart
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position).restaurantId;
 
-        holder.mIdView.setText(HomeFragment.restaurantList.get(holder.mItem).restaurantName);
+        holder.mIdView.setText(Singleton.restaurantList.get(holder.mItem).restaurantName);
         //Adapter_Cart ac = new Adapter_Cart(mValues.get(position).foodList, context);
 
        /* while(holder.rv.getChildCount() < mValues.get(position).foodList.size()){
