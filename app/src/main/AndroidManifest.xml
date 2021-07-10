@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.food__delivery">
+    package="com.example.fooddelivery">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +13,7 @@
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="false"
-        android:icon="@color/colorPrimaryDark"
+        android:icon="@drawable/logo"
         android:label="Hunger Hunt"
         android:largeHeap="true"
         android:logo="@drawable/logo"
@@ -21,36 +21,42 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label,android:roundIcon">
-        <activity android:name=".Activities.ChatActivity"></activity>
-        <activity android:name=".Activities.InboxActivity" />
-        <activity android:name=".Activities.OpenScreen" />
-        <activity android:name=".Activities.SigninActivity" />
-        <activity android:name=".Activities.SignupActivity" />
+        <activity android:name="com.example.fooddelivery.Activities.ChatActivity"></activity>
+        <activity android:name="com.example.fooddelivery.Activities.InboxActivity" />
+        <activity android:name="com.example.fooddelivery.Activities.OpenScreen" />
+        <activity android:name="com.example.fooddelivery.Activities.SigninActivity" />
+        <activity android:name="com.example.fooddelivery.Activities.SignupActivity" />
+
         <activity
-            android:name=".Activities.MainScreen"
+            android:name="com.example.fooddelivery.Activities.MainScreen"
             android:theme="@style/AppTheme" />
+
         <activity
-            android:name=".Activities.AdminScreen"
+            android:name="com.example.fooddelivery.Activities.AdminScreen"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Activities.ForgotPasswordActivity" />
+
+        <activity android:name="com.example.fooddelivery.Activities.ForgotPasswordActivity" />
+
         <activity
-            android:name=".Activities.MenuActivity"
+            android:name="com.example.fooddelivery.Activities.MenuActivity"
             android:label="Menu"
-            android:parentActivityName=".Activities.MainScreen"
+            android:parentActivityName="com.example.fooddelivery.Activities.MainScreen"
             android:theme="@style/AppTheme" />
+
         <activity
-            android:name=".Activities.Cart_Favorite"
-            android:parentActivityName=".Activities.MenuActivity" />
+            android:name="com.example.fooddelivery.Activities.Cart_Favorite"
+            android:parentActivityName="com.example.fooddelivery.Activities.MenuActivity" />
+
         <activity
-            android:name=".Activities.Checkout"
+            android:name="com.example.fooddelivery.Activities.Checkout"
             android:label="@string/title_activity_checkout"
-            android:parentActivityName=".Activities.Cart_Favorite"
+            android:parentActivityName="com.example.fooddelivery.Activities.Cart_Favorite"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".Activities.ThankYouPage">
+
+        <activity android:name="com.example.fooddelivery.Activities.ThankYouPage">
             <intent-filter>
                 <action android:name="applicationB.intent.action.Launch" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -58,14 +64,20 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+        
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
 
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -78,14 +90,15 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".Activities.SplashActivity"
+            android:name="com.example.fooddelivery.Activities.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="Food Delivery"
             android:theme="@style/FullscreenTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

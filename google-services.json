@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "148060294734",
+    "project_id": "fooddeliverytest-430e1",
+    "storage_bucket": "fooddeliverytest-430e1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148060294734:android:4a786f093668b31d71fd1f",
+        "android_client_info": {
+          "package_name": "com.example.fooddelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148060294734-hgsh3tolhanrv3aas7acednu1iock5uk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd4EFf6WPrdDrIddsa6vNFQacTVWYlfMI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "148060294734-hgsh3tolhanrv3aas7acednu1iock5uk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

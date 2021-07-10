@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/colorPrimaryDark"
-    tools:context="com.example.food__delivery.Activities.Checkout">
+    tools:context="com.example.fooddelivery.Activities.Checkout">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -33,7 +33,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.example.food__delivery.Additional.CustomViewPager
+    <com.example.fooddelivery.Additional.CustomViewPager
         android:id="@+id/container1"
         android:layout_width="match_parent"
         android:layout_height="343dp"

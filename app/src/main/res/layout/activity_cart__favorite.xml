@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/cart_back"
     android:orientation="vertical"
-    tools:context="com.example.food__delivery.Activities.Cart_Favorite">
+    tools:context="com.example.fooddelivery.Activities.Cart_Favorite">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="0.9"
-    tools:context="com.example.food__delivery.Activities.OpenScreen">
+    tools:context="com.example.fooddelivery.Activities.OpenScreen">
     <ImageView
         android:id="@+id/background"
         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:background="#22FFFFFF"
+        android:background="#6B000000"
         android:elevation="15dp"
         android:text="Skip For Now"
         android:textColor="#FFFFFF"
@@ -87,7 +87,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="2dp"
-        android:background="#22FFFFFF"
+        android:background="#6B000000"
         android:elevation="15dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="@string/sign_up"
@@ -105,7 +105,7 @@
         android:layout_marginLeft="2dp"
         android:layout_marginRight="5dp"
         android:layout_toEndOf="@+id/signup"
-        android:background="#22FFFFFF"
+        android:background="#6B000000"
         android:elevation="15dp"
         android:text="LOGIN"
         android:textColor="#FFFFFF"
