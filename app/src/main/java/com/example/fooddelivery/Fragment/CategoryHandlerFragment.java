@@ -1,5 +1,7 @@
 package com.example.fooddelivery.Fragment;
 
+import static java.lang.Character.compare;
+
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -27,28 +29,30 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Character.compare;
-
 /**
  * A simple {@link Fragment} subclass.
  */
 public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
 
     private final int EDIT_DISTANCE = 2;
+    public final DatabaseReference mDatabase = Singleton.db.getReference();
+    public ArrayList<FoodElement> filteredFoodElements = new ArrayList<>();
+
     ProgressDialog loading;
     List<FoodElement> foodElements = new ArrayList<>();
     RecyclerView recyclerView;
 
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu_Items recyclerViewadapter;
-    public ArrayList<FoodElement> filteredFoodElements = new ArrayList<>();
+
+    private final int restaurantId;
+    private final FloatingActionButton fab;
+    private final TextInputEditText foodsearch;
+    private final TextInputLayout foodsearchparent;
+    private final MenuActivity parent;
+
     boolean done;
-    public final DatabaseReference mDatabase = Singleton.db.getReference();
-    private int restaurantId;
-    private FloatingActionButton fab;
-    private TextInputEditText foodsearch;
-    private TextInputLayout foodsearchparent;
-    private MenuActivity parent;
+
 
     public CategoryHandlerFragment(int restaurantId, ArrayList<FoodElement> foodElements, MenuActivity parent) {
         this.restaurantId = restaurantId;
@@ -64,13 +68,11 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_categoryhandler, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.categoryRecycler);
+        recyclerView = view.findViewById(R.id.categoryRecycler);
         recyclerView.setHasFixedSize(true);
-        //foodsearch.setHint(category+" Search");
 
-        if(foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
-        }
-        else{
+        if (foodElements.size() == 0 || foodElements.get(0).getRate() != restaurantId) {
+        } else {
             recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
             recyclerView.setAdapter(recyclerViewadapter);
         }
@@ -106,10 +108,10 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s != null) {
+                if (s != null) {
                     filteredFoodElements = filterFood((ArrayList<FoodElement>) foodElements, s.toString().toLowerCase());
                     recyclerViewadapter = new Adapter_Menu_Items(getActivity(), filteredFoodElements);
-                }else{
+                } else {
                     recyclerViewadapter = new Adapter_Menu_Items(getActivity(), foodElements);
                 }
 
@@ -130,18 +132,18 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
         recyclerView.setAdapter(recyclerViewadapter);
     }
 
-    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter){
+    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter) {
         ArrayList<FoodElement> filtered = new ArrayList<>();
-        if(filter == "")
+        if (filter == "")
             return foodElements;
 
-        for(FoodElement food:foodElements){
+        for (FoodElement food : foodElements) {
             String lc = food.getName().toLowerCase();
 
-            for(int i = 0; i < lc.length() - filter.length() + 1; i++){
+            for (int i = 0; i < lc.length() - filter.length() + 1; i++) {
                 String temp = lc.substring(i, i + filter.length());
-                Log.d("TAG", editDistance( temp, filter) +" "+filter+" "+temp);
-                if(lc.contains(filter) || editDistance(temp, filter) <= EDIT_DISTANCE){
+                Log.d("TAG", editDistance(temp, filter) + " " + filter + " " + temp);
+                if (lc.contains(filter) || editDistance(temp, filter) <= EDIT_DISTANCE) {
                     filtered.add(food);
                     break;
                 }
@@ -156,21 +158,20 @@ public class CategoryHandlerFragment extends androidx.fragment.app.Fragment {
 
         int[][] editDistances = new int[row_len][col_len];
 
-        for(int i = 0; i < row_len; i++){
-            for(int j = 0; j < col_len; j++){
-                if(i == 0) {
+        for (int i = 0; i < row_len; i++) {
+            for (int j = 0; j < col_len; j++) {
+                if (i == 0) {
                     editDistances[i][j] = j;
-                }
-                else if( j == 0 ){
+                } else if (j == 0) {
                     editDistances[i][j] = i;
-                }else if (compare(left.charAt(i-1), right.charAt(j-1)) == 0){
-                    editDistances[i][j] = java.lang.Math.min(editDistances[i-1][j], java.lang.Math.min(editDistances[i][j-1], editDistances[i-1][j-1]));
-                }else {
-                    editDistances[i][j] = 1 + java.lang.Math.min(editDistances[i-1][j], java.lang.Math.min(editDistances[i][j-1], editDistances[i-1][j-1]));
+                } else if (compare(left.charAt(i - 1), right.charAt(j - 1)) == 0) {
+                    editDistances[i][j] = java.lang.Math.min(editDistances[i - 1][j], java.lang.Math.min(editDistances[i][j - 1], editDistances[i - 1][j - 1]));
+                } else {
+                    editDistances[i][j] = 1 + java.lang.Math.min(editDistances[i - 1][j], java.lang.Math.min(editDistances[i][j - 1], editDistances[i - 1][j - 1]));
                 }
             }
         }
-        return editDistances[row_len-1][col_len-1];
+        return editDistances[row_len - 1][col_len - 1];
     }
 
     private void requestFocus(View view) {

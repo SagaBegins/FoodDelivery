@@ -7,8 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.fooddelivery.R;
 import com.example.fooddelivery.Additional.DatabaseInstance;
+import com.example.fooddelivery.R;
 
 public class ThankYouPage extends AppCompatActivity {
 
@@ -19,7 +19,7 @@ public class ThankYouPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you_page);
-        order=(Button)findViewById(R.id.continueordering);
+        order = findViewById(R.id.continueordering);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

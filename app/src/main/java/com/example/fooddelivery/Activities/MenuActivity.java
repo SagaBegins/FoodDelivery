@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
@@ -22,14 +20,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.fooddelivery.HelperModal.FoodElement;
-import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
-import com.example.fooddelivery.Fragment.CategoryHandlerFragment;
-import com.example.fooddelivery.R;
 import com.example.fooddelivery.Additional.DatabaseInstance;
+import com.example.fooddelivery.Fragment.CategoryHandlerFragment;
+import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
+import com.example.fooddelivery.HelperModal.FoodElement;
+import com.example.fooddelivery.R;
 import com.example.fooddelivery.Singleton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -39,8 +36,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.Character.compare;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -59,7 +54,7 @@ public class MenuActivity extends AppCompatActivity {
      */
     FirebaseAuth auth;
     public static TextView tv;
-    private ArrayList<com.example.fooddelivery.HelperModal.Menu> menuList = HomeFragment.menuList;
+    private final ArrayList<com.example.fooddelivery.HelperModal.Menu> menuList = HomeFragment.menuList;
     public ViewPager mViewPager;
     public FloatingActionButton fab;
     public TextInputLayout foodsearchparent;
@@ -67,38 +62,38 @@ public class MenuActivity extends AppCompatActivity {
     public TabLayout tabLayout;
 
     private DatabaseInstance databaseInstance;
-    private ArrayList<FoodElement> foodElements = new ArrayList<>();
+    private final ArrayList<FoodElement> foodElements = new ArrayList<>();
+
     Bundle savedInstanceState;
     ImageView imageView;
     public int restaurantId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.savedInstanceState = savedInstanceState;
-        Intent intent = getIntent();
-        restaurantId = intent.getIntExtra("restaurantId" ,0);
-
         setContentView(R.layout.activity_menu);
+
+        auth = Singleton.auth;
+        Intent intent = getIntent();
+
+        restaurantId = intent.getIntExtra("restaurantId", 0);
+
         foodsearch = findViewById(R.id.food_search);
         foodsearchparent = findViewById(R.id.food_search_parent);
         fab = findViewById(R.id.floatingActionButton);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        tabLayout = findViewById(R.id.tabs);
+        mViewPager = findViewById(R.id.container);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mViewPager = (ViewPager) findViewById(R.id.container);
+
         setupViewPager(mViewPager);
-        //mViewPager.setOffscreenPageLimit(9);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));
-        auth = Singleton.auth;
-        mViewPager.addOnAdapterChangeListener(new ViewPager.OnAdapterChangeListener() {
-            @Override
-            public void onAdapterChanged(@NonNull ViewPager viewPager, @Nullable PagerAdapter oldAdapter, @Nullable PagerAdapter newAdapter) {
-                newAdapter.startUpdate(viewPager);
-            }
-        });
+        mViewPager.addOnAdapterChangeListener((viewPager, oldAdapter, newAdapter) -> newAdapter.startUpdate(viewPager));
 
         foodsearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,8 +120,8 @@ public class MenuActivity extends AppCompatActivity {
         MenuItem item = menu.findItem(R.id.action_cart);
         MenuItemCompat.setActionView(item, R.layout.badge_layout);
         RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(item);
-        tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
-        imageView = (ImageView)notifCount.findViewById(R.id.imagenotif);
+        tv = notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        imageView = notifCount.findViewById(R.id.imagenotif);
         tv.setText(String.valueOf(databaseInstance.totalQty(restaurantId)));
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -170,40 +165,14 @@ public class MenuActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        /*if(menuList.get(restaurantId).vegStarters.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).vegStarters), "Veg Starters");
 
-        if(menuList.get(restaurantId).nonVegStarters.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).nonVegStarters), "Non-Veg Starters");
-
-        if(menuList.get(restaurantId).vegMainCourse.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).vegMainCourse), "Veg Main Course");
-
-        if(menuList.get(restaurantId).nonVegMainCourse.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).nonVegMainCourse), "Non-Veg Main Course");
-
-        if(menuList.get(restaurantId).sweets.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).sweets), "Sweets");
-
-        if(menuList.get(restaurantId).rolls.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).rolls), "Rolls");
-
-        if(menuList.get(restaurantId).rice.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).rice), "Rice");
-
-        if(menuList.get(restaurantId).breads.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).breads), "Breads");
-
-        if(menuList.get(restaurantId).beverages.size() > 0)
-            adapter.addFrag(new CategoryHandlerFragment(restaurantId, menuList.get(restaurantId).beverages), "Beverages");*/
-
-        for(String category: com.example.fooddelivery.HelperModal.Menu.categories){
-            Log.d("TAG", "setupViewPager: "+foodsearch.getText().toString().toLowerCase());
+        for (String category : com.example.fooddelivery.HelperModal.Menu.categories) {
+            Log.d("TAG", "setupViewPager: " + foodsearch.getText().toString().toLowerCase());
             try {
-                ArrayList<FoodElement> temp = filterFood(menuList.get(restaurantId).getIndex(category),foodsearch.getText().toString().toLowerCase());
+                ArrayList<FoodElement> temp = filterFood(menuList.get(restaurantId).getIndex(category), foodsearch.getText().toString().toLowerCase());
                 if (temp.size() > 0)
                     adapter.addFrag(new CategoryHandlerFragment(restaurantId, temp, this), category);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -234,6 +203,7 @@ public class MenuActivity extends AppCompatActivity {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
@@ -257,18 +227,18 @@ public class MenuActivity extends AppCompatActivity {
         databaseInstance.close();
     }
 
-    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter){
+    private ArrayList<FoodElement> filterFood(ArrayList<FoodElement> foodElements, String filter) {
         ArrayList<FoodElement> filtered = new ArrayList<>();
-        if(filter == "")
+        if (filter == "")
             return foodElements;
 
-        for(FoodElement food:foodElements){
+        for (FoodElement food : foodElements) {
             String lc = food.getName().toLowerCase();
 
-            for(int i = 0; i < lc.length() - filter.length() + 1; i++){
+            for (int i = 0; i < lc.length() - filter.length() + 1; i++) {
                 String temp = lc.substring(i, i + java.lang.Math.min(filter.length(), lc.length()));
-                Log.d("TAG", editDistance( temp, filter) +" "+filter+" "+temp);
-                if(lc.contains(filter) || editDistance(temp, filter) <= EDIT_DISTANCE){
+                Log.d("TAG", editDistance(temp, filter) + " " + filter + " " + temp);
+                if (lc.contains(filter) || editDistance(temp, filter) <= EDIT_DISTANCE) {
                     filtered.add(food);
                     break;
                 }
@@ -283,20 +253,19 @@ public class MenuActivity extends AppCompatActivity {
 
         int[][] editDistances = new int[row_len][col_len];
 
-        for(int i = 0; i < row_len; i++){
-            for(int j = 0; j < col_len; j++){
-                if(i == 0) {
+        for (int i = 0; i < row_len; i++) {
+            for (int j = 0; j < col_len; j++) {
+                if (i == 0) {
                     editDistances[i][j] = j;
-                }
-                else if( j == 0 ){
+                } else if (j == 0) {
                     editDistances[i][j] = i;
-                }else if (compare(left.charAt(i-1), right.charAt(j-1)) == 0){
-                    editDistances[i][j] = java.lang.Math.min(editDistances[i-1][j], java.lang.Math.min(editDistances[i][j-1], editDistances[i-1][j-1]));
-                }else {
-                    editDistances[i][j] = 1 + java.lang.Math.min(editDistances[i-1][j], java.lang.Math.min(editDistances[i][j-1], editDistances[i-1][j-1]));
+                } else if (left.charAt(i - 1) == right.charAt(j - 1)) {
+                    editDistances[i][j] = java.lang.Math.min(editDistances[i - 1][j], java.lang.Math.min(editDistances[i][j - 1], editDistances[i - 1][j - 1]));
+                } else {
+                    editDistances[i][j] = 1 + java.lang.Math.min(editDistances[i - 1][j], java.lang.Math.min(editDistances[i][j - 1], editDistances[i - 1][j - 1]));
                 }
             }
         }
-        return editDistances[row_len-1][col_len-1];
+        return editDistances[row_len - 1][col_len - 1];
     }
 }

@@ -14,17 +14,17 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.example.fooddelivery.Activities.MenuActivity;
+import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.example.fooddelivery.Fragment.FavouriteFragment;
 import com.example.fooddelivery.HelperModal.FoodElement;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.Additional.DatabaseInstance;
 
 import java.util.List;
 
 
-public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
+public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder> {
 
-    private List<FoodElement> foodElements;
+    private final List<FoodElement> foodElements;
     Context context;
     FavouriteFragment parent;
     DatabaseInstance databaseInstance;
@@ -36,7 +36,7 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
         this.foodElements = foodElementsList;
         try {
             this.id = foodElements.get(0).getRate();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -54,23 +54,17 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
                 .load(foodElements.get(position).getPhoto()).transform(new CenterCrop(), new RoundedCorners(50))
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());
-        holder.addtocart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                databaseInstance = new DatabaseInstance(context);
-                databaseInstance.insertIntoCart(foodElements.get(position).getName().split("_")[0]+"_"+id,foodElements.get(position).getPhoto(),foodElements.get(position).getPrice(),foodElements.get(position).getRate(), foodElements.get(position).getQty());
-                MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
-            }
+        holder.addtocart.setOnClickListener(view -> {
+            databaseInstance = new DatabaseInstance(context);
+            databaseInstance.insertIntoCart(foodElements.get(position).getName().split("_")[0] + "_" + id, foodElements.get(position).getPhoto(), foodElements.get(position).getPrice(), foodElements.get(position).getRate(), foodElements.get(position).getQty());
+            MenuActivity.tv.setText(String.valueOf(databaseInstance.totalQty(id)));
         });
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                databaseInstance = new DatabaseInstance(context);
-                databaseInstance.deleteARow(foodElements.get(position).getPhoto(), foodElements.get(position).getRate(),"favour_table");
-                foodElements.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position,foodElements.size());
-            }
+        holder.delete.setOnClickListener(view -> {
+            databaseInstance = new DatabaseInstance(context);
+            databaseInstance.deleteARow(foodElements.get(position).getPhoto(), foodElements.get(position).getRate(), "favour_table");
+            foodElements.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, foodElements.size());
         });
     }
 
@@ -79,19 +73,21 @@ public class Adapter_Fav extends RecyclerView.Adapter<Adapter_Fav.ViewHolder>  {
         return foodElements.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView food_name, price;
-        private ImageView image;
-        private Button addtocart, delete;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView food_name;
+        private final TextView price;
+        private final ImageView image;
+        private final Button addtocart;
+        private final Button delete;
 
 
         public ViewHolder(View itemView) {
             super(itemView);
-            food_name = (TextView) itemView.findViewById(R.id.nameproduct);
-            price = (TextView)itemView.findViewById(R.id.priceproduct);
-            image = (ImageView) itemView.findViewById(R.id.imagefav);
-            addtocart = (Button) itemView.findViewById(R.id.addtocart);
-            delete=(Button)itemView.findViewById(R.id.deletebutton);
+            food_name = itemView.findViewById(R.id.nameproduct);
+            price = itemView.findViewById(R.id.priceproduct);
+            image = itemView.findViewById(R.id.imagefav);
+            addtocart = itemView.findViewById(R.id.addtocart);
+            delete = itemView.findViewById(R.id.deletebutton);
         }
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Adapter_Confirm extends RecyclerView.Adapter<Adapter_Confirm.ViewHolder> {
 
-    private List<FoodElement> foodElements;
+    private final List<FoodElement> foodElements;
     Context context;
 
     public Adapter_Confirm(List<FoodElement> foodElements, Context context) {
@@ -38,22 +38,26 @@ public class Adapter_Confirm extends RecyclerView.Adapter<Adapter_Confirm.ViewHo
         Glide.with(context.getApplicationContext()).load(foodElements.get(position).getPhoto())
                 .into(holder.image);
         holder.price.setText(foodElements.get(position).getPrice());
-        holder.qty.setText(""+foodElements.get(position).getQty());
+        holder.qty.setText("" + foodElements.get(position).getQty());
     }
 
     @Override
     public int getItemCount() {
         return foodElements.size();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView food_name, price, qty;
-        private ImageView image;
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView food_name;
+        private final TextView price;
+        private final TextView qty;
+        private final ImageView image;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            food_name = (TextView) itemView.findViewById(R.id.itemname);
-            price = (TextView)itemView.findViewById(R.id.itemprice);
-            image = (ImageView) itemView.findViewById(R.id.imageconfirm);
-            qty=(TextView) itemView.findViewById(R.id.itemqty);
+            food_name = itemView.findViewById(R.id.itemname);
+            price = itemView.findViewById(R.id.itemprice);
+            image = itemView.findViewById(R.id.imageconfirm);
+            qty = itemView.findViewById(R.id.itemqty);
         }
     }
 }

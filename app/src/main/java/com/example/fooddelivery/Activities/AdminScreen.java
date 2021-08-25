@@ -1,6 +1,5 @@
 package com.example.fooddelivery.Activities;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -37,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AdminScreen extends AppCompatActivity {
+
     public static ArrayList<OrderList> adminordersList;
     FirebaseAuth auth = Singleton.auth;
     DatabaseReference mDatabase;
@@ -54,11 +54,11 @@ public class AdminScreen extends AppCompatActivity {
         FacebookSdk.setApplicationId("581033482823166");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_admin_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setTitle("Admin Home");
+        final DatabaseReference databaseReference = Singleton.db.getReference();
         toolbar.setTitleTextColor(0xFFFFFFFF);
         setSupportActionBar(toolbar);
-        final DatabaseReference databaseReference = Singleton.db.getReference();
         pager = findViewById(R.id.adminviewpager);
         tablayout = findViewById(R.id.admintablayout);
         adminordersList = new ArrayList<>();
@@ -74,7 +74,7 @@ public class AdminScreen extends AppCompatActivity {
         loading.show();
         try {
             ThreadRunner loading = new ThreadRunner();
-            if(adminordersList.isEmpty())
+            if (adminordersList.isEmpty())
                 loading.execute();
 
             DatabaseReference orderRef = mDatabase.child("Orders");
@@ -84,9 +84,9 @@ public class AdminScreen extends AppCompatActivity {
                     adminordersList.clear();
                     orderDone = false;
                     ArrayList<FoodElement> foodElements = new ArrayList<>();
-                    for(DataSnapshot user: dataSnapshot.getChildren()) {
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
                         String userId = user.getKey();
-                        for (DataSnapshot order :user.getChildren()) {
+                        for (DataSnapshot order : user.getChildren()) {
                             OrderList orderList = new OrderList();
                             orderList.userID = userId;
                             orderList.txnId = order.getKey();
@@ -146,7 +146,7 @@ public class AdminScreen extends AppCompatActivity {
             usersRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot user:dataSnapshot.getChildren()){
+                    for (DataSnapshot user : dataSnapshot.getChildren()) {
                         String useremail = user.child("name").getValue(String.class);
                         useridEmail.put(user.getKey(), useremail);
                     }
@@ -157,7 +157,7 @@ public class AdminScreen extends AppCompatActivity {
 
                 }
             });
-        }catch(Exception e){
+        } catch (Exception e) {
             orderDone = true;
             e.printStackTrace();
         }
@@ -169,10 +169,12 @@ public class AdminScreen extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] objects) {
-            while (!orderDone) {}
+            while (!orderDone) {
+            }
             Log.d("TAG", "doInBackground: SHOULD BE DONE");
             return null;
         }
+
         @Override
         protected void onPostExecute(Object object) {
 
@@ -246,6 +248,7 @@ public class AdminScreen extends AppCompatActivity {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
         }
+
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);

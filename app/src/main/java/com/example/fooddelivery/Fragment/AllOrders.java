@@ -17,8 +17,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.fooddelivery.Activities.AdminScreen;
 import com.example.fooddelivery.Adapter.AdapterOrderDescription;
-import com.example.fooddelivery.HelperModal.OrderList;
 import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
+import com.example.fooddelivery.HelperModal.OrderList;
 import com.example.fooddelivery.R;
 import com.example.fooddelivery.Singleton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +29,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -40,9 +39,10 @@ public class AllOrders extends androidx.fragment.app.Fragment {
     public ArrayList<OrderList> orderlist = HomeFragment.ordersList;
     public ArrayList<OrderList> allorderslist = AdminScreen.adminordersList;
 
-    boolean isAdmin;
     FirebaseAuth auth;
     FirebaseDatabase database;
+    boolean isAdmin;
+
     public RecyclerView orderdetails;
     public CardView orderpopup;
 
@@ -51,60 +51,62 @@ public class AllOrders extends androidx.fragment.app.Fragment {
     public TextView txnDate;
     public TextView status;
     public TextView amount;
-    AdapterOrderDescription adapter;
     public RecyclerView fullorderdetails;
     public ImageView exit;
     public Button accept;
 
     private View view;
 
+    AdapterOrderDescription adapter;
+    ViewPager mViewPager;
 
-    public AllOrders(boolean isAdmin){
+    public AllOrders(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
+
     public AllOrders() {
         // Required empty public constructor
     }
 
-    ViewPager mViewPager;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_all_orders, container, false);
-        orderdetails = (RecyclerView) view.findViewById(R.id.orderslist);
-        orderpopup = (CardView) view.findViewById(R.id.order_popup);
-        restaurantName = (TextView) view.findViewById(R.id.restaurant_Name);
-        txnId = (TextView) view.findViewById(R.id.txnId);
-        txnDate = (TextView) view.findViewById(R.id.order_date);
-        accept = view.findViewById(R.id.accept);
-
         auth = Singleton.auth;
         database = Singleton.db;
+
+        view = inflater.inflate(R.layout.fragment_all_orders, container, false);
+
+        orderdetails = view.findViewById(R.id.orderslist);
+        orderpopup = view.findViewById(R.id.order_popup);
+        restaurantName = view.findViewById(R.id.restaurant_Name);
+        txnId = view.findViewById(R.id.txnId);
+        txnDate = view.findViewById(R.id.order_date);
+        status = view.findViewById(R.id.status);
+        amount = view.findViewById(R.id.amount);
+        fullorderdetails = view.findViewById(R.id.order_food_list);
+        exit = view.findViewById(R.id.exit);
+        accept = view.findViewById(R.id.accept);
+
         DatabaseReference users = database.getReference().child("users").child(auth.getCurrentUser().getUid());
 
-
-        status = (TextView) view.findViewById(R.id.status);
-        amount = (TextView) view.findViewById(R.id.amount);
-        fullorderdetails = (RecyclerView) view.findViewById(R.id.order_food_list);
-        exit = (ImageView) view.findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 orderpopup.setVisibility(View.GONE);
             }
         });
+
         users.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try {
                     isAdmin = dataSnapshot.child("admin").getValue(Boolean.class);
-                }
-                catch (Exception e){
+                } catch (Exception e) {
                     isAdmin = false;
                 }
-                if(!isAdmin) {
+                if (!isAdmin) {
                     adapter = new AdapterOrderDescription(orderlist, AllOrders.this, isAdmin);
-                }else{
+                } else {
                     adapter = new AdapterOrderDescription(allorderslist, AllOrders.this, isAdmin);
                 }
                 orderdetails.setAdapter(adapter);
@@ -118,10 +120,6 @@ public class AllOrders extends androidx.fragment.app.Fragment {
             }
         });
 
-
-
         return view;
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.example.fooddelivery.HelperModal;
 
 public class Offer {
+    // TODO use enums instead
     public static final String vs = "vegstarters";
     public static final String nvs = "nonvegstarters";
     public static final String vm = "vegmaincourse";

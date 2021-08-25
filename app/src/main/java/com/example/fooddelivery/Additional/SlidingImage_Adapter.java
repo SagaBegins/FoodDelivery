@@ -20,14 +20,14 @@ import java.util.ArrayList;
 public class SlidingImage_Adapter extends PagerAdapter {
 
 
-    private ArrayList<Integer> IMAGES;
-    private LayoutInflater inflater;
-    private Context context;
+    private final ArrayList<Integer> IMAGES;
+    private final LayoutInflater inflater;
+    private final Context context;
 
 
-    public SlidingImage_Adapter(Context context,ArrayList<Integer> IMAGES) {
+    public SlidingImage_Adapter(Context context, ArrayList<Integer> IMAGES) {
         this.context = context;
-        this.IMAGES=IMAGES;
+        this.IMAGES = IMAGES;
         inflater = LayoutInflater.from(context);
     }
 
@@ -46,11 +46,11 @@ public class SlidingImage_Adapter extends PagerAdapter {
         View imageLayout = inflater.inflate(R.layout.slidingimages_layout, view, false);
 
         assert imageLayout != null;
-        ImageView imageView = (ImageView) imageLayout
+        ImageView imageView = imageLayout
                 .findViewById(R.id.image);
 
 
-        imageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(),IMAGES.get(position), 200, 200));
+        imageView.setImageBitmap(decodeSampledBitmapFromResource(context.getResources(), IMAGES.get(position), 200, 200));
 
         view.addView(imageLayout, 0);
 
@@ -93,6 +93,7 @@ public class SlidingImage_Adapter extends PagerAdapter {
 
         return inSampleSize;
     }
+
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
                                                          int reqWidth, int reqHeight) {
 

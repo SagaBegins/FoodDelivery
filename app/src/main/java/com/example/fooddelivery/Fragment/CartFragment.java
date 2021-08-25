@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fooddelivery.Activities.Checkout;
 import com.example.fooddelivery.Adapter.Adapter_Cart;
+import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.example.fooddelivery.HelperModal.FoodElement;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.Additional.DatabaseInstance;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,27 +35,28 @@ public class CartFragment extends androidx.fragment.app.Fragment {
     public Float saved;
 
     private DatabaseInstance databaseEntrytotal;
+
     RecyclerView recyclerView;
     Adapter_Cart reAdapterFav;
     DatabaseInstance databaseInstance;
     List<FoodElement> foodElementsList;
     RecyclerView.LayoutManager layoutManager;
 
-    int price=0;
+    TextView totalp;
+    TextView textget;
 
-     TextView totalp;
-     TextView textget ;
+    RelativeLayout proceed;
 
-     RelativeLayout proceed;
-    private int restaurantId;
+    int price = 0;
+    private final int restaurantId;
 
     public CartFragment(int rate) {
         this.restaurantId = rate;
         this.saved = 0.0f;
-        // Required empty public constructor
     }
+
     private View view;
-     Context context;
+    Context context;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class CartFragment extends androidx.fragment.app.Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_cart, container, false);
-        Log.d("cartfrag","This is running "+ this.restaurantId);
+        Log.d("cartfrag", "This is running " + this.restaurantId);
         setUpView();
         return view;
     }
@@ -79,36 +80,36 @@ public class CartFragment extends androidx.fragment.app.Fragment {
         super.onDestroy();
     }
 
-    private void setUpView(){
+    private void setUpView() {
         context = view.getContext();
-        recyclerView = (RecyclerView)view.findViewById(R.id.recycler11);
+        recyclerView = view.findViewById(R.id.recycler11);
         databaseInstance = new DatabaseInstance(getActivity());
         foodElementsList = new ArrayList<>();
         recyclerView.hasFixedSize();
 
         foodElementsList = databaseInstance.getDataFromDB("cart_table", restaurantId);
         databaseInstance.close();
-        textget = (TextView)view.findViewById(R.id.textView_cartEmpty);
-        proceed = (RelativeLayout)view.findViewById(R.id.relative_layout);
-        reAdapterFav = new Adapter_Cart(foodElementsList,this);
-        totalp=(TextView)view.findViewById(R.id.textView_cartTotalPrice);
+        textget = view.findViewById(R.id.textView_cartEmpty);
+        proceed = view.findViewById(R.id.relative_layout);
+        reAdapterFav = new Adapter_Cart(foodElementsList, this);
+        totalp = view.findViewById(R.id.textView_cartTotalPrice);
         recyclerView.setAdapter(reAdapterFav);
         double tot = calculateGrandTotal(restaurantId);
-        String totalvalue = String.format("%.2f",tot);
+        String totalvalue = String.format("%.2f", tot);
         textget.setVisibility(View.GONE);
         SharedPreferences totalPrice;
         totalPrice = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = totalPrice.edit();
         editor.putString("total", totalvalue);
         editor.apply();
-        editor.putFloat("saved",  saved);
+        editor.putFloat("saved", saved);
         editor.apply();
 
 
         //Confirmation.priceTextview(totalvalue);
         layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        if(!foodElementsList.isEmpty()){
+        if (!foodElementsList.isEmpty()) {
             textget.setVisibility(View.GONE);
             proceed.setVisibility(View.VISIBLE);
             proceed.setOnClickListener(new View.OnClickListener() {
@@ -119,31 +120,31 @@ public class CartFragment extends androidx.fragment.app.Fragment {
                     startActivity(intent);
                 }
             });
-        }else{
+        } else {
             textget.setVisibility(View.VISIBLE);
         }
     }
 
 
-    public double calculateGrandTotal(int rate){
+    public double calculateGrandTotal(int rate) {
         double total;
-        Activity activity = (Activity)context;
+        Activity activity = (Activity) context;
         databaseEntrytotal = new DatabaseInstance(activity);
         total = databaseEntrytotal.total(rate);
         databaseEntrytotal.close();
-        String tot = String.format("%.2f",total);
-        totalp.setText("\u20B9 "+tot);
-        if(total == 0){
+        String tot = String.format("%.2f", total);
+        totalp.setText("\u20B9 " + tot);
+        if (total == 0) {
             textget.setVisibility(View.VISIBLE);
             proceed.setVisibility(View.GONE);
-        }else{
+        } else {
             textget.setVisibility(View.GONE);
             proceed.setVisibility(View.VISIBLE);
         }
         return total;
     }
 
-    public int getRestaurantId(){
+    public int getRestaurantId() {
         return this.restaurantId;
     }
 }

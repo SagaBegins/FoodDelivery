@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.fooddelivery.Adapter.Adapter_Menu;
+import com.example.fooddelivery.Additional.SlidingImage_Adapter;
 import com.example.fooddelivery.HelperModal.ChatModel;
 import com.example.fooddelivery.HelperModal.FoodElement;
 import com.example.fooddelivery.HelperModal.Menu;
@@ -30,7 +31,6 @@ import com.example.fooddelivery.HelperModal.Offer;
 import com.example.fooddelivery.HelperModal.OrderList;
 import com.example.fooddelivery.HelperModal.Restaurant;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.Additional.SlidingImage_Adapter;
 import com.example.fooddelivery.Singleton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,7 +58,14 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     public static Float off = 0.15f;
     public static boolean msgSent = false;
     public static Float threshold = 2000f;
+
     boolean d;
+    boolean done;
+    boolean menuDone;
+    boolean orderDone;
+
+    public final static DatabaseReference mDatabase = Singleton.db.getReference();
+
     DatabaseReference mRef;
     ArrayList<String> mChats;
     ArrayList<String> mMsg;
@@ -68,18 +75,17 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     RecyclerView recyclerView;
     RecyclerView.LayoutManager reLayoutManager;
     Adapter_Menu recyclerViewadapter;
-    boolean done;
-    boolean menuDone;
-    boolean orderDone;
+
     private static ViewPager mPager;
     private static boolean[] filteredMenu = new boolean[5];
-    private static List<Restaurant> filteredRestaurant = new ArrayList<>();
-    private GetElements getElements = new GetElements();
+    private static final List<Restaurant> filteredRestaurant = new ArrayList<>();
+    private final GetElements getElements = new GetElements();
+
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private static final Integer[] IMAGES = {R.drawable.discount1, R.drawable.discount3, R.drawable.discount4};
-    private ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
-    public final static DatabaseReference mDatabase = Singleton.db.getReference();
+    private final ArrayList<Integer> ImagesArray = new ArrayList<Integer>();
+
     TextWatcher tw;
     TextInputEditText searchFilter;
 
@@ -92,18 +98,20 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        mUser = Singleton.auth.getCurrentUser();
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         init(view);
-        searchFilter = (TextInputEditText) view.findViewById(R.id.editText_search);
+
         mChats = new ArrayList<>();
         mMsg = new ArrayList<>();
-        mUser = Singleton.auth.getCurrentUser();
-        //EditText searchFilter = (EditText) view.findViewById(R.id.editText_search);
+
+        searchFilter = view.findViewById(R.id.editText_search);
         searchFilter.setTextColor(Color.WHITE);
         searchFilter.setHintTextColor(Color.WHITE);
         searchFilter.setHint("Food Search");
         searchFilter.setSingleLine();
         searchFilter.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+
         tw = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -120,10 +128,12 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 onKeyFilter(s);
             }
         };
+
         searchFilter.addTextChangedListener(tw);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.restaurantsrecycler);
+        recyclerView = view.findViewById(R.id.restaurantsrecycler);
         recyclerView.setHasFixedSize(true);
+
         if (restaurantList.size() == 0) {
             getElements.execute();
         } else {
@@ -137,6 +147,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 return false;
             }
         };
+
         recyclerView.setLayoutManager(reLayoutManager);
         return view;
     }
@@ -144,10 +155,11 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
     private void init(View view) {
         for (int i = 0; i < IMAGES.length; i++)
             ImagesArray.add(IMAGES[i]);
-        mPager = (ViewPager) view.findViewById(R.id.pager);
+
+        mPager = view.findViewById(R.id.pager);
         mPager.setAdapter(new SlidingImage_Adapter(getActivity(), ImagesArray));
-        CirclePageIndicator indicator = (CirclePageIndicator)
-                view.findViewById(R.id.indicator);
+
+        CirclePageIndicator indicator = view.findViewById(R.id.indicator);
         indicator.setViewPager(mPager);
 
         final float density = getResources().getDisplayMetrics().density;
@@ -165,6 +177,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 mPager.setCurrentItem(currentPage++, true);
             }
         };
+
         Timer swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
             @Override
@@ -182,12 +195,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
             @Override
             public void onPageScrolled(int pos, float arg1, int arg2) {
-
             }
 
             @Override
             public void onPageScrollStateChanged(int pos) {
-
             }
         });
 
@@ -202,19 +213,20 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
             loading.setMessage("After Dinner Rest a While; After Supper Walk a Mile");
             loading.setCancelable(false);
             loading.show();
-
         }
 
         @Override
         protected List<Restaurant> doInBackground(String... arg0) {
+            FirebaseAuth auth = Singleton.auth;
+
             done = false;
             menuDone = false;
             orderDone = false;
+
             DatabaseReference restaurantRef = mDatabase.child("restaurants");
             DatabaseReference menuRef = mDatabase.child("menu");
             DatabaseReference offerRef = mDatabase.child("offers");
 
-            FirebaseAuth auth = Singleton.auth;
             d = false;
             offerRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -229,35 +241,36 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                 }
             });
 
-            while(!d);
+            while (!d) ;
             try {
                 off = Singleton.offers.totalDiscount.off;
                 threshold = Singleton.offers.totalDiscount.threshold;
-            }catch(NullPointerException e){
+            } catch (NullPointerException e) {
                 off = 0.0f;
                 threshold = 0.0f;
             }
+
             mRef = Singleton.db.getReference().child("Chat");
             mRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     mChats.clear();
                     mMsg.clear();
-                    if(dataSnapshot.exists()){
-                        for(DataSnapshot d : dataSnapshot.getChildren()){
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot d : dataSnapshot.getChildren()) {
                             ChatModel cm = d.getValue(ChatModel.class);
                             //Getting all the chats that user sent
-                            try{
-                            if(cm.getFrom().equals(mUser.getEmail())){
-                                mChats.add(cm.getTo());
-                                msgSent = true;
-                                mMsg.add(cm.getMsg());
-                            }}
-                            catch (Exception e){
+                            try {
+                                if (cm.getFrom().equals(mUser.getEmail())) {
+                                    mChats.add(cm.getTo());
+                                    msgSent = true;
+                                    mMsg.add(cm.getMsg());
+                                }
+                            } catch (Exception e) {
                                 break;
                             }
                             //Getting all the chats sent to the user
-                            if(cm.getTo().equals(mUser.getEmail())){
+                            if (cm.getTo().equals(mUser.getEmail())) {
                                 mChats.add(cm.getFrom());
                                 msgSent = false;
                                 mMsg.add(cm.getMsg());
@@ -265,13 +278,14 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
                         }
                     }
-                    if(mChats.size()>0)
-                        if(!mChats.get(mChats.size()-1).equals(Singleton.auth.getCurrentUser().getEmail()) && !msgSent){
+
+                    if (mChats.size() > 0)
+                        if (!mChats.get(mChats.size() - 1).equals(Singleton.auth.getCurrentUser().getEmail()) && !msgSent) {
                             NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), "CHANNEL_ID")
                                     .setSmallIcon(R.drawable.logo1)
-                                    .setContentTitle(mChats.get(mChats.size()-1))
-                                    .setContentText(mMsg.get(mMsg.size()-1))
-                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(mMsg.get(mMsg.size()-1)))
+                                    .setContentTitle(mChats.get(mChats.size() - 1))
+                                    .setContentText(mMsg.get(mMsg.size() - 1))
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(mMsg.get(mMsg.size() - 1)))
                                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                                     .setAutoCancel(true);
 
@@ -279,10 +293,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                             Log.d("TAG", "onDataChange: Before build");
                             notificationManager.notify(0, builder.build());
                         }
-                    msgSent = false;
-                    //chats();
-                    //displayInfo();
 
+                    msgSent = false;
                 }
 
                 @Override
@@ -306,8 +318,10 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                             orderList.txnTime = orderList.txnTime.split("GMT")[0];
                             orderList.restaurantId = order.child("restaurantId").getValue(Integer.class);
                             orderList.amount = order.child("amount").getValue(String.class);
-                            Log.d("TAG", "onDataChange: "+ orderList.amount);
+
+                            Log.d("TAG", "onDataChange: " + orderList.amount);
                             orderList.status = order.child("status").getValue(String.class);
+
                             for (DataSnapshot food : order.child("foodList").getChildren()) {
                                 FoodElement foodElement = new FoodElement();
                                 foodElement.setPhoto(food.child("photo").getValue(String.class));
@@ -319,6 +333,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                                 foodElement.setRate(food.child("rate").getValue(Integer.class));
                                 foodElements.add(foodElement);
                             }
+
                             orderList.foodList = (ArrayList<FoodElement>) foodElements.clone();
                             foodElements.clear();
                             ordersList.add(0, orderList);
@@ -331,7 +346,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
                     }
                 });
-            }catch(Exception e){
+            } catch (Exception e) {
                 orderDone = true;
                 e.printStackTrace();
             }
@@ -343,6 +358,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                         Restaurant Restaurant = new Restaurant();
                         Restaurant.photo = (child.child("Imagepath").getValue(String.class));
                         Restaurant.restaurantName = (child.child("Category").getValue(String.class));
+
                         restaurantList.add(Restaurant);
                     }
                     done = true;
@@ -353,7 +369,6 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
 
                 }
             });
-
 
 
             menuRef.addValueEventListener(new ValueEventListener() {
@@ -371,7 +386,8 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                                 foodElement.setPhoto(food.child("image").getValue(String.class));
                                 foodElement.setName(food.child("name").getValue(String.class));
                                 foodElement.setFoodType(food.child("category").getValue(String.class));
-                                switch(foodElement.getFoodType()){
+
+                                switch (foodElement.getFoodType()) {
                                     case Offer.vs:
                                         foodElement.off = Singleton.offers.vegstarters;
                                         break;
@@ -400,7 +416,7 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
                                         foodElement.off = Singleton.offers.beverages;
                                         break;
                                 }
-                                switch(foodElement.getFoodType()){
+                                switch (foodElement.getFoodType()) {
                                     case Offer.vs:
                                         foodElement.offqtyval = Singleton.offers.vegstartersqty;
                                         break;
@@ -477,9 +493,11 @@ public class HomeFragment extends androidx.fragment.app.Fragment {
         filteredMenu = setBoolArrayTo(false, filteredMenu.length);
         Log.d("Text", "Line 81 Home Fragement " + filterText);
         int iter = 0;
+
         if (filterText.equals("") || filterText.equals(" ")) {
             filteredMenu = setBoolArrayTo(true, filteredMenu.length);
         }
+
         for (Menu m : menuList) {
             filteredMenu[iter] = m.containsFood(filterText);
             iter++;

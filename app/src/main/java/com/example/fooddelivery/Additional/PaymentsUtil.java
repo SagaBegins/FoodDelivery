@@ -21,17 +21,16 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
-import com.google.android.gms.wallet.WalletConstants;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Optional;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Optional;
 
 /**
  * Contains helper static methods for dealing with the Payments API.
@@ -105,10 +104,10 @@ public class PaymentsUtil {
     private static JSONObject getDirectTokenizationSpecification()
             throws JSONException, RuntimeException {
         //if (Constants.DIRECT_TOKENIZATION_PARAMETERS.isEmpty()
-        if (true){
-                //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY.isEmpty()
-                //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == null
-                //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == "REPLACE_ME") {
+        if (true) {
+            //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY.isEmpty()
+            //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == null
+            //|| Constants.DIRECT_TOKENIZATION_PUBLIC_KEY == "REPLACE_ME") {
             throw new RuntimeException(
                     "Please edit the Constants.java file to add protocol version & public key.");
         }

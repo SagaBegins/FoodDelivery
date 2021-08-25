@@ -32,14 +32,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.example.fooddelivery.Fragment.AllOrders;
+import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.example.fooddelivery.Fragment.AllCartsFragment;
 import com.example.fooddelivery.Fragment.AllFavouriteFragment;
+import com.example.fooddelivery.Fragment.AllOrders;
 import com.example.fooddelivery.Fragment.MainScreenFragment.AboutFragment;
 import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.fooddelivery.Fragment.MainScreenFragment.RateFragment;
 import com.example.fooddelivery.R;
-import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.example.fooddelivery.Singleton;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
@@ -64,84 +64,96 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        fragment = new HomeFragment();
+        setTitle("Home");
+
+        final DatabaseReference databaseReference = Singleton.db.getReference();
+        auth = Singleton.auth;
+        user = Singleton.auth.getCurrentUser();
+
+        databaseInstance = new DatabaseInstance(MainScreen.this);
+        databaseInstance.createTable();
+        databaseInstance.close();
+
         FacebookSdk.setApplicationId("581033482823166");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_main_screen);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // Activity setup
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         setSupportActionBar(toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        final DatabaseReference databaseReference = Singleton.db.getReference();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View view = navigationView.getRootView();
-        view.setBackgroundResource(R.drawable.home_back);
-        fragment = new HomeFragment();
-        setTitle("Home");
-        databaseInstance = new DatabaseInstance(MainScreen.this);
-        databaseInstance.createTable();
-        databaseInstance.close();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setItemTextColor(ColorStateList.valueOf(Color.BLACK));
         navigationView.setItemIconTintList(ColorStateList.valueOf(Color.BLACK));
-        nametext = (TextView)navigationView.getHeaderView(0).findViewById(R.id.username);
-        photo = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.logo);
-        sign = (Button)navigationView.getHeaderView(0).findViewById(R.id.buttonloginorsignup);
-        auth = Singleton.auth;
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View view = navigationView.getRootView();
+        view.setBackgroundResource(R.drawable.home_back);
+
+        nametext = navigationView.getHeaderView(0).findViewById(R.id.username);
+        photo = navigationView.getHeaderView(0).findViewById(R.id.logo);
+        sign = navigationView.getHeaderView(0).findViewById(R.id.buttonloginorsignup);
+
+        // Handle Fragments
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.content_frame, fragment).commit();
-        navigationView.setNavigationItemSelectedListener(this);
-        user = Singleton.auth.getCurrentUser();
-        if(user != null){
+
+        if (user != null) {
             navigationView.inflateMenu(R.menu.main_screen_drawer_login);
             databaseReference.child("users").child(user.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot){
-                        facebookName = String.valueOf(dataSnapshot.child("name").getValue());
-                        facebookId= String.valueOf(dataSnapshot.child("id").getValue());
-                        nametext.setText(facebookName);
-                        if(!facebookId.equalsIgnoreCase("null")){
-                            sign.setText("Log Out");
-                            Glide.with(MainScreen.this).load("http://graph.facebook.com/" + facebookId + "/picture?type=normal").into(photo);
-                            sign.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    auth.signOut();
-                                    LoginManager.getInstance().logOut();
-                                    Intent intent = new Intent(MainScreen.this, SigninActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
-                        }else{
-                            sign.setText("Log Out");
-                            photo.setImageResource(R.drawable.male3);
-                            sign.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    facebookName = String.valueOf(dataSnapshot.child("name").getValue());
+                    facebookId = String.valueOf(dataSnapshot.child("id").getValue());
+                    nametext.setText(facebookName);
+                    if (!facebookId.equalsIgnoreCase("null")) {
+                        sign.setText("Log Out");
+                        Glide.with(MainScreen.this).load("http://graph.facebook.com/" + facebookId + "/picture?type=normal").into(photo);
+                        sign.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                auth.signOut();
+                                LoginManager.getInstance().logOut();
+                                Intent intent = new Intent(MainScreen.this, SigninActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    } else {
+                        sign.setText("Log Out");
+                        photo.setImageResource(R.drawable.male3);
+                        sign.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
 
-                                    auth.signOut();
-                                    Intent intent = new Intent(MainScreen.this, SigninActivity.class);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            });
-                        }
+                                auth.signOut();
+                                Intent intent = new Intent(MainScreen.this, SigninActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+                    }
 
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
-        }else{
+        } else {
             navigationView.inflateMenu(R.menu.activity_main_screen_drawer);
             nametext.setText("Guest User");
             photo.setImageResource(R.drawable.male3);
@@ -149,7 +161,7 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(MainScreen.this, SigninActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
@@ -160,10 +172,10 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
     @Override
     public void onBackPressed() {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else{
+        } else {
             super.onBackPressed();
         }
     }
@@ -198,32 +210,16 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
 
         switch (id) {
             case R.id.nav_home: {
-                fragment = new HomeFragment();
-                setTitle("Home");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("Home", new HomeFragment());
                 break;
             }
             case R.id.nav_about: {
-                fragment = new AboutFragment();
-                setTitle("About Us");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("About us", new AboutFragment());
                 break;
             }
             case R.id.nav_inbox: {
-                Intent i =  new Intent(this, ChatActivity.class);
+                Intent i = new Intent(this, ChatActivity.class);
                 startActivity(i);
-                /*fragment = new InboxFragment();
-                setTitle("Inbox");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();*/
                 break;
             }
             case R.id.nav_call:
@@ -254,45 +250,32 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
                 alertDialog.show();
                 break;
             case R.id.nav_rate: {
-                fragment = new RateFragment();
-                setTitle("Rate Us");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("Rate us", new RateFragment());
                 break;
             }
             case R.id.order: {
-                fragment = new AllOrders();
-                setTitle("Order");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("Order", new AllOrders());
                 break;
             }
             case R.id.cartnav: {
-                fragment = new AllCartsFragment();
-                setTitle("Your Carts");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("Your Carts", new AllCartsFragment());
                 break;
             }
             case R.id.favourite: {
-                fragment = new AllFavouriteFragment();
-                setTitle("Favourites");
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment).commit();
+                handleFragment("Favourites", new AllFavouriteFragment());
                 break;
             }
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void handleFragment(String title, Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, fragment).commit();
     }
 
     public void exitByBackKey() {
@@ -339,8 +322,6 @@ public class MainScreen extends AppCompatActivity implements NavigationView.OnNa
             notificationManager.createNotificationChannel(channel);
         }
     }
-
-
 }
 
 

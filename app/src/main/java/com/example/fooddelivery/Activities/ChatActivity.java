@@ -1,9 +1,5 @@
 package com.example.fooddelivery.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -14,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.fooddelivery.Adapter.ChatAdapter;
 import com.example.fooddelivery.Fragment.InboxFragment;
@@ -31,87 +30,82 @@ import java.util.HashMap;
 
 public class ChatActivity extends AppCompatActivity {
 
+    ArrayList<ChatModel> mChatData = new ArrayList<>();
+    ChatAdapter adapter;
+
     FirebaseUser mUser;
     DatabaseReference mRef;
+
     EditText editMsg;
     Button btnSend;
-    ArrayList<ChatModel> mChatData = new ArrayList<>();
-    String adminemail = "admin@gmail.com";
+
+    String adminEmail = "admin@gmail.com";
     String fromEmail;
-    ChatAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setTitle("Chat");
-        createNotificationChannel();
-        toolbar.setTitleTextColor(0xFFFFFFFF);
-        setSupportActionBar(toolbar);
-        editMsg = (EditText)findViewById(R.id.edt_message);
-        btnSend = (Button)findViewById(R.id.btn_send);
-
         mUser = Singleton.auth.getCurrentUser();
 
-        if(mUser.getEmail().equals(adminemail)){
-            Intent i= getIntent();
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setTitle("Chat");
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+        setSupportActionBar(toolbar);
+
+        createNotificationChannel();
+
+        editMsg = findViewById(R.id.edt_message);
+        btnSend = findViewById(R.id.btn_send);
+
+        if (mUser.getEmail().equals(adminEmail)) {
+            Intent i = getIntent();
             Bundle b = i.getExtras();
 
-
-            if(b!=null)
-            {
-               fromEmail = (String) b.get("fromEmail");
-               displayMsg(fromEmail, adminemail);
+            if (b != null) {
+                fromEmail = (String) b.get("fromEmail");
+                displayMsg(fromEmail, adminEmail);
             }
         }
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mUser.getEmail().equals(adminemail)){
+                if (mUser.getEmail().equals(adminEmail)) {
                     String msg = editMsg.getText().toString();
                     String useremail = "admin@gmail.com";
-                    String adminemail = fromEmail;
+                    String adminEmail = fromEmail;
 
-                    if(msg.isEmpty()){
-                        //Empty message
-                    } else {
-                        send(useremail, adminemail, msg);
-                        displayMsg(useremail, adminemail);
+                    if (!msg.isEmpty()) {
+                        send(useremail, adminEmail, msg);
+                        displayMsg(useremail, adminEmail);
                         editMsg.setText("");
                     }
-                }else {
+                } else {
                     String msg = editMsg.getText().toString();
                     String useremail = mUser.getEmail();
-                    String adminemail = "admin@gmail.com";
+                    String adminEmail = "admin@gmail.com";
 
-                    if(msg.isEmpty()){
-                        //Empty message
-                    } else {
-                        send(useremail, adminemail, msg);
-                        displayMsg(useremail, adminemail);
+                    if (!msg.isEmpty()) {
+                        send(useremail, adminEmail, msg);
+                        displayMsg(useremail, adminEmail);
                         editMsg.setText("");
                     }
                 }
-
             }
         });
 
-        String em = mUser.getEmail();
-        String adem = "admin@gmail.com";
+        if (mUser.getEmail().equals(adminEmail)) {
 
-        if(mUser.getEmail().equals(adem)){
-
-        }else {
-            displayMsg(em, adem);
+        } else {
+            displayMsg(mUser.getEmail(), adminEmail);
         }
 
 
     }
 
     //Send message
-    private void send(String f, final String t, String m){
+    private void send(String f, final String t, String m) {
         DatabaseReference databaseReference = Singleton.db.getReference();
 
         HashMap<String, Object> hm = new HashMap<>();
@@ -142,7 +136,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //Display messages to the user
-    private void displayMsg(final String f, final String t){
+    private void displayMsg(final String f, final String t) {
         mChatData = new ArrayList<>();
 
         mRef = Singleton.db.getReference().child("Chat");
@@ -150,18 +144,18 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mChatData.clear();
-                for(DataSnapshot d : dataSnapshot.getChildren()){
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     ChatModel chatmodel = d.getValue(ChatModel.class);
-                    if(chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)){
+                    if (chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)) {
                         mChatData.add(chatmodel);
                     }
 
                     // Create the adapter to convert the array to views
                     adapter = new ChatAdapter(ChatActivity.this, mChatData);
                     // Attach the adapter to a ListView
-                    ListView listView = (ListView) findViewById(R.id.chatlist);
+                    ListView listView = findViewById(R.id.chatlist);
                     listView.setAdapter(adapter);
-                    listView.setSelection(mChatData.size()-1);
+                    listView.setSelection(mChatData.size() - 1);
                 }
             }
 
@@ -174,7 +168,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     //Display messages to the user
-    private void displayAdminMsg(final String f, final String t){
+    private void displayAdminMsg(final String f, final String t) {
         mChatData = new ArrayList<>();
 
         mRef = Singleton.db.getReference().child("Chat");
@@ -182,9 +176,9 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mChatData.clear();
-                for(DataSnapshot d : dataSnapshot.getChildren()){
+                for (DataSnapshot d : dataSnapshot.getChildren()) {
                     ChatModel chatmodel = d.getValue(ChatModel.class);
-                    if(chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)){
+                    if (chatmodel.getTo().equals(f) && chatmodel.getFrom().equals(t) || chatmodel.getTo().equals(t) && chatmodel.getFrom().equals(f)) {
                         mChatData.add(chatmodel);
                     }
 
@@ -193,9 +187,9 @@ public class ChatActivity extends AppCompatActivity {
                     // Create the adapter to convert the array to views
                     ChatAdapter adapter = new ChatAdapter(ChatActivity.this, mChatData);
                     // Attach the adapter to a ListView
-                    ListView listView = (ListView) findViewById(R.id.chatlist);
+                    ListView listView = findViewById(R.id.chatlist);
                     listView.setAdapter(adapter);
-                    listView.setSelection(mChatData.size()-1);
+                    listView.setSelection(mChatData.size() - 1);
                 }
             }
 
@@ -221,5 +215,4 @@ public class ChatActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
-
 }

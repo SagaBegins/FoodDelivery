@@ -18,14 +18,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.fooddelivery.Fragment.Confirmation;
-import com.example.fooddelivery.HelperModal.FoodElement;
-import com.example.fooddelivery.HelperModal.OrderList;
-import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
-import com.example.fooddelivery.R;
-import com.example.fooddelivery.Fragment.ShippingFragment;
 import com.example.fooddelivery.Additional.CustomViewPager;
 import com.example.fooddelivery.Additional.DatabaseInstance;
+import com.example.fooddelivery.Fragment.Confirmation;
+import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
+import com.example.fooddelivery.Fragment.ShippingFragment;
+import com.example.fooddelivery.HelperModal.FoodElement;
+import com.example.fooddelivery.HelperModal.OrderList;
+import com.example.fooddelivery.R;
 import com.example.fooddelivery.Singleton;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
@@ -46,18 +46,24 @@ public class Checkout extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        restaurantId = getIntent().getIntExtra("restaurantId", 0);
         setContentView(R.layout.activity_checkout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        restaurantId = getIntent().getIntExtra("restaurantId", 0);
+
+        // Activity Setup
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(0xFFFFFFFF);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mViewPager = (CustomViewPager) findViewById(R.id.container1);
-        setupViewPager(mViewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(mViewPager);
+
+        mViewPager = findViewById(R.id.container1);
         mViewPager.setPagingEnabled(false);
+
+        tabLayout = findViewById(R.id.tabs);
+        setupViewPager(mViewPager);
+        tabLayout.setupWithViewPager(mViewPager);
         tabLayout.setTabTextColors(Color.parseColor("#FFFFFF"), Color.parseColor("#5CA67C"));
+
         LinearLayout tabStrip = ((LinearLayout) tabLayout.getChildAt(0));
         for (int i = 0; i < tabStrip.getChildCount(); i++) {
             tabStrip.getChildAt(i).setOnTouchListener(new View.OnTouchListener() {
@@ -117,26 +123,31 @@ public class Checkout extends AppCompatActivity {
                 if (transactionResponse.getTransactionStatus().equals(TransactionResponse.TransactionStatus.SUCCESSFUL)) {
                     //Success Transaction
                     Toast.makeText(this, "Transaction Success", Toast.LENGTH_LONG).show();
-                    intent = new Intent(this, ThankYouPage.class);
+
+                    String txnId = getIntent().getStringExtra("txnId");
+                    String uid = Singleton.auth.getCurrentUser().getUid();
                     DatabaseInstance successOperations = new DatabaseInstance(this);
+
+                    intent = new Intent(this, ThankYouPage.class);
+
                     OrderList orderList = new OrderList();
                     orderList.userEmail = Singleton.auth.getCurrentUser().getEmail();
                     orderList.foodList = (ArrayList<FoodElement>) successOperations.getDataFromDB("cart_table", restaurantId);
                     orderList.restaurantId = restaurantId;
-                    String txnId = getIntent().getStringExtra("txnId");
                     orderList.txnTime = getIntent().getStringExtra("txnTime");
                     orderList.amount = getIntent().getStringExtra("amount");
                     orderList.address = getIntent().getStringExtra("address");
                     orderList.status = "Pending";
+
                     successOperations.deleteCart(restaurantId, "cart_table");
                     successOperations.close();
 
+                    // Process dialog
                     final ProgressDialog waitingToWrite = new ProgressDialog(this);
                     waitingToWrite.setMessage("Order Registering");
                     waitingToWrite.setCancelable(false);
                     waitingToWrite.show();
 
-                    String uid = Singleton.auth.getCurrentUser().getUid();
                     DatabaseReference currentOrder = HomeFragment.mDatabase.child("Orders").child(uid);
                     currentOrder.child(txnId).setValue(orderList).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -158,11 +169,7 @@ public class Checkout extends AppCompatActivity {
 
                 // Response from SURl and FURL
                 String merchantResponse = transactionResponse.getTransactionDetails();
-            } /*else if (resultModel != null && resultModel.getError() != null) {
-                Log.d(TAG, "Error response : " + resultModel.getError().getTransactionResponse());
-            } else {
-                Log.d(TAG, "Both objects are null!");
-            }*/
+            }
         }
     }
 }

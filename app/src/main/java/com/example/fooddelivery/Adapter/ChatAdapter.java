@@ -39,25 +39,25 @@ public class ChatAdapter extends ArrayAdapter<ChatModel> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.chat_listitem, parent, false);
         }
         // Lookup view for data population
-        CardView msgCard = (CardView) convertView.findViewById(R.id.msg_card);
-        TextView tvName = (TextView) convertView.findViewById(R.id.emailid);
-        TextView tvHome = (TextView) convertView.findViewById(R.id.msg);
+        CardView msgCard = convertView.findViewById(R.id.msg_card);
+        TextView tvName = convertView.findViewById(R.id.emailid);
+        TextView tvHome = convertView.findViewById(R.id.msg);
 
-        if(cm.getFrom().equals(auth.getCurrentUser().getEmail())){
+        if (cm.getFrom().equals(auth.getCurrentUser().getEmail())) {
             msgCard.setCardBackgroundColor(Color.GREEN);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             params.gravity = Gravity.RIGHT;
-           tvName.setLayoutParams(params);
+            tvName.setLayoutParams(params);
 
-           LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             p.width = (int) (dp * getContext().getResources().getDisplayMetrics().density);
             p.gravity = Gravity.RIGHT;
             p.bottomMargin = (int) (10 * getContext().getResources().getDisplayMetrics().density);
             msgCard.setLayoutParams(p);
-        }else{
+        } else {
             msgCard.setCardBackgroundColor(Color.BLUE);
 
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

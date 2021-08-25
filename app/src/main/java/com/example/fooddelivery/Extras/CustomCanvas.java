@@ -11,7 +11,7 @@ public class CustomCanvas extends View {
         super(context);
     }
 
-    public CustomCanvas(Context context, AttributeSet attr){
+    public CustomCanvas(Context context, AttributeSet attr) {
         super(context, attr);
     }
 

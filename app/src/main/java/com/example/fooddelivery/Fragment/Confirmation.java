@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +21,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.fooddelivery.Activities.SigninActivity;
+import com.example.fooddelivery.Activities.SignupActivity;
+import com.example.fooddelivery.Adapter.Adapter_Confirm;
+import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.example.fooddelivery.Fragment.MainScreenFragment.HomeFragment;
 import com.example.fooddelivery.HelperModal.FoodElement;
-import com.example.fooddelivery.Activities.SignupActivity;
+import com.example.fooddelivery.R;
 import com.example.fooddelivery.Singleton;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.payu.india.Extras.PayUChecksum;
 import com.payu.india.Interfaces.OneClickPaymentListener;
@@ -39,10 +41,6 @@ import com.payu.india.Model.PostData;
 import com.payu.india.Payu.PayuConstants;
 import com.payu.india.Payu.PayuErrors;
 import com.payumoney.core.PayUmoneySdkInitializer;
-import com.example.fooddelivery.Adapter.Adapter_Confirm;
-import com.example.fooddelivery.Activities.SigninActivity;
-import com.example.fooddelivery.R;
-import com.example.fooddelivery.Additional.DatabaseInstance;
 import com.payumoney.sdkui.ui.activities.PayUmoneyActivity;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
 
@@ -57,6 +55,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -69,169 +68,208 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Confirmation extends androidx.fragment.app.Fragment implements OneClickPaymentListener{
+public class Confirmation extends androidx.fragment.app.Fragment implements OneClickPaymentListener {
 
-    private String merchantId = "7076546";
-    private String merchantKey="I2lGq2jl", userCredentials;
-    private String salt = "clorzgwwte";
-    private String txntime;
     private final String productName = "Food Delivery";
-    private final String txnid = System.currentTimeMillis()+"";
+    private final String txnid = System.currentTimeMillis() + "";
+
+    // Details
+    private final String merchantId = "7076546";
+    private final String merchantKey = "I2lGq2jl";
+    private String userCredentials;
+    private final String salt = "clorzgwwte";
+    private String txntime;
+
+    // Payu Variables
     private PayuConfig payuConfig;
-    static TextView shipname;
-    static TextView address;
-    PaymentParams mPaymentParams;
-    static TextView amount;
-    static TextView phone;
+    private PaymentParams mPaymentParams;
     private PayUChecksum checksum;
-    Button shipbutton, pay;
-    static String text, fname, add, city, zip, phno, email;
-    RecyclerView recyclerViewconfirm;
-    RecyclerView.LayoutManager layoutManager;
-    Context appContext;
-    Adapter_Confirm reAdapterconfirm;
-    DatabaseInstance databaseInstance;
-    ViewPager viewPager;
-    List<FoodElement> foodElementsList;
-    FirebaseAuth auth;
+
+    // Firebase variables
     FirebaseUser user;
     CallbackManager mCallbackManager;
+
+    // Variables to store data
+    int restaurantId;
+    static String priceText, fname, add, city, zip, phno, email;
+    List<FoodElement> foodElementsList;
+
+    Adapter_Confirm reAdapterconfirm;
+    DatabaseInstance databaseInstance;
+
+    // Elements
+    static TextView name;
+    static TextView address;
+    static TextView amount;
+    static TextView phone;
+    Button shipDetailsButton, payButton;
+    ViewPager viewPager;
     ViewHandling viewHandler;
     ProgressDialog loading;
     Toast toast;
 
-    int restaurantId;
+    RecyclerView recyclerViewconfirm;
+    RecyclerView.LayoutManager layoutManager;
 
-    public Confirmation(int rate) {
-        this.restaurantId = rate;
-        // Required empty public constructor
+    Context appContext;
+
+    public Confirmation(int restaurantId) {
+        this.restaurantId = restaurantId;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // To get stored values
+        SharedPreferences storedPriceDetails, shipDetails;
+
+        // Getting user details
+        user = Singleton.auth.getCurrentUser();
+        email = user.getEmail();
+
+        // Initializing payment related variables
+        loading = new ProgressDialog(this.getActivity().getApplicationContext());
+        toast = new Toast(this.getActivity().getApplicationContext());
+        appContext = this.getActivity().getApplicationContext();
+        viewHandler = new ViewHandling();
+
+//        restaurantId = Objects.requireNonNull(getActivity()).getIntent().getIntExtra("restaurantId", 0);
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_confirmation, container, false);
-        shipname = (TextView) view.findViewById(R.id.shippingname);
-        address = (TextView) view.findViewById(R.id.shippingaddress);
-        amount = (TextView) view.findViewById(R.id.textviewamount);
-        phone = (TextView) view.findViewById(R.id.phonenumberconfirm);
-        pay = (Button) view.findViewById(R.id.pay);
-        shipbutton = (Button) view.findViewById(R.id.edit);
-        SharedPreferences pricetotal, shipdetails;
-        viewPager = (ViewPager) getActivity().findViewById(R.id.container1);
-        pricetotal = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
-        text = pricetotal.getString("total", "0.0");
-        Float savedTotal = pricetotal.getFloat("saved", 0.0f);
-        Float p = Float.parseFloat(text);
-        Float saved = 0.0f;
-        if(HomeFragment.off > 0.0f && p > HomeFragment.threshold){
-            saved = HomeFragment.off * p;
-            p -= saved;
-        }
+
+        // Getting the elements from view
+        name = view.findViewById(R.id.shippingname);
+        address = view.findViewById(R.id.shippingaddress);
+        amount = view.findViewById(R.id.textviewamount);
+        phone = view.findViewById(R.id.phonenumberconfirm);
+        payButton = view.findViewById(R.id.pay);
+        shipDetailsButton = view.findViewById(R.id.edit);
+        viewPager = getActivity().findViewById(R.id.container1);
         TextView savedTextview = view.findViewById(R.id.savedText);
-        text = String.format("%.2f", p);
-        priceTextview(text);
-        saved +=  savedTotal;
-        if(saved > 0.0f) {
-            savedTextview.setText(String.format("(Saved: %.2f)", saved));
-            savedTextview.setVisibility(View.VISIBLE);
-        }
-        restaurantId = getActivity().getIntent().getIntExtra("restaurantId", 0);
-        shipdetails = getActivity().getSharedPreferences("SHIPPING_ADDRESS", Context.MODE_PRIVATE);
-        fname = shipdetails.getString("firstname", "----");
-        add = shipdetails.getString("address", "----");
-        city = shipdetails.getString("city", "----");
-        zip = shipdetails.getString("zip", "----");
-        phno = shipdetails.getString("phonenumber", "----");
-        Log.e("confirmation value",fname+add+city+zip+phno );
-        shipbutton.setOnClickListener(new View.OnClickListener() {
+        recyclerViewconfirm = view.findViewById(R.id.itemsincart);
+
+        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        databaseInstance = new DatabaseInstance(getActivity());
+        foodElementsList = new ArrayList<>();
+
+        // Getting vales stored in shared preferences
+        storedPriceDetails = getActivity().getSharedPreferences("PRICE_TOTAL", Context.MODE_PRIVATE);
+        shipDetails = getActivity().getSharedPreferences("SHIPPING_ADDRESS", Context.MODE_PRIVATE);
+
+        calculateAndDisplayPrice(savedTextview, storedPriceDetails);
+
+        // Obtaining stored values from shared preferences
+        fname = shipDetails.getString("firstname", "----");
+        add = shipDetails.getString("address", "----");
+        city = shipDetails.getString("city", "----");
+        zip = shipDetails.getString("zip", "----");
+        phno = shipDetails.getString("phonenumber", "----");
+
+        Log.d("confirmation value", fname + add + city + zip + phno);
+
+        // Displaying Ordered items
+        foodElementsList = databaseInstance.getDataFromDB("cart_table", restaurantId);
+        reAdapterconfirm = new Adapter_Confirm(foodElementsList, getActivity());
+        recyclerViewconfirm.setAdapter(reAdapterconfirm);
+        recyclerViewconfirm.setLayoutManager(layoutManager);
+
+        payButton.setOnClickListener(viewHandler);
+
+        shipDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 viewPager.setCurrentItem(0);
             }
         });
-        recyclerViewconfirm = (RecyclerView) view.findViewById(R.id.itemsincart);
-        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        databaseInstance = new DatabaseInstance(getActivity());
-        foodElementsList = new ArrayList<>();
-        foodElementsList = databaseInstance.getDataFromDB("cart_table", restaurantId);
-        reAdapterconfirm = new Adapter_Confirm(foodElementsList, getActivity());
-        recyclerViewconfirm.setAdapter(reAdapterconfirm);
-        recyclerViewconfirm.setLayoutManager(layoutManager);
-        auth = Singleton.auth;
-        user = Singleton.auth.getCurrentUser();
-        email = user.getEmail();
-        loading = new ProgressDialog(this.getActivity().getApplicationContext());
-        toast = new Toast(this.getActivity().getApplicationContext());
-        appContext = this.getActivity().getApplicationContext();
-        viewHandler = new ViewHandling();
-        pay.setOnClickListener(viewHandler);
+
+        databaseInstance.close();
         return view;
+    }
+
+    private void calculateAndDisplayPrice(TextView savedTextview, SharedPreferences storedPriceDetails) {
+        // To calculate total after discounts
+        float savedTotal, totalPrice, saved;
+
+        priceText = storedPriceDetails.getString("total", "0.0");
+        savedTotal = storedPriceDetails.getFloat("saved", 0.0f);
+        totalPrice = Float.parseFloat(priceText);
+        saved = 0.0f;
+
+        if (HomeFragment.off > 0.0f && totalPrice > HomeFragment.threshold) {
+            saved = HomeFragment.off * totalPrice;
+            totalPrice -= saved;
+        }
+
+        priceText = String.format("%.2f", totalPrice);
+        saved += savedTotal;
+
+        if (saved > 0.0f) {
+            savedTextview.setText(String.format("(Saved: %.2f)", saved));
+            savedTextview.setVisibility(View.VISIBLE);
+        }
+        priceTextview(priceText);
     }
 
     public class ViewHandling implements View.OnClickListener {
 
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(appContext, "Processing", Toast.LENGTH_SHORT);
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(appContext, "Processing", Toast.LENGTH_SHORT);
 
-                loading.setCancelable(false);
+            loading.setCancelable(false);
 
-                loading.setTitle("Waiting for payment");
-                loading.setMessage("Processing");
-                if(user == null){
-                    final Dialog dialog = new Dialog(getActivity());
-                    auth = Singleton.auth;
-                    FacebookSdk.setApplicationId("581033482823166");
-                    FacebookSdk.sdkInitialize(getActivity());
-                    dialog.setContentView(R.layout.dialog);
-                    dialog.setTitle("SigninActivity OR Sign Up");
-                    dialog.show();
-                    mCallbackManager = CallbackManager.Factory.create();
-                    Button sign = (Button)dialog.findViewById(R.id.signup);
-                    Button login = (Button)dialog.findViewById(R.id.login);
-                    sign.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), SignupActivity.class);
-                            startActivity(intent);
-                            dialog.dismiss();
-                        }
-                    });
-                    login.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent intent = new Intent(getActivity(), SigninActivity.class);
-                            startActivity(intent);
-                            dialog.dismiss();
-                        }
-                    });
-                }else {
-                    try {
-                        payuIntegration();
-                    } catch (Exception e) {
-                        Toast.makeText(appContext, "ERROR", Toast.LENGTH_LONG);
-                        Log.d("TAG", "onClick: Exception");
-                        e.printStackTrace();
+            loading.setTitle("Waiting for payment");
+            loading.setMessage("Processing");
+            if (user == null) {
+                final Dialog dialog = new Dialog(getActivity());
+                FacebookSdk.setApplicationId("581033482823166");
+                FacebookSdk.sdkInitialize(getActivity());
+                dialog.setContentView(R.layout.dialog);
+                dialog.setTitle("SigninActivity OR Sign Up");
+                dialog.show();
+                mCallbackManager = CallbackManager.Factory.create();
+                Button sign = dialog.findViewById(R.id.signup);
+                Button login = dialog.findViewById(R.id.login);
+                sign.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), SignupActivity.class);
+                        startActivity(intent);
+                        dialog.dismiss();
                     }
+                });
+                login.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), SigninActivity.class);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+            } else {
+                try {
+                    payuIntegration();
+                } catch (Exception e) {
+                    Toast.makeText(appContext, "ERROR", Toast.LENGTH_LONG);
+                    Log.d("TAG", "onClick: Exception");
+                    e.printStackTrace();
                 }
-
-                loading.dismiss();
             }
+
+            loading.dismiss();
+        }
 
     }
 
-
     public void payuIntegration() throws Exception {
-        //key|txnid|amount|productinfo|firstname|email|udf1|udf3|||||||||salt;
+        // key|txnid|amount|productinfo|firstname|email|udf1|udf3|||||||||salt;
         txntime = Calendar.getInstance().getTime() + "";
-        String hash = merchantKey+'|'+txnid+'|'+text.trim()+'|'+productName+'|'+fname+'|'+email+'|'+add.toUpperCase() + ", " + city.toUpperCase() + ", " + zip+"||||||||||"+salt; //"+txntime +"
+        String hash = merchantKey + '|' + txnid + '|' + priceText.trim() + '|' + productName + '|' + fname + '|' + email + '|' + add.toUpperCase() + ", " + city.toUpperCase() + ", " + zip + "||||||||||" + salt; //"+txntime +"
         hash = CalculateHash("SHA-512", hash);
 
         PayUmoneySdkInitializer.PaymentParam.Builder builder = new PayUmoneySdkInitializer.PaymentParam.Builder();//.setIsDebug(true);
-        builder.setAmount(text.trim())
+        builder.setAmount(priceText.trim())
                 .setTxnId(txnid)
                 .setPhone(phno)
                 .setProductName(productName)
@@ -245,15 +283,14 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                 .setKey(merchantKey)
                 .setMerchantId(merchantId);
         PayUmoneySdkInitializer.PaymentParam paymentParam = builder.build();
-        Log.d("TAG", "payuIntegration: "+ paymentParam.getParams().size());
+        Log.d("TAG", "payuIntegration: " + paymentParam.getParams().size());
         paymentParam.setMerchantHash(hash);
         getActivity().getIntent().putExtra("txnId", txnid);
         getActivity().getIntent().putExtra("txnTime", txntime);
-        getActivity().getIntent().putExtra("amount", text);
-        getActivity().getIntent().putExtra("address", add+ " "+ zip);
+        getActivity().getIntent().putExtra("amount", priceText);
+        getActivity().getIntent().putExtra("address", add + " " + zip);
         PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, getActivity(), R.style.AppTheme_default, true);
     }
-
 
     public static String CalculateHash(String type, String hashString) {
         StringBuilder hash = new StringBuilder();
@@ -271,16 +308,13 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         return hash.toString();
     }
 
-
-    public static void textviews(String fname, String add, String city, String zip, String phno) {
+    public static void textViews(String fname, String add, String city, String zip, String phno) {
         if (!fname.isEmpty() && !add.isEmpty() && !city.isEmpty() && !zip.isEmpty() && !phno.isEmpty()) {
-            shipname.setText(fname.toUpperCase());
+            name.setText(fname.toUpperCase());
             address.setText(add.toUpperCase() + ", " + city.toUpperCase() + ", " + zip);
             phone.setText(phno);
         }
     }
-
-
 
     public static void priceTextview(String price) {
         if (!price.isEmpty()) {
@@ -288,9 +322,8 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         }
     }
 
-
     //Code to deploy live version provided by payu
-    public void navigateToBase(){
+    public void navigateToBase() {
 
         String id = String.valueOf(System.currentTimeMillis());
         SharedPreferences sharedPreferences;
@@ -299,23 +332,24 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         editor.putString("time", id);
         editor.commit();
         mPaymentParams = new PaymentParams();
+
         /**
-         * For Test Environment, merchantKey = "gtKFFx"
+         * For Test Environment, merchantKey = "I2lGq2jl"
          * For Production Environment, merchantKey should be your live key or for testing in live you can use "0MQaQP"
          */
         userCredentials = merchantKey + ":" + phno.trim();
         Log.e("user credentials", userCredentials);
         mPaymentParams.setKey(merchantKey);
-        mPaymentParams.setAmount(text.trim());
+        mPaymentParams.setAmount(priceText.trim());
         mPaymentParams.setProductInfo("Food");
         mPaymentParams.setFirstName(fname.trim());
         mPaymentParams.setPhone(phno.trim());
-        mPaymentParams.setAddress1(add.toUpperCase().trim()+ ", " + city.toUpperCase().trim() + ", " + zip.trim());
+        mPaymentParams.setAddress1(add.toUpperCase().trim() + ", " + city.toUpperCase().trim() + ", " + zip.trim());
         mPaymentParams.setEmail("xyz@gmail.com");
 
         /*
-        * Transaction Id should be kept unique for each transaction.
-        * */
+         * Transaction Id should be kept unique for each transaction.
+         * */
         mPaymentParams.setTxnId("" + id);
 
         /**
@@ -325,7 +359,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         mPaymentParams.setSurl(PayuConstants.SURL);
         mPaymentParams.setFurl(PayuConstants.FURL);
 
-        /*
+        /**
          * udf1 to udf5 are options params where you can pass additional information related to transaction.
          * If you don't want to use it, then send them as empty string like, udf1=""
          * */
@@ -347,6 +381,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         //mPaymentParams.setOfferKey("cardnumber@8370");
 
         int environment = PayuConstants.STAGING_ENV;
+
         //TODO Sets the payment environment in PayuConfig object
         payuConfig = new PayuConfig();
         payuConfig.setEnvironment(environment);
@@ -371,7 +406,6 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     // lets generate hashes.
     // This should be done from server side..
     // Do not keep salt anywhere in app.
-
     public void generateHashFromSDK(PaymentParams mPaymentParams, String salt) {
         PayuHashes payuHashes = new PayuHashes();
         PostData postData = new PostData();
@@ -394,10 +428,10 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
 
         postData = checksum.getHash();
         if (postData.getCode() == PayuErrors.NO_ERROR) {
-            Log.d("Hash","Hash created");
+            Log.d("Hash", "Hash created");
             payuHashes.setPaymentHash(postData.getResult());
-        }else{
-            Log.d("Error","Line 291 some error with hash");
+        } else {
+            Log.d("Error", "Line 291 some error with hash");
         }
 
         // checksum for payemnt related details
@@ -442,7 +476,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         }
 
         // we have generated all the hases now lest launch sdk's ui
-        Log.d("Launch","Line 337 About to launc");
+        Log.d("Launch", "Line 337 About to launc");
         launchSdkUI(payuHashes);
     }
 
@@ -484,7 +518,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         if (null != mPaymentParams.getOfferKey())
             postParamsBuffer.append(concatParams(PayuConstants.OFFER_KEY, mPaymentParams.getOfferKey()));
 
-        String postParams = postParamsBuffer.charAt(postParamsBuffer.length() - 1) == '&' ? postParamsBuffer.substring(0, postParamsBuffer.length() - 1).toString() : postParamsBuffer.toString();
+        String postParams = postParamsBuffer.charAt(postParamsBuffer.length() - 1) == '&' ? postParamsBuffer.substring(0, postParamsBuffer.length() - 1) : postParamsBuffer.toString();
 
         generateHashFromSDK(mPaymentParams, salt);
 
@@ -523,7 +557,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                 // get the payuConfig first
                 String postParam = postParams[0];
 
-                byte[] postParamsByte = postParam.getBytes("UTF-8");
+                byte[] postParamsByte = postParam.getBytes(StandardCharsets.UTF_8);
 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -710,7 +744,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     //TODO Deploy a file on your server for storing cardToken and merchantHash nad replace below url with your server side file url.
                     URL url = new URL("https://payu.herokuapp.com/store_merchant_hash");
 
-                    byte[] postParamsByte = postParams.getBytes("UTF-8");
+                    byte[] postParamsByte = postParams.getBytes(StandardCharsets.UTF_8);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
@@ -725,10 +759,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     for (int i; (i = responseInputStream.read(byteContainer)) != -1; ) {
                         responseStringBuffer.append(new String(byteContainer, 0, i));
                     }
-
                     JSONObject response = new JSONObject(responseStringBuffer.toString());
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 } catch (MalformedURLException e) {
@@ -769,7 +800,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     //TODO Replace below url with your server side file url.
                     URL url = new URL("https://payu.herokuapp.com/get_merchant_hashes");
 
-                    byte[] postParamsByte = postParams.getBytes("UTF-8");
+                    byte[] postParamsByte = postParams.getBytes(StandardCharsets.UTF_8);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("GET");
@@ -841,7 +872,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
                     //TODO Replace below url with your server side file url.
                     URL url = new URL("https://payu.herokuapp.com/delete_merchant_hash");
 
-                    byte[] postParamsByte = postParams.getBytes("UTF-8");
+                    byte[] postParamsByte = postParams.getBytes(StandardCharsets.UTF_8);
 
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
@@ -888,7 +919,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
             //TODO Replace below url with your server side file url.
             URL url = new URL("https://payu.herokuapp.com/get_merchant_hashes");
 
-            byte[] postParamsByte = postParams.getBytes("UTF-8");
+            byte[] postParamsByte = postParams.getBytes(StandardCharsets.UTF_8);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -946,7 +977,7 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
         // GET params - merchant_key, user_credentials.
         // 2. In response we get a
         // this is a sample code for fetching one click hash from merchant server.
-       // return getAllOneClickHashHelper(merchantKey, userCreds);
+        // return getAllOneClickHashHelper(merchantKey, userCreds);
         return null;
     }
 
@@ -1005,9 +1036,9 @@ public class Confirmation extends androidx.fragment.app.Fragment implements OneC
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PayuConstants.PAYU_REQUEST_CODE) {
-            if(data!=null){
+            if (data != null) {
 
-            }else{
+            } else {
                 Toast.makeText(getActivity(), "Payment Failed!", Toast.LENGTH_SHORT).show();
             }
         }

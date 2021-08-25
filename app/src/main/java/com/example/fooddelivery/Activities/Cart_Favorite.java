@@ -19,63 +19,68 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Cart_Favorite extends AppCompatActivity {
 
+    private int restaurantId;
+
     Fragment fragment;
     Toolbar toolbar;
-    private int restaurantId;
-    LinearLayout l;
+    LinearLayout linearLayout;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            l = findViewById(R.id.container);
             switch (item.getItemId()) {
                 case R.id.navigation_favorite:
-                    getSupportActionBar().setTitle("Favourite");
-                    fragment = new FavouriteFragment(restaurantId);
-                    l = findViewById(R.id.container);
-                    l.setBackgroundResource(R.drawable.fav_back);
-                    fragmentTransaction.replace(R.id.content, fragment).commit();
+                    handleFragment("Favorite", new FavouriteFragment(restaurantId));
                     return true;
                 case R.id.navigation_cart:
-                    getSupportActionBar().setTitle("Cart");
-                    l = findViewById(R.id.container);
-                    fragment = new CartFragment(restaurantId);
-                    l.setBackgroundResource(R.drawable.cart_back);
-                    fragmentTransaction.replace(R.id.content, fragment).commit();
+                    handleFragment("Cart", new CartFragment(restaurantId));
                     return true;
             }
             return false;
         }
     };
 
+    private void handleFragment(String title, Fragment fragment) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        getSupportActionBar().setTitle(title);
+
+        linearLayout = findViewById(R.id.container);
+        linearLayout = findViewById(R.id.container);
+        linearLayout.setBackgroundResource(R.drawable.fav_back);
+        fragmentTransaction.replace(R.id.content, fragment).commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        restaurantId = getIntent().getIntExtra("restaurantId",0);
         setContentView(R.layout.activity_cart__favorite);
-        toolbar = (Toolbar) findViewById(R.id.toolbar8);
+
+        restaurantId = getIntent().getIntExtra("restaurantId", 0);
+
+        Intent intent = getIntent();
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        toolbar = findViewById(R.id.toolbar8);
+        linearLayout = findViewById(R.id.container);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_cart);
-        Intent intent = getIntent();
-        l = findViewById(R.id.container);
+
         switch (intent.getIntExtra("ViewPager", 0)) {
             case 0:
                 getSupportActionBar().setTitle("Cart");
-                l.setBackgroundResource(R.drawable.cart_back);
+                linearLayout.setBackgroundResource(R.drawable.cart_back);
                 navigation.setSelectedItemId(R.id.navigation_cart);
                 break;
             case 1:
                 getSupportActionBar().setTitle("Favourite");
-                l.setBackgroundResource(R.drawable.fav_back);
+                linearLayout.setBackgroundResource(R.drawable.fav_back);
                 navigation.setSelectedItemId(R.id.navigation_favorite);
                 break;
         }

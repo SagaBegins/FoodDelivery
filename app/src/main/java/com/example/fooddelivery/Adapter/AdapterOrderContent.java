@@ -19,12 +19,12 @@ import com.example.fooddelivery.R;
 import java.util.ArrayList;
 
 public class AdapterOrderContent extends RecyclerView.Adapter<AdapterOrderContent.ViewHolder> {
-    private ArrayList<FoodElement> foodElements;
-    private AllOrders parent;
-    private Context context;
-    private int restaurantId;
+    private final ArrayList<FoodElement> foodElements;
+    private final AllOrders parent;
+    private final Context context;
+    private final int restaurantId;
 
-    public AdapterOrderContent(ArrayList<FoodElement> foodElements, AllOrders parent){
+    public AdapterOrderContent(ArrayList<FoodElement> foodElements, AllOrders parent) {
         this.foodElements = foodElements;
         this.parent = parent;
         this.context = parent.getContext();
@@ -43,9 +43,9 @@ public class AdapterOrderContent extends RecyclerView.Adapter<AdapterOrderConten
         Glide.with(context.getApplicationContext())
                 .load(foodElements.get(position).getPhoto())
                 .into(holder.foodimage);
-        Log.d("TAG", "onBindViewHolder: "+ foodElements.get(position).getPhoto());
+        Log.d("TAG", "onBindViewHolder: " + foodElements.get(position).getPhoto());
         holder.food.setText(foodElements.get(position).getName().split("_")[0]);
-        holder.quantity.setText(foodElements.get(position).getQty()+"");
+        holder.quantity.setText(foodElements.get(position).getQty() + "");
         holder.price.setText(foodElements.get(position).getTotalPrice());
     }
 
@@ -55,8 +55,11 @@ public class AdapterOrderContent extends RecyclerView.Adapter<AdapterOrderConten
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView food, quantity, price;
-        private ImageView foodimage;
+        private final TextView food;
+        private final TextView quantity;
+        private final TextView price;
+        private final ImageView foodimage;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             food = itemView.findViewById(R.id.txtView_food);

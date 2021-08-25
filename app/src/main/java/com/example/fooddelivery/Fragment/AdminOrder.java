@@ -40,25 +40,25 @@ public class AdminOrder extends androidx.fragment.app.Fragment {
     public ImageView exit;
     private View view;
 
+    ViewPager mViewPager;
+
     public AdminOrder() {
         // Required empty public constructor
     }
-
-    ViewPager mViewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_all_orders, container, false);
-        orderdetails = (RecyclerView) view.findViewById(R.id.orderslist);
-        orderpopup = (CardView) view.findViewById(R.id.order_popup);
-        restaurantName = (TextView) view.findViewById(R.id.restaurant_Name);
-        txnId = (TextView) view.findViewById(R.id.txnId);
-        txnDate = (TextView) view.findViewById(R.id.order_date);
-        status = (TextView) view.findViewById(R.id.status);
-        amount = (TextView) view.findViewById(R.id.amount);
-        fullorderdetails = (RecyclerView) view.findViewById(R.id.order_food_list);
-        exit = (ImageView) view.findViewById(R.id.exit);
+        orderdetails = view.findViewById(R.id.orderslist);
+        orderpopup = view.findViewById(R.id.order_popup);
+        restaurantName = view.findViewById(R.id.restaurant_Name);
+        txnId = view.findViewById(R.id.txnId);
+        txnDate = view.findViewById(R.id.order_date);
+        status = view.findViewById(R.id.status);
+        amount = view.findViewById(R.id.amount);
+        fullorderdetails = view.findViewById(R.id.order_food_list);
+        exit = view.findViewById(R.id.exit);
         exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -11,11 +11,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fooddelivery.R;
 import com.example.fooddelivery.Singleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.example.fooddelivery.R;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     EditText email;
@@ -26,16 +26,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
-        email = (EditText)findViewById(R.id.enteremail);
-        send = (Button)findViewById(R.id.submit);
-        back = (Button)findViewById(R.id.back);
+
         auth = Singleton.auth;
+
+        email = findViewById(R.id.enteremail);
+        send = findViewById(R.id.submit);
+        back = findViewById(R.id.back);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 startActivity(new Intent(ForgotPasswordActivity.this, SigninActivity.class));
             }
         });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

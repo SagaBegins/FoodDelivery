@@ -13,7 +13,7 @@ public class OrderList {
     public String txnTime;
     public int restaurantId = 0;
 
-    public OrderList(){
+    public OrderList() {
     }
 
 }

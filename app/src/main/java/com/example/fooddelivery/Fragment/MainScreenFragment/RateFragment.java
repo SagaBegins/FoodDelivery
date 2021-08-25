@@ -29,14 +29,13 @@ public class RateFragment extends androidx.fragment.app.Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_rate, container, false);
-        send = (Button)view.findViewById(R.id.button8);
-        number = (EditText)view.findViewById(R.id.editText6);
+        View view = inflater.inflate(R.layout.fragment_rate, container, false);
+        send = view.findViewById(R.id.button8);
+        number = view.findViewById(R.id.editText6);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override

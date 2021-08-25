@@ -37,14 +37,6 @@ public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<Myallcart
         holder.mItem = mValues.get(position).restaurantId;
 
         holder.mIdView.setText(Singleton.restaurantList.get(holder.mItem).restaurantName);
-        //Adapter_Cart ac = new Adapter_Cart(mValues.get(position).foodList, context);
-
-       /* while(holder.rv.getChildCount() < mValues.get(position).foodList.size()){
-            Log.d("l", holder.rv.getChildCount()+"");};
-        /*FragmentManager fm = ((AppCompatActivity) context).getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        Fragment cf = new CartFragment(holder.mItem);
-        fragmentTransaction.replace(R.id.shop_fragment, cf).commit();*/
     }
 
     @Override
@@ -52,7 +44,7 @@ public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<Myallcart
         return mValues.size();
     }
 
-    private void onChange(){
+    private void onChange() {
         super.notifyDataSetChanged();
     }
 
@@ -64,7 +56,7 @@ public class MyallcartRecyclerViewAdapter extends RecyclerView.Adapter<Myallcart
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.restaurant_Name);
+            mIdView = view.findViewById(R.id.restaurant_Name);
         }
 
     }

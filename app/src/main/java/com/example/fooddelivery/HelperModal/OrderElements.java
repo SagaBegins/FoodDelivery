@@ -4,7 +4,7 @@ public class OrderElements {
     public OrderElements() {
     }
 
-    String foodname ,url, price, rate, qty, name, address, transactionID;
+    String foodname, url, price, rate, qty, name, address, transactionID;
 
     public String getFoodname() {
         return foodname;
